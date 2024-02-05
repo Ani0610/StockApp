@@ -5,12 +5,16 @@ import userReducer from './action/User/userSlice';
 import stoneReducer from './action/StoneDetails/stoneSlice';
 import designReducer from './action/DesignDetails/designSlice';
 import jobworkReducer from './action/Job Work details/jobDetailsSlice';
+import designMasterReducer from './action/DesignsMaster/designMasterSlice';
+import stoneStockReducer from './action/Stone Stock/stoneStock';
 
 const rootReducer = combineReducers({
     user: userReducer,
     stone: stoneReducer,
     designs: designReducer,
     jobWorks: jobworkReducer,
+    designMaster: designMasterReducer,
+    stoneStock: stoneStockReducer,
 });
 
 const persistConfig = {

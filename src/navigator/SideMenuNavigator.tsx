@@ -11,6 +11,7 @@ import JobWorkDetails from '../pages/Job work details/JobWorkDetails';
 import DesignDetails from '../pages/Design details/DesignDetails';
 import CreateSampleDesign from '../pages/Design master/CreateSampleDesign';
 import BottomTabNavigator from './BottomTabNavigator';
+import StoneStock from '../pages/Stone Stock/StoneStock';
 const DrawerStack = createDrawerNavigator();
 const SideMenuNavigator = ({ navigation }: any) => {
     return (
@@ -25,6 +26,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
                 })}
             /> */}
             <DrawerStack.Screen name='StoneDetails' component={StoneDetails} />
+            <DrawerStack.Screen name='StoneStock' component={StoneStock} />
             <DrawerStack.Screen name='DesignDetails' component={DesignDetails} />
             <DrawerStack.Screen name='JobWorkDetails' component={JobWorkDetails} />
         </DrawerStack.Navigator>

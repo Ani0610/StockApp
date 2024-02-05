@@ -5,11 +5,13 @@ import { GlobalStyle } from '../../../globalStyle'
 import { FieldArray, FormikProvider, useFormik } from 'formik'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import SelectDropdown from 'react-native-select-dropdown';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import ImageUploadScreen from '../../components/imageUpload/ImageUploadScreen'
 import fs, { touch } from 'react-native-fs'
 import * as Yup from "yup"
+import { addDesignMaster } from '../../redux/action/DesignsMaster/designMasterSlice'
+import { editstoneStock } from '../../redux/action/Stone Stock/stoneStock'
 
 interface InitialFormValues {
     designNo: string,
@@ -25,10 +27,11 @@ interface InitialFormValues {
 
 }
 const CreateSampleDesign = ({ navigation }: any) => {
-    const { stone } = useSelector((state: RootState) => state.stone)
+    const { stoneStock } = useSelector((state: RootState) => state.stoneStock)
     const { designs } = useSelector((state: RootState) => state.designs)
     const { jobWorks } = useSelector((state: RootState) => state.jobWorks)
     const [iscamaraModalVisible, setIscamaraModalVisible] = useState(false);
+    const dispatch = useDispatch()
     const [sampleimg, setSampleimg] = useState<any>();
     const [selectedImage, setSelectedImage] = useState<any>();
     const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>({
@@ -106,6 +109,8 @@ const CreateSampleDesign = ({ navigation }: any) => {
         validationSchema: sampleSchema,
         onSubmit: async (values: any) => {
             console.log(values, 'sample design');
+            values.stoneDetails.map((stone: any) => updateStock(stone))
+            // dispatch(addDesignMaster({ ...values, id: Math.floor(2000 + Math.random() * 9000), total: Number(values.total).toFixed(2) }))
             resetForm()
             navigation.goBack()
 
@@ -113,7 +118,12 @@ const CreateSampleDesign = ({ navigation }: any) => {
     });
     // { console.log(formik.values, 'new formik') }
     const { handleChange, handleBlur, handleSubmit, values, errors, isValid, touched, setFieldValue, resetForm } = formik
-
+    const updateStock = async (item: any) => {
+        const findIndex = await stoneStock.findIndex((item1: any) => item1.id === item.stoneuid)
+        let newObj = { ...stoneStock[findIndex], avilablestone: stoneStock[findIndex].avilablestone - parseInt(item.stoneunit) }
+        dispatch(editstoneStock({ ...newObj }))
+        stoneStock[findIndex] = newObj
+    }
     useEffect(() => {
         totalofStone()
     }, [values.stoneDetails])
@@ -146,7 +156,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
         setIscamaraModalVisible(false)
     }
     const uploadProfileImage = (selectedImage: any) => {
-        console.log('uploades image', selectedImage);
+        console.log('uploades image', selectedImage.uri);
         fs.readFile(selectedImage.uri, "base64").then((imgRes) => {
             setFieldValue('sampleImg', `data:image/jpeg;base64,${imgRes}`)
             setSampleimg(`data:image/jpeg;base64,${imgRes}`)
@@ -160,7 +170,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
         setSelectedImage(null)
     }
     return (
-        <SafeAreaView style={[GlobalStyle.safeAreaCotainer, { height: '100%' }]}>
+        <SafeAreaView style={[GlobalStyle.safeAreaCotainer, { height: '100%', marginBottom: 20 }]}>
             <StatusBar
                 backgroundColor="#fff"
                 barStyle="dark-content" // Here is where you change the font-color
@@ -305,7 +315,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                     <Text style={styles.inputLabel}>Stone Type</Text>
                                                                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                                                         <SelectDropdown
-                                                                            data={[...stone]}
+                                                                            data={[...stoneStock]}
                                                                             onSelect={(selectedItem) => {
                                                                                 replace(i, { ...stone1, stoneType: selectedItem.stoneType, price: selectedItem.pricePerStone, stoneuid: selectedItem.id })
                                                                             }}
@@ -323,7 +333,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                         />
                                                                     </View>
                                                                 </View>
-                                                                {errors.stoneDetails && errors.stoneDetails[i].stoneType && touched.stoneDetails && touched.stoneDetails[i].stoneType &&
+                                                                {errors.stoneDetails && errors.stoneDetails[i] && touched.stoneDetails && touched.stoneDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.stoneDetails[i].stoneType}</Text>
                                                                 }
                                                             </View>
@@ -344,7 +354,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
 
                                                                     </View>
                                                                 </View>
-                                                                {errors.stoneDetails && errors.stoneDetails[i].price && touched.stoneDetails && touched.stoneDetails[i].price &&
+                                                                {errors.stoneDetails && errors.stoneDetails[i] && touched.stoneDetails && touched.stoneDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.stoneDetails[i].price}</Text>
                                                                 }
                                                             </View>
@@ -365,7 +375,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
 
                                                                     </View>
                                                                 </View>
-                                                                {errors.stoneDetails && errors.stoneDetails[i].stoneunit && touched.stoneDetails && touched.stoneDetails[i].stoneunit &&
+                                                                {errors.stoneDetails && errors.stoneDetails[i] && touched.stoneDetails && touched.stoneDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.stoneDetails[i].stoneunit}</Text>
                                                                 }
                                                             </View>
@@ -439,7 +449,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                         />
                                                                     </View>
                                                                 </View>
-                                                                {errors.designDetails && errors.designDetails[i].measurement && touched.designDetails && touched.designDetails[i].measurement &&
+                                                                {errors.designDetails && errors.designDetails[i] && touched.designDetails && touched.designDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.designDetails[i].measurement}</Text>
                                                                 }
                                                             </View>
@@ -460,7 +470,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
 
                                                                     </View>
                                                                 </View>
-                                                                {errors.designDetails && errors.designDetails[i].price && touched.designDetails && touched.designDetails[i].price &&
+                                                                {errors.designDetails && errors.designDetails[i] && touched.designDetails && touched.designDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.designDetails[i].price}</Text>
                                                                 }
                                                             </View>
@@ -481,7 +491,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
 
                                                                     </View>
                                                                 </View>
-                                                                {errors.designDetails && errors.designDetails[i].designunit && touched.designDetails && touched.designDetails[i].designunit &&
+                                                                {errors.designDetails && errors.designDetails[i] && touched.designDetails && touched.designDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.designDetails[i].designunit}</Text>
                                                                 }
                                                             </View>
@@ -552,7 +562,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                         />
                                                                     </View>
                                                                 </View>
-                                                                {errors.jobworkDetails && errors.jobworkDetails[i].workType && touched.jobworkDetails && touched.jobworkDetails[i].workType &&
+                                                                {errors.jobworkDetails && errors.jobworkDetails[i] && touched.jobworkDetails && touched.jobworkDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobworkDetails[i].workType}</Text>
                                                                 }
                                                             </View>
@@ -573,7 +583,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
 
                                                                     </View>
                                                                 </View>
-                                                                {errors.jobworkDetails && errors.jobworkDetails[i].partyName && touched.jobworkDetails && touched.jobworkDetails[i].partyName &&
+                                                                {errors.jobworkDetails && errors.jobworkDetails[i] && touched.jobworkDetails && touched.jobworkDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobworkDetails[i].partyName}</Text>
                                                                 }
                                                             </View>
@@ -594,7 +604,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
 
                                                                     </View>
                                                                 </View>
-                                                                {errors.jobworkDetails && errors.jobworkDetails[i].price && touched.jobworkDetails && touched.jobworkDetails[i].price &&
+                                                                {errors.jobworkDetails && errors.jobworkDetails[i] && touched.jobworkDetails && touched.jobworkDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobworkDetails[i].price}</Text>
                                                                 }
                                                             </View>
@@ -616,7 +626,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
 
                                                                     </View>
                                                                 </View>
-                                                                {errors.jobworkDetails && errors.jobworkDetails[i].unit && touched.jobworkDetails && touched.jobworkDetails[i].unit &&
+                                                                {errors.jobworkDetails && errors.jobworkDetails[i] && touched.jobworkDetails && touched.jobworkDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobworkDetails[i].unit}</Text>
                                                                 }
                                                             </View>
@@ -630,7 +640,6 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                     )}
                                 </FieldArray>
                             </View>
-
 
                             <View style={{ marginTop: 10 }}>
                                 <View

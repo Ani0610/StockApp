@@ -3,11 +3,13 @@ import { Dimensions, Modal, Platform, Pressable, SafeAreaView, StatusBar, StyleS
 import { GlobalStyle } from '../../../globalStyle'
 import Icon from 'react-native-easy-icon'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Formik, useFormik } from 'formik'
+import { useFormik } from 'formik'
 import * as yup from "yup"
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
-import { addStone, deleteStone, editStone } from '../../redux/action/StoneDetails/stoneSlice'
+import { deleteStone } from '../../redux/action/StoneDetails/stoneSlice'
+import SelectDropdown from 'react-native-select-dropdown'
+import { addStonestock, editstoneStock } from '../../redux/action/Stone Stock/stoneStock'
 var heightY = Dimensions.get("window").height;
 
 interface InitialFormValues {
@@ -15,10 +17,12 @@ interface InitialFormValues {
     price: string,
     stonePerBag: string,
     pricePerStone: number,
+    avilablestone: number,
+    totalBags: string,
     id: undefined,
 
 }
-const StoneDetails = () => {
+const StoneStock = () => {
     const [showModal, setShowModal] = useState(false);
     const [update, setUpdate] = useState(false);
     const [data, setdata] = useState<any | null>(null); // Track the selected card's ID
@@ -29,24 +33,28 @@ const StoneDetails = () => {
         price: yup.string().required('Price is required')
     })
     const { stone } = useSelector((state: RootState) => state.stone)
+    const { stoneStock } = useSelector((state: RootState) => state.stoneStock)
     const dispatch = useDispatch()
     const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>({
         stoneType: '',
         price: '',
         stonePerBag: '',
         pricePerStone: 0,
+        avilablestone: 0,
+        totalBags: '',
         id: undefined
     });
     const formik = useFormik<InitialFormValues>({
         initialValues: initialFormValues,
         validationSchema: stoneSchema,
         onSubmit: (async (values: any) => {
-            values.pricePerStone = Number((values.price / values.stonePerBag)).toFixed(2)
+            values.avilablestone = Number((values.stonePerBag * values.totalBags))
             if (update) {
-                dispatch(editStone({ ...values }))
+                dispatch(editstoneStock({ ...values }))
+
             } else {
                 values.id = Math.floor(2000 + Math.random() * 9000)
-                dispatch(addStone({ ...values }))
+                dispatch(addStonestock({ ...values }))
             }
             setShowModal(false)
             setUpdate(false)
@@ -61,18 +69,19 @@ const StoneDetails = () => {
     const onClose = () => {
         setisVisible(false)
     }
-    const editStoneDetails = () => {
+    const editStoneStock = () => {
         setFieldValue('stoneType', data.stoneType)
         setFieldValue('stonePerBag', data.stonePerBag)
         setFieldValue('pricePerStone', data.pricePerStone)
+        setFieldValue('avilablestone', data.avilablestone)
+        setFieldValue('totalBags', data.totalBags)
         setFieldValue('price', data.price)
         setFieldValue('id', data.id)
         setUpdate(true)
         setisVisible(false)
         setShowModal(true)
-
     }
-    const deleteStoneDetails = () => {
+    const deleteStoneStock = () => {
         dispatch(deleteStone(data))
         setisVisible(false)
     }
@@ -91,7 +100,7 @@ const StoneDetails = () => {
                 <ScrollView>
                     <View style={[GlobalStyle.container]}>
                         <View>
-                            {stone?.map((item: any, i: any) => (
+                            {stoneStock?.map((item: any, i: any) => (
                                 <View key={i} style={[GlobalStyle.card, GlobalStyle.shadowProp, {
                                     paddingVertical: 8,
                                     paddingHorizontal: 8,
@@ -103,12 +112,15 @@ const StoneDetails = () => {
                                         <Text style={GlobalStyle.label}>Stones</Text>
                                         <Text style={GlobalStyle.label}>Price</Text>
                                         <Text style={GlobalStyle.label}>Stone Price</Text>
+                                        <Text style={GlobalStyle.label}>Stone Stock</Text>
+
                                     </View>
                                     <View style={GlobalStyle.middleSide}>
                                         <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.stoneType}</Text>
                                         <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.stonePerBag}(1 Bag)</Text>
                                         <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.price}₹(1 Bag)</Text>
                                         <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.pricePerStone}₹(1 Stone)</Text>
+                                        <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.avilablestone}</Text>
 
                                     </View>
                                     <View style={GlobalStyle.rightSide}>
@@ -141,11 +153,11 @@ const StoneDetails = () => {
                             borderTopRightRadius: 15
                         }}>
 
-                            <TouchableOpacity onPress={() => editStoneDetails()} style={[GlobalStyle.btn, { borderRadius: 15 }]}>
+                            <TouchableOpacity onPress={() => editStoneStock()} style={[GlobalStyle.btn, { borderRadius: 15 }]}>
                                 <Icon type="feather" name="edit" color="gray" size={25} />
                                 <Text style={{ color: 'gray', marginLeft: 10, fontWeight: 'bold', fontSize: 18 }}>Edit</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => deleteStoneDetails()} style={[GlobalStyle.btn, { borderRadius: 15 }]}>
+                            <TouchableOpacity onPress={() => deleteStoneStock()} style={[GlobalStyle.btn, { borderRadius: 15 }]}>
                                 <Icon type="feather" name="delete" color="gray" size={25} />
                                 <Text style={{ color: 'gray', marginLeft: 10, fontWeight: 'bold', fontSize: 18 }}>Delete</Text>
                             </TouchableOpacity>
@@ -180,15 +192,28 @@ const StoneDetails = () => {
                                         style={Style.inputField}>
                                         <Text style={Style.inputLabel}>Stone Type</Text>
                                         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <TextInput
-                                                onChangeText={handleChange('stoneType')}
-                                                onBlur={() => { handleBlur('stoneType') }}
-                                                value={values.stoneType}
-                                                style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                placeholderTextColor='gray'
-                                                placeholder='Enter Stone Type'
-                                            />
+                                            <SelectDropdown
+                                                data={[...stone]}
+                                                onSelect={(selectedItem) => {
+                                                    console.log(selectedItem, 'selected item');
+                                                    setFieldValue('stoneType', selectedItem.stoneType)
+                                                    setFieldValue('stonePerBag', selectedItem.stonePerBag)
+                                                    setFieldValue('pricePerStone', selectedItem.pricePerStone)
+                                                    setFieldValue('price', selectedItem.price)
 
+                                                }}
+                                                buttonTextAfterSelection={(selectedItem: any, index: number) => {
+                                                    return `${selectedItem?.stoneType}`
+                                                }}
+                                                rowTextForSelection={(item: any, index: number) => {
+                                                    return `${item?.stoneType}`;
+                                                }}
+                                                buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                                defaultButtonText='Select stone Type'
+                                                buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
+                                                dropdownStyle={{ width: '80%', borderRadius: 10 }}
+                                                defaultValue={values.stoneType}
+                                            />
                                         </View>
                                     </View>
                                     {errors.stoneType && touched.stoneType &&
@@ -198,21 +223,21 @@ const StoneDetails = () => {
                                 <View style={{ marginTop: 15 }}>
                                     <View
                                         style={Style.inputField}>
-                                        <Text style={Style.inputLabel}>Price</Text>
+                                        <Text style={Style.inputLabel}>Total Bags</Text>
                                         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                             <TextInput
-                                                onChangeText={handleChange('price')}
-                                                onBlur={() => { handleBlur('price') }}
-                                                value={values.price}
+                                                onChangeText={handleChange('totalBags')}
+                                                onBlur={() => { handleBlur('totalBags') }}
+                                                value={values.totalBags}
                                                 style={{ flex: 1, fontSize: 16, color: '#000' }}
                                                 placeholderTextColor='gray'
-                                                placeholder='Enter price per bag'
+                                                placeholder='Enter total bag'
                                             />
 
                                         </View>
                                     </View>
-                                    {errors.price && touched.price &&
-                                        <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.price}</Text>
+                                    {errors.totalBags && touched.totalBags &&
+                                        <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.totalBags}</Text>
                                     }
                                 </View>
                                 <View style={{ marginTop: 15 }}>
@@ -264,4 +289,4 @@ const Style = StyleSheet.create({
         margin: 10
     },
 })
-export default StoneDetails
+export default StoneStock

@@ -11,6 +11,7 @@ const AllSampleDesign = ({ navigation }: any) => {
         { designNo: '4', sampleImg: require('../../assets/sample4.jpg'), stoneDeails: [], designDetails: [], jobWorkDetails: [], total: 950 },
     ];
 
+
     const renderThumbnail = (uri: any, designNo: any, total: any) => {
         return (
             <ImageBackground source={uri} style={styles.thumbnail}>
