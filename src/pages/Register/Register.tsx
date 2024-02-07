@@ -15,14 +15,11 @@ const Register = () => {
     const { mobileNumber } = route.params as { mobileNumber: string };
     const dispatch = useDispatch()
     const registerSchema = yup.object().shape({
-        fname: yup.string().required('First Name is required')
+        fullName: yup.string().required('First Name is required')
             .min(2, 'First name must be at least 2 characters long')
             .max(20, 'First name must not exceed 20 characters')
             .matches(/^[a-zA-Z0-9\s]*$/, 'Invalid character in first name'),
-        lname: yup.string().required('Last Name is required')
-            .min(2, 'First name must be at least 2 characters long')
-            .max(20, 'First name must not exceed 20 characters')
-            .matches(/^[a-zA-Z0-9\s]*$/, 'Invalid character in first name'),
+
         email: yup.string().email("Please enter valid email")
             .required('Email is required').matches(/@[^.]*\./, "Please enter valid email"),
         userType: yup.string().required('User Type is required'),
@@ -30,7 +27,11 @@ const Register = () => {
     })
     const onRegister = (values: any) => {
         console.log('values', { ...values, mobileNumber: mobileNumber });
-        dispatch(setUser({ ...values, mobileNumber: mobileNumber }))
+        if (values.userType === "Job Work") {
+            dispatch(setUser({ ...values, mobileNumber: mobileNumber, partyName: 'Aakash', workType: 'Stiching', price: 20 }))
+        } else {
+            dispatch(setUser({ ...values, mobileNumber: mobileNumber }))
+        }
 
     }
     return (
@@ -48,8 +49,7 @@ const Register = () => {
                             <Text style={{ color: '#949494', marginBottom: 20, fontSize: 18 }}>Please enter your details to register</Text>
                             <Formik
                                 initialValues={{
-                                    fname: '',
-                                    lname: '',
+                                    fullName: '',
                                     email: '',
                                     userType: ''
                                 }}
@@ -63,37 +63,20 @@ const Register = () => {
                                                 <Icon type="fontisto" name="person" color="gray" size={20} />
                                             </View>
                                             <TextInput style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                onChangeText={handleChange('fname')}
-                                                onBlur={() => { handleBlur('fname') }}
-                                                value={values.fname}
+                                                onChangeText={handleChange('fullName')}
+                                                onBlur={() => { handleBlur('fullName') }}
+                                                value={values.fullName}
                                                 placeholder='First Name'
                                                 placeholderTextColor='gray'
 
                                             />
                                         </View>
                                         <View style={{ marginBottom: 10 }}>
-                                            {touched.fname && errors.fname &&
-                                                <Text style={GlobalStyle.errorMsg}>{errors.fname}</Text>
+                                            {touched.fullName && errors.fullName &&
+                                                <Text style={GlobalStyle.errorMsg}>{errors.fullName}</Text>
                                             }
                                         </View>
-                                        <View style={[GlobalStyle.fieldwithIcon]}>
-                                            <View style={{ marginRight: 10 }}>
-                                                <Icon type="fontisto" name="person" color="gray" size={20} />
-                                            </View>
-                                            <TextInput style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                onChangeText={handleChange('lname')}
-                                                onBlur={() => { handleBlur('lname') }}
-                                                value={values.lname}
-                                                placeholder='Last Name'
-                                                placeholderTextColor='gray'
 
-                                            />
-                                        </View>
-                                        <View style={{ marginBottom: 10 }}>
-                                            {errors.lname && touched.lname &&
-                                                <Text style={GlobalStyle.errorMsg}>{errors.lname}</Text>
-                                            }
-                                        </View>
                                         <View style={[GlobalStyle.fieldwithIcon]}>
                                             <View style={{ marginRight: 10 }}>
                                                 <Icon type="feather" name="lock" color="gray" size={20} />
@@ -118,7 +101,7 @@ const Register = () => {
                                                 <Icon type="feather" name="lock" color="gray" size={20} />
                                             </View>
                                             <SelectDropdown
-                                                data={['Admin', 'Godown', 'Carrier Person']}
+                                                data={['Admin', 'Godown', 'Carrier Person', 'Job Work']}
                                                 onSelect={(selectedItem) => {
                                                     setFieldValue('userType', selectedItem)
 

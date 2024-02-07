@@ -12,23 +12,57 @@ import DesignDetails from '../pages/Design details/DesignDetails';
 import CreateSampleDesign from '../pages/Design master/CreateSampleDesign';
 import BottomTabNavigator from './BottomTabNavigator';
 import StoneStock from '../pages/Stone Stock/StoneStock';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import JobWorkTeam from '../pages/job work module/JobWorkTeam';
+import TeamWorkPerDay from '../pages/job work module/TeamWorkPerDay';
+import UserMaster from '../pages/Users Master/UserMaster';
+import Challan from '../pages/Carrier Challan/Challan';
 const DrawerStack = createDrawerNavigator();
 const SideMenuNavigator = ({ navigation }: any) => {
+    const { user }: any = useSelector((state: RootState) => state.user)
+
     return (
         <DrawerStack.Navigator drawerContent={(props) => <DrawerView {...props} />}>
-            <DrawerStack.Screen name="Home" component={BottomTabNavigator}
-            />
-            {/* <DrawerStack.Screen name='Add Design' component={CreateSampleDesign}
-                options={() => ({
-                    drawerLabel: () => null,
-                    title: undefined,
-                    drawerIcon: () => null,
-                })}
-            /> */}
-            <DrawerStack.Screen name='StoneDetails' component={StoneDetails} />
-            <DrawerStack.Screen name='StoneStock' component={StoneStock} />
-            <DrawerStack.Screen name='DesignDetails' component={DesignDetails} />
-            <DrawerStack.Screen name='JobWorkDetails' component={JobWorkDetails} />
+            {
+                (() => {
+                    switch (user?.userType) {
+                        case 'Admin':
+                            return (
+                                <>
+                                    <DrawerStack.Screen name="Home" component={BottomTabNavigator}
+                                    />
+                                    <DrawerStack.Screen name='StoneDetails' component={StoneDetails} />
+                                    <DrawerStack.Screen name='StoneStock' component={StoneStock} />
+                                    <DrawerStack.Screen name='DesignDetails' component={DesignDetails} />
+                                    <DrawerStack.Screen name='JobWorkDetails' component={JobWorkDetails} />
+                                    <DrawerStack.Screen name='Users' component={UserMaster} />
+                                    <DrawerStack.Screen name='Challan' component={Challan} />
+                                </>
+                            )
+                        case 'Job Work':
+                            return (
+                                <>
+                                    <DrawerStack.Screen name='Home' component={TeamWorkPerDay} />
+                                    <DrawerStack.Screen name="Team" component={JobWorkTeam}
+                                    />
+                                </>
+                            )
+                        default:
+                            return (
+                                <>
+                                    <DrawerStack.Screen name="Home" component={BottomTabNavigator}
+                                    />
+                                    <DrawerStack.Screen name='StoneDetails' component={StoneDetails} />
+                                    <DrawerStack.Screen name='StoneStock' component={StoneStock} />
+                                    <DrawerStack.Screen name='DesignDetails' component={DesignDetails} />
+                                    <DrawerStack.Screen name='JobWorkDetails' component={JobWorkDetails} />
+                                </>
+                            )
+                    }
+                })()
+            }
+
         </DrawerStack.Navigator>
     );
 }

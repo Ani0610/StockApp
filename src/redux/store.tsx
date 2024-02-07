@@ -7,6 +7,10 @@ import designReducer from './action/DesignDetails/designSlice';
 import jobworkReducer from './action/Job Work details/jobDetailsSlice';
 import designMasterReducer from './action/DesignsMaster/designMasterSlice';
 import stoneStockReducer from './action/Stone Stock/stoneStock';
+import jobTeamReducer from './action/ job work/JobTeamSlice';
+import worPerDayReducer from './action/ job work/WorkPerDaySlice';
+import usersMasterReducer from './action/User Master/userMasterSlice';
+import challanReducer from './action/Challan/ChallanSlice';
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -15,12 +19,16 @@ const rootReducer = combineReducers({
     jobWorks: jobworkReducer,
     designMaster: designMasterReducer,
     stoneStock: stoneStockReducer,
+    perDayWorks: worPerDayReducer,
+    teams: jobTeamReducer,
+    userMaster: usersMasterReducer,
+    challan: challanReducer
 });
 
 const persistConfig = {
     key: 'root', // key for AsyncStorage
     storage: AsyncStorage,
-    whitelist: ['user'],
+    whitelist: ['user', 'jobWorks', 'stone', 'designs', 'stoneStock', 'userMaster', 'challan'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

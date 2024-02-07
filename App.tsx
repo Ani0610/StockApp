@@ -32,6 +32,7 @@ import { RootState } from './src/redux/store';
 import SideMenuNavigator from './src/navigator/SideMenuNavigator';
 import BottomTabNavigator from './src/navigator/BottomTabNavigator';
 import CreateSampleDesign from './src/pages/Design master/CreateSampleDesign';
+import CreateChallan from './src/pages/Carrier Challan/CreateChallan';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -64,9 +65,10 @@ function App(): React.JSX.Element {
             <Stack.Screen name='Add Design' component={CreateSampleDesign} options={{
               headerShown: false
             }} />
-            {/* <Stack.Screen name='BottomTabNavigator' component={BottomTabNavigator} options={{
+            <Stack.Screen name='Create Challan' component={CreateChallan} options={{
               headerShown: false
-            }} /> */}
+            }} />
+
           </Stack.Navigator>
           :
           <Stack.Navigator initialRouteName="Login">

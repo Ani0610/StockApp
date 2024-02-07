@@ -4,12 +4,17 @@ import { Pressable, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, View }
 import * as yup from "yup"
 import { GlobalStyle } from '../../../globalStyle'
 import Icon from 'react-native-easy-icon'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../redux/store'
+import { setUser } from '../../redux/action/User/userSlice'
 
 
 const Login = ({ navigation }: any) => {
     const [isOtpsent, setOtpSend] = useState(false);
     const [mobile, setMobile] = useState("");
-
+    const { userMaster } = useSelector((state: RootState) => state.userMaster)
+    const { jobWorks } = useSelector((state: RootState) => state.jobWorks)
+    const dispatch = useDispatch()
     const loginPhoneSchema = yup.object().shape({
         phone: yup.string().required('Phone number is required')
             .min(10, 'Phone number must be 10 digit number')
@@ -24,9 +29,21 @@ const Login = ({ navigation }: any) => {
         setMobile(values.phone)
     }
     const onSubmit = async (values: any) => {
+        const existingUser: any = userMaster.find((user: any) => user.mobileNumber === mobile);
+        if (existingUser) {
+            if (existingUser.userType === "Job Work") {
+                const jobWork: any = jobWorks.find((job: any) => job.id === existingUser.useruid)
+                dispatch(setUser({ ...existingUser, partyName: jobWork.partyName, workType: jobWork.workType, price: jobWork.price }))
 
+            } else {
+                dispatch(setUser({ ...existingUser }))
+
+            }
+        } else {
+            navigation.navigate('Register', { mobileNumber: mobile })
+        }
         setOtpSend(false)
-        navigation.navigate('Register', { mobileNumber: mobile })
+
 
     }
     return (
