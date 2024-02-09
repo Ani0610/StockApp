@@ -1,0 +1,52 @@
+com.stockapp-drawerlayout-1.1.1-0 C:\Users\HELLO\.gradle\caches\transforms-3\08a41e501c2c85b869f64d5271128085\transformed\drawerlayout-1.1.1\res
+com.stockapp-cardview-1.0.0-1 C:\Users\HELLO\.gradle\caches\transforms-3\0c0fc494abea994368b0c31e752ab405\transformed\cardview-1.0.0\res
+com.stockapp-jetified-flipper-0.201.0-2 C:\Users\HELLO\.gradle\caches\transforms-3\1b40c15f339c518456129d3a4e309447\transformed\jetified-flipper-0.201.0\res
+com.stockapp-jetified-tracing-1.1.0-3 C:\Users\HELLO\.gradle\caches\transforms-3\1c5763210688e20106c1aa980301e9bf\transformed\jetified-tracing-1.1.0\res
+com.stockapp-lifecycle-livedata-core-2.5.1-4 C:\Users\HELLO\.gradle\caches\transforms-3\1fd9b603cbb9ace9c4e6626e3c0e2129\transformed\lifecycle-livedata-core-2.5.1\res
+com.stockapp-appcompat-1.6.1-5 C:\Users\HELLO\.gradle\caches\transforms-3\291739c7e62f0cf7d74cd658d7be977b\transformed\appcompat-1.6.1\res
+com.stockapp-transition-1.2.0-6 C:\Users\HELLO\.gradle\caches\transforms-3\2f85e88cf2095219fd0c89f178bcac90\transformed\transition-1.2.0\res
+com.stockapp-jetified-emoji2-views-helper-1.2.0-7 C:\Users\HELLO\.gradle\caches\transforms-3\339627cbdd8bb091cc85ca7a21adfacb\transformed\jetified-emoji2-views-helper-1.2.0\res
+com.stockapp-jetified-savedstate-1.2.0-8 C:\Users\HELLO\.gradle\caches\transforms-3\388f8d915d874aee85f66d5133ca7e73\transformed\jetified-savedstate-1.2.0\res
+com.stockapp-core-1.9.0-9 C:\Users\HELLO\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\res
+com.stockapp-jetified-lifecycle-process-2.4.1-10 C:\Users\HELLO\.gradle\caches\transforms-3\4bb01ff517dea9f20351c3f169ca52bf\transformed\jetified-lifecycle-process-2.4.1\res
+com.stockapp-jetified-appcompat-resources-1.6.1-11 C:\Users\HELLO\.gradle\caches\transforms-3\519988ee05f7728d7028eb82a01f0faf\transformed\jetified-appcompat-resources-1.6.1\res
+com.stockapp-jetified-ucrop-2.2.6-native-12 C:\Users\HELLO\.gradle\caches\transforms-3\59d48992cb58be3a18e38a0cb78473c3\transformed\jetified-ucrop-2.2.6-native\res
+com.stockapp-jetified-drawee-3.1.3-13 C:\Users\HELLO\.gradle\caches\transforms-3\5c0de9516115400d97c98dcb46bac019\transformed\jetified-drawee-3.1.3\res
+com.stockapp-material-1.9.0-14 C:\Users\HELLO\.gradle\caches\transforms-3\5ff1ce3ec4c7364dc0dcdb3fbb601af1\transformed\material-1.9.0\res
+com.stockapp-jetified-startup-runtime-1.1.1-15 C:\Users\HELLO\.gradle\caches\transforms-3\682cc802fb0d3361fff8dcd252eb1e2e\transformed\jetified-startup-runtime-1.1.1\res
+com.stockapp-jetified-annotation-experimental-1.3.0-16 C:\Users\HELLO\.gradle\caches\transforms-3\77818ba50e98f0b418c5c15da46a2dc8\transformed\jetified-annotation-experimental-1.3.0\res
+com.stockapp-jetified-autofill-1.1.0-17 C:\Users\HELLO\.gradle\caches\transforms-3\7a1f5265fb716559db494aba8d7ed7f5\transformed\jetified-autofill-1.1.0\res
+com.stockapp-jetified-activity-1.6.0-18 C:\Users\HELLO\.gradle\caches\transforms-3\7ae4f40a372c3926387039e54076e559\transformed\jetified-activity-1.6.0\res
+com.stockapp-jetified-emoji2-1.2.0-19 C:\Users\HELLO\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\res
+com.stockapp-constraintlayout-2.0.1-20 C:\Users\HELLO\.gradle\caches\transforms-3\95029146debe55a5a402448556f4c7b6\transformed\constraintlayout-2.0.1\res
+com.stockapp-sqlite-2.2.0-21 C:\Users\HELLO\.gradle\caches\transforms-3\9f95b9dbc61433a889cedd9d8cbcb139\transformed\sqlite-2.2.0\res
+com.stockapp-jetified-viewpager2-1.0.0-22 C:\Users\HELLO\.gradle\caches\transforms-3\aa19983ea9c565518a02aa7a2457a47c\transformed\jetified-viewpager2-1.0.0\res
+com.stockapp-fragment-1.3.6-23 C:\Users\HELLO\.gradle\caches\transforms-3\adba6fe07e7fc58d1946ca17b399d47c\transformed\fragment-1.3.6\res
+com.stockapp-recyclerview-1.1.0-24 C:\Users\HELLO\.gradle\caches\transforms-3\ae8700af4b2e0eda9ffacc752c08d20e\transformed\recyclerview-1.1.0\res
+com.stockapp-jetified-react-android-0.73.2-debug-25 C:\Users\HELLO\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\res
+com.stockapp-sqlite-framework-2.2.0-26 C:\Users\HELLO\.gradle\caches\transforms-3\c2fb4fdcbde7f0d5a248973322144cca\transformed\sqlite-framework-2.2.0\res
+com.stockapp-swiperefreshlayout-1.1.0-27 C:\Users\HELLO\.gradle\caches\transforms-3\d2395f42d512a8dcb5357d1af42784d3\transformed\swiperefreshlayout-1.1.0\res
+com.stockapp-coordinatorlayout-1.2.0-28 C:\Users\HELLO\.gradle\caches\transforms-3\e1c071278f273613dd884245d6872760\transformed\coordinatorlayout-1.2.0\res
+com.stockapp-jetified-core-ktx-1.9.0-29 C:\Users\HELLO\.gradle\caches\transforms-3\e3b0ddcd0d55f1b9ed4f5a03b15bd1ba\transformed\jetified-core-ktx-1.9.0\res
+com.stockapp-lifecycle-viewmodel-2.5.1-30 C:\Users\HELLO\.gradle\caches\transforms-3\e5ab6afbc1fb2e92aca9401bae289621\transformed\lifecycle-viewmodel-2.5.1\res
+com.stockapp-lifecycle-runtime-2.5.1-31 C:\Users\HELLO\.gradle\caches\transforms-3\f19e91f4055963385be77108540a71bc\transformed\lifecycle-runtime-2.5.1\res
+com.stockapp-jetified-lifecycle-viewmodel-savedstate-2.5.1-32 C:\Users\HELLO\.gradle\caches\transforms-3\f8c7179ce8e3b9ca3c83701e7c1ef2f3\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.1\res
+com.stockapp-pngs-33 D:\skyban projects\react native\StockApp\android\app\build\generated\res\pngs\debug
+com.stockapp-resValues-34 D:\skyban projects\react native\StockApp\android\app\build\generated\res\resValues\debug
+com.stockapp-packageDebugResources-35 D:\skyban projects\react native\StockApp\android\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.stockapp-packageDebugResources-36 D:\skyban projects\react native\StockApp\android\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.stockapp-merged_res-37 D:\skyban projects\react native\StockApp\android\app\build\intermediates\merged_res\debug
+com.stockapp-debug-38 D:\skyban projects\react native\StockApp\android\app\src\debug\res
+com.stockapp-main-39 D:\skyban projects\react native\StockApp\android\app\src\main\res
+com.stockapp-packaged_res-40 D:\skyban projects\react native\StockApp\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-41 D:\skyban projects\react native\StockApp\node_modules\@react-native-community\masked-view\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-42 D:\skyban projects\react native\StockApp\node_modules\react-native-fs\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-43 D:\skyban projects\react native\StockApp\node_modules\react-native-gesture-handler\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-44 D:\skyban projects\react native\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-45 D:\skyban projects\react native\StockApp\node_modules\react-native-image-picker\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-46 D:\skyban projects\react native\StockApp\node_modules\react-native-permissions\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-47 D:\skyban projects\react native\StockApp\node_modules\react-native-reanimated\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-48 D:\skyban projects\react native\StockApp\node_modules\react-native-safe-area-context\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-49 D:\skyban projects\react native\StockApp\node_modules\react-native-screens\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-50 D:\skyban projects\react native\StockApp\node_modules\react-native-svg\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-51 D:\skyban projects\react native\StockApp\node_modules\react-native-vector-icons\android\build\intermediates\packaged_res\debug
