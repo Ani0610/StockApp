@@ -3032,6 +3032,9 @@ drawable mtrl_switch_track
 drawable mtrl_switch_track_decoration
 drawable mtrl_tabs_default_indicator
 drawable navigation_empty_icon
+drawable node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon
+drawable node_modules_reactnavigation_elements_src_assets_backicon
+drawable node_modules_reactnavigation_elements_src_assets_backiconmask
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low
@@ -3046,6 +3049,10 @@ drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable redbox_top_border_background
 drawable rn_edit_text_material
+drawable src_assets_sample1
+drawable src_assets_sample2
+drawable src_assets_sample3
+drawable src_assets_sample4
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light

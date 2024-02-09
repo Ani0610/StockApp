@@ -1,6 +1,13 @@
 R_DEF: Internal format may change without notice
 local
+drawable node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon
+drawable node_modules_reactnavigation_elements_src_assets_backicon
+drawable node_modules_reactnavigation_elements_src_assets_backiconmask
 drawable rn_edit_text_material
+drawable src_assets_sample1
+drawable src_assets_sample2
+drawable src_assets_sample3
+drawable src_assets_sample4
 integer react_native_dev_server_port
 integer react_native_inspector_proxy_port
 mipmap ic_launcher
