@@ -38,6 +38,8 @@ const SideMenuNavigator = ({ navigation }: any) => {
                                     <DrawerStack.Screen name='JobWork Details' component={JobWorkDetails} />
                                     <DrawerStack.Screen name='Users' component={UserMaster} />
                                     <DrawerStack.Screen name='Challan' component={Challan} />
+                                    <DrawerStack.Screen name="Job work Team" component={JobWorkTeam}/>
+                                    <DrawerStack.Screen name='Per Day Work by Team' component={TeamWorkPerDay} />
                                 </>
                             )
                         case 'Job Work':
@@ -64,6 +66,8 @@ const SideMenuNavigator = ({ navigation }: any) => {
                                     <DrawerStack.Screen name='Stone Stock' component={StoneStock} />
                                     <DrawerStack.Screen name='Design Details' component={DesignDetails} />
                                     <DrawerStack.Screen name='JobWork Details' component={JobWorkDetails} />
+                                    <DrawerStack.Screen name='Users' component={UserMaster} />
+                                    <DrawerStack.Screen name='Challan' component={Challan} />
                                 </>
                             )
                     }

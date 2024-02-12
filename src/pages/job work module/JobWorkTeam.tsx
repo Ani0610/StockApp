@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, Modal, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { GlobalStyle } from '../../../globalStyle'
 import * as yup from "yup"
@@ -7,6 +7,7 @@ import Icon from 'react-native-easy-icon'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import { addjobTeam, deletejobTeam, editjobTeam } from '../../redux/action/ job work/JobTeamSlice'
+import SelectDropdown from 'react-native-select-dropdown'
 var heightY = Dimensions.get("window").height;
 
 interface InitialFormValues {
@@ -14,6 +15,8 @@ interface InitialFormValues {
     workType: string,
     teamName: string,
     teamPersonName: any,
+    useruid:'',
+    price:'',
     id: undefined,
 }
 const JobWorkTeam = () => {
@@ -23,12 +26,16 @@ const JobWorkTeam = () => {
     const [isVisible, setisVisible] = useState(false);
     const { user }: any = useSelector((state: RootState) => state.user)
     const { teams }: any = useSelector((state: RootState) => state.teams)
+    const { jobWorks } = useSelector((state: RootState) => state.jobWorks)
+const [team,setTeam]=useState<any>([])
     const dispatch = useDispatch()
     const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>({
-        partyName: user.partyName,
-        workType: user.workType,
+        partyName: user.userType ==="Job Work"?user.partyName:'',
+        workType: user.userType ==="Job Work"?user.workType:'',
         teamName: '',
         teamPersonName: [{ personName: '' }],
+        useruid:user.userType ==="Job Work"?user.useruid:'',
+        price:user.userType ==="Job Work"?user.price:'',
         id: undefined
     });
     const teamSchema = yup.object().shape({
@@ -63,6 +70,15 @@ const JobWorkTeam = () => {
         setUpdate(false)
         resetForm()
     }
+    useEffect(() => {
+        if (user.userType ==="Job Work") {
+            const tm:any = teams.filter((item: any) => item.useruid === user.useruid)
+            setTeam([...tm])
+        } else {
+            setTeam([...teams])    
+        }
+    }, [user.userType,teams])
+    
     const selectCard = (item: number) => {
         setisVisible(true)
         setdata(item);
@@ -75,6 +91,8 @@ const JobWorkTeam = () => {
         setFieldValue('workType', data.workType)
         setFieldValue('teamName', data.teamName)
         setFieldValue('teamPersonName', data.teamPersonName)
+        setFieldValue('useruid', data.useruid)
+        setFieldValue('price', data.price)
         setFieldValue('id', data.id)
         setUpdate(true)
         setisVisible(false)
@@ -95,7 +113,7 @@ const JobWorkTeam = () => {
                 <ScrollView>
                     <View style={[GlobalStyle.container]}>
                         <View>
-                            {teams?.map((item: any, i: any) => (
+                            {team?.map((item: any, i: any) => (
                                 <View key={i} style={[GlobalStyle.card, GlobalStyle.shadowProp, {
                                     paddingVertical: 8,
                                     paddingHorizontal: 8,
@@ -124,9 +142,6 @@ const JobWorkTeam = () => {
                                             </Pressable>
                                         </View>
                                     </View>
-
-
-
                                 </View>
                             ))}
                         </View>
@@ -168,6 +183,7 @@ const JobWorkTeam = () => {
             }
             {showModal &&
                 <Modal visible={showModal} transparent={false} animationType="slide">
+                    <ScrollView>
                     <FormikProvider value={formik}>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10, marginVertical: Platform.OS === "ios" ? 30 : 0, zIndex: 0 }}>
                             <View style={{
@@ -181,10 +197,11 @@ const JobWorkTeam = () => {
                                         <Icon type="entypo" name="cross" color="black" size={35} />
                                     </Pressable>
                                 </View>
-
+                                
                                 <View style={{
                                     padding: 10
                                 }}>
+                                    {user.userType ==="Job Work" ?
                                     <View style={{ marginTop: 10 }}>
                                         <View
                                             style={Style.inputField}>
@@ -205,7 +222,38 @@ const JobWorkTeam = () => {
                                         {errors.partyName && touched.partyName &&
                                             <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.partyName}</Text>
                                         }
+                                    </View>:
+                                    <View style={{ marginTop: 10 }}>
+                                    <View
+                                        style={Style.inputField}>
+                                        <Text style={Style.inputLabel}>Select Party</Text>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                            <SelectDropdown
+                                                data={[...jobWorks]}
+                                                onSelect={(selectedItem) => {
+                                                    console.log(selectedItem, 'selecteditem');
+                                                    setFieldValue('useruid', selectedItem.id)
+                                                    setFieldValue('partyName', selectedItem.partyName)
+                                                    setFieldValue('workType', selectedItem.workType)
+                                                    setFieldValue('price', selectedItem.price)
+                                                }}
+                                                buttonTextAfterSelection={(selectedItem: any, index: number) => {
+                                                    return `${selectedItem?.partyName} `
+                                                }}
+                                                rowTextForSelection={(item: any, index: number) => {
+                                                    return `${item.partyName}- ${item?.workType}`;
+                                                }}
+                                                buttonStyle={{ backgroundColor: 'transparent' ,width:'100%'}}
+                                                defaultButtonText='Select Party Name'
+                                                buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
+                                                dropdownStyle={{ width: '80%', borderRadius: 10 }}
+                                                defaultValue={jobWorks.find((job:any) => job.id === values.useruid)}
+                                            />
+
+                                        </View>
                                     </View>
+
+                                </View>}
                                     <View style={{ marginTop: 15 }}>
                                         <View
                                             style={Style.inputField}>
@@ -312,6 +360,7 @@ const JobWorkTeam = () => {
                             </View>
                         </View>
                     </FormikProvider>
+                    </ScrollView>
                 </Modal>}
         </>
     )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, Modal, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { GlobalStyle } from '../../../globalStyle'
 import * as yup from "yup"
@@ -15,7 +15,11 @@ interface InitialFormValues {
     teamName: string,
     teamPersons: any,
     total: number
+    useruid:any,
+    price:any,
     id: undefined,
+    partyName:string,
+    workType:string
 }
 const TeamWorkPerDay = () => {
     const [showModal, setShowModal] = useState(false);
@@ -25,13 +29,17 @@ const TeamWorkPerDay = () => {
     const { user }: any = useSelector((state: RootState) => state.user)
     const { teams }: any = useSelector((state: RootState) => state.teams)
     const { perDayWorks }: any = useSelector((state: RootState) => state.perDayWorks)
+    const [work,setWork]=useState<any>([])
     const dispatch = useDispatch()
     const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>({
-
         teamName: '',
         teamPersons: [],
         total: 0,
-        id: undefined
+        useruid:'',
+        price:'',
+        id: undefined,
+        partyName:'',
+        workType:'',
     });
     const teamSchema = yup.object().shape({
         teamName: yup.string().required('Team Name is required'),
@@ -43,6 +51,14 @@ const TeamWorkPerDay = () => {
             })
         ),
     })
+    useEffect(() => {
+        if (user.userType ==="Job Work") {
+            const wk:any = perDayWorks.filter((item: any) => item.useruid === user.useruid)
+            setWork([...wk])
+        } else {
+            setWork([...perDayWorks])    
+        }
+    }, [user.userType,perDayWorks])
     const formik = useFormik<InitialFormValues>({
         initialValues: initialFormValues,
         validationSchema: teamSchema,
@@ -76,7 +92,11 @@ const TeamWorkPerDay = () => {
         setFieldValue('total', data.total)
         setFieldValue('teamName', data.teamName)
         setFieldValue('teamPersons', data.teamPersons)
+        setFieldValue('useruid', data.useruid)
+        setFieldValue('price', data.price)
         setFieldValue('id', data.id)
+        setFieldValue('pertyName', data.pertyName)
+        setFieldValue('workType', data.workType)
         setUpdate(true)
         setisVisible(false)
         setShowModal(true)
@@ -96,7 +116,7 @@ const TeamWorkPerDay = () => {
                 <ScrollView>
                     <View style={[GlobalStyle.container]}>
                         <View>
-                            {perDayWorks?.map((item: any, i: any) => (
+                            {work?.map((item: any, i: any) => (
                                 <View key={i} style={[GlobalStyle.card, GlobalStyle.shadowProp, {
                                     paddingVertical: 8,
                                     paddingHorizontal: 8,
@@ -105,10 +125,14 @@ const TeamWorkPerDay = () => {
                                 }]}>
                                     <View style={GlobalStyle.leftSide}>
                                         <Text style={GlobalStyle.label}>Team Name</Text>
+                                        <Text style={GlobalStyle.label}>Party Name</Text>
+                                        <Text style={GlobalStyle.label}>Work Type</Text>
                                         <Text style={GlobalStyle.label}>Total</Text>
                                     </View>
                                     <View style={GlobalStyle.middleSide}>
                                         <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.teamName}</Text>
+                                        <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.partyName}</Text>
+                                        <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.workType}</Text>
                                         <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.total}</Text>
 
 
@@ -197,6 +221,10 @@ const TeamWorkPerDay = () => {
                                                                 arry.push({ personName: item.personName, unit: 0, cost: 0 })
                                                             })
                                                             setFieldValue('teamName', selectedItem?.teamName)
+                                                            setFieldValue('useruid', selectedItem?.useruid)
+                                                            setFieldValue('price', selectedItem?.price)
+                                                            setFieldValue('partyName', selectedItem?.partyName)
+                                                            setFieldValue('workType', selectedItem?.workType)
                                                             setFieldValue('teamPersons', arry)
 
                                                         }}
@@ -282,7 +310,7 @@ const TeamWorkPerDay = () => {
                                                                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                                                                     <TextInput
                                                                                         onChangeText={(text: any) => {
-                                                                                            replace(i, { ...person, unit: text, cost: text * user.price })
+                                                                                            replace(i, { ...person, unit: text, cost: text * values.price })
                                                                                         }}
                                                                                         value={person.unit.toString()}
                                                                                         style={{ flex: 1, fontSize: 16, color: '#000' }}
