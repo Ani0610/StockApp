@@ -217,7 +217,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View>
 
-                                            <Text style={[styles.inputLabel]}>Sample Imgage</Text>
+                                            <Text style={[styles.inputLabel]}>Sample Image</Text>
                                             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',marginTop:10 }}>
                                                 <Pressable onPress={() => setIscamaraModalVisible(true)}><Text style={{color:'gray'}}>Upload Sample</Text></Pressable>
                                             </View>

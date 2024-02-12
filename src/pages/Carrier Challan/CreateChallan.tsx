@@ -190,7 +190,7 @@ const patchData =()=>{
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View>
 
-                                        <Text style={styles.inputLabel}>Material Imgage</Text>
+                                        <Text style={styles.inputLabel}>Material Image</Text>
                                         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',marginTop:10 }}>
                                             <Pressable onPress={() => setIscamaraModalVisibleMaterial(true)}><Text style={{color:'gray'}}>Upload Sample</Text></Pressable>
                                         </View>
@@ -255,7 +255,7 @@ const patchData =()=>{
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View>
 
-                                        <Text style={styles.inputLabel}>Sample Imgage</Text>
+                                        <Text style={styles.inputLabel}>Sample Image</Text>
                                         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' ,marginTop:10}}>
                                             <Pressable onPress={() => setIscamaraModalVisible(true)}><Text style={{color:'gray'}}>Upload Sample</Text></Pressable>
                                         </View>
