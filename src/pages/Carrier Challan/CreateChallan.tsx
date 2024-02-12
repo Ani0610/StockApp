@@ -9,7 +9,7 @@ import * as Yup from "yup"
 import { useFormik } from 'formik'
 import { RootState } from '../../redux/store'
 import SelectDropdown from 'react-native-select-dropdown'
-import { addChallan } from '../../redux/action/Challan/ChallanSlice'
+import { addChallan, editChallan } from '../../redux/action/Challan/ChallanSlice'
 interface InitialFormValues {
     designNo: string,
     numberOfSample: string,
@@ -22,9 +22,12 @@ interface InitialFormValues {
     id: undefined,
 
 }
-const CreateChallan = ({ navigation }: any) => {
+const CreateChallan = ({ navigation ,route}: any) => {
     const [iscamaraModalVisible, setIscamaraModalVisible] = useState(false);
     const [iscamaraModalVisibleMaterial, setIscamaraModalVisibleMaterial] = useState(false);
+    const {user}:any = useSelector((state: RootState) => state.user)
+    const [update, setUpdate] = useState(false);
+
     const dispatch = useDispatch()
     const [sampleimg, setSampleimg] = useState<any>();
     const [selectedImage, setSelectedImage] = useState<any>();
@@ -59,17 +62,48 @@ const CreateChallan = ({ navigation }: any) => {
         initialValues: initialFormValues,
         validationSchema: challanSchema,
         onSubmit: async (values: any) => {
-            values.id = Math.floor(2360 + Math.random() * 6438)
-
-            console.log(values, 'Challan');
-            dispatch(addChallan({ ...values }))
+            if (update) {                
+                dispatch(editChallan({ ...values }))
+            } else {                
+                values.id = Math.floor(2360 + Math.random() * 6438)
+                dispatch(addChallan({ ...values }))
+            }
             resetForm()
             navigation.goBack()
 
         },
     });
     const { handleChange, handleBlur, handleSubmit, values, errors, isValid, touched, setFieldValue, resetForm } = formik
-
+useEffect(() => {
+  if (route.params) {
+    patchData()
+    setUpdate(true)
+  }else{
+    setInitialFormValues({
+        designNo: '',
+        numberOfSample: '',
+        materialImg: '',
+        sampleImg: '',
+        status: '',
+        carrierPersonName: user.userType?user.fullName:'',
+        carrierPersonUid: user.userType?user.useruid:'',
+        carrierPersonMobNo: user.userType?user.mobileNumber:'',
+        id: undefined,
+    })
+    setUpdate(false)
+  }
+}, [route.params])
+const patchData =()=>{
+    setFieldValue('designNo',route.params?.designNo)
+    setFieldValue('numberOfSample',route.params?.numberOfSample)
+    setFieldValue('materialImg',route.params?.materialImg)
+    setFieldValue('sampleImg',route.params?.sampleImg)
+    setFieldValue('status',route.params?.status)
+    setFieldValue('carrierPersonName',route.params?.carrierPersonName)
+    setFieldValue('carrierPersonUid',route.params?.carrierPersonUid)
+    setFieldValue('carrierPersonMobNo',route.params?.carrierPersonMobNo)
+    setFieldValue('id',route.params?.id)
+}
     const closecamaraModel = () => {
         setIscamaraModalVisible(false)
         setIscamaraModalVisibleMaterial(false)
@@ -152,13 +186,13 @@ const CreateChallan = ({ navigation }: any) => {
                         </View>
                         <View style={{ marginTop: 15 }}>
                             <View
-                                style={[styles.inputField, { width: '100%', height: values.materialImg ? 110 : 55 }]}>
+                                style={[styles.inputField, { width: '100%', height: values.materialImg ? 110 : 80 }]}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View>
 
                                         <Text style={styles.inputLabel}>Material Imgage</Text>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <Pressable onPress={() => setIscamaraModalVisibleMaterial(true)}><Text>Upload Sample</Text></Pressable>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',marginTop:10 }}>
+                                            <Pressable onPress={() => setIscamaraModalVisibleMaterial(true)}><Text style={{color:'gray'}}>Upload Sample</Text></Pressable>
                                         </View>
                                     </View>
                                     <View>
@@ -217,13 +251,13 @@ const CreateChallan = ({ navigation }: any) => {
                         </View>
                         <View style={{ marginTop: 15 }}>
                             <View
-                                style={[styles.inputField, { width: '100%', height: values.sampleImg ? 110 : 55 }]}>
+                                style={[styles.inputField, { width: '100%', height: values.sampleImg ? 110 : 80 }]}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View>
 
                                         <Text style={styles.inputLabel}>Sample Imgage</Text>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <Pressable onPress={() => setIscamaraModalVisible(true)}><Text>Upload Sample</Text></Pressable>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' ,marginTop:10}}>
+                                            <Pressable onPress={() => setIscamaraModalVisible(true)}><Text style={{color:'gray'}}>Upload Sample</Text></Pressable>
                                         </View>
                                     </View>
                                     <View>
@@ -280,11 +314,6 @@ const CreateChallan = ({ navigation }: any) => {
                                 <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.sampleImg}</Text>
                             }
                         </View>
-
-
-
-
-
                         <View style={{ marginTop: 15 }}>
                             <View
                                 style={styles.inputField}>
@@ -295,7 +324,7 @@ const CreateChallan = ({ navigation }: any) => {
                                         onSelect={(selectedItem) => {
                                             setFieldValue('status', selectedItem)
                                         }}
-                                        buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                        buttonStyle={{ backgroundColor: 'transparent',width:'100%'}}
                                         defaultButtonText='Select Status'
                                         buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                         dropdownStyle={{ width: '80%', borderRadius: 10 }}
@@ -308,6 +337,7 @@ const CreateChallan = ({ navigation }: any) => {
                                 <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.status}</Text>
                             }
                         </View>
+                        {user.userType !=="Carrier" &&
                         <View style={{ marginTop: 15 }}>
                             <View
                                 style={styles.inputField}>
@@ -316,7 +346,6 @@ const CreateChallan = ({ navigation }: any) => {
                                     <SelectDropdown
                                         data={[...carrierPersons]}
                                         onSelect={(selectedItem) => {
-                                            console.log(selectedItem, 'selecteditem');
                                             setFieldValue('carrierPersonName', selectedItem.fullName)
                                             setFieldValue('carrierPersonUid', selectedItem.useruid)
                                             setFieldValue('carrierPersonMobNo', selectedItem.mobileNumber)
@@ -327,11 +356,11 @@ const CreateChallan = ({ navigation }: any) => {
                                         rowTextForSelection={(item: any, index: number) => {
                                             return `${item.fullName}`;
                                         }}
-                                        buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                        buttonStyle={{ backgroundColor: 'transparent',width:'100%'}}
                                         defaultButtonText='Select Carrier Person'
                                         buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                         dropdownStyle={{ width: '80%', borderRadius: 10 }}
-                                        defaultValue={values.carrierPersonName}
+                                        defaultValue={carrierPersons.find((person:any) => person.useruid === values.carrierPersonUid)}
                                     />
 
                                 </View>
@@ -339,9 +368,9 @@ const CreateChallan = ({ navigation }: any) => {
                             {errors.carrierPersonName && touched.carrierPersonName &&
                                 <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.carrierPersonName}</Text>
                             }
-                        </View>
+                        </View>}
                         <Pressable style={GlobalStyle.button} onPress={() => handleSubmit()}>
-                            <Text style={GlobalStyle.btntext}>{'Submit'}</Text>
+                            <Text style={GlobalStyle.btntext}>{update?'Update':'Submit'}</Text>
                         </Pressable>
                     </View>
                 </ScrollView>
@@ -369,7 +398,6 @@ const CreateChallan = ({ navigation }: any) => {
     )
 }
 const styles = StyleSheet.create({
-
     inputField: {
         backgroundColor: '#F9F9F9',
         borderRadius: 15,

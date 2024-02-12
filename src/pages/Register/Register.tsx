@@ -66,7 +66,7 @@ const Register = () => {
                                                 onChangeText={handleChange('fullName')}
                                                 onBlur={() => { handleBlur('fullName') }}
                                                 value={values.fullName}
-                                                placeholder='First Name'
+                                                placeholder='Full Name'
                                                 placeholderTextColor='gray'
 
                                             />

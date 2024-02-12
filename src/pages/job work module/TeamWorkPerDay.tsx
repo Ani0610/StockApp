@@ -206,11 +206,11 @@ const TeamWorkPerDay = () => {
                                                         rowTextForSelection={(item: any, index: number) => {
                                                             return `${item?.teamName}`;
                                                         }}
-                                                        buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                                        buttonStyle={{ backgroundColor: 'transparent',width:'100%' }}
                                                         defaultButtonText={values.teamName ? values.teamName : 'Select Team'}
                                                         buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                         dropdownStyle={{ width: '80%', borderRadius: 10 }}
-                                                        defaultValue={values.teamName}
+                                                        defaultValue={teams.find((team:any) => team.teamName === values.teamName)}
                                                     />
                                                     {/* <TextInput
                                                     onChangeText={handleChange('teamName')}

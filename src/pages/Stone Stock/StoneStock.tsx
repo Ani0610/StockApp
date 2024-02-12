@@ -208,11 +208,11 @@ const StoneStock = () => {
                                                 rowTextForSelection={(item: any, index: number) => {
                                                     return `${item?.stoneType}`;
                                                 }}
-                                                buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                                buttonStyle={{ backgroundColor: 'transparent',width:'100%' }}
                                                 defaultButtonText='Select stone Type'
                                                 buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                 dropdownStyle={{ width: '80%', borderRadius: 10 }}
-                                                defaultValue={values.stoneType}
+                                                defaultValue={stone.find((st:any) => st.stoneType === values.stoneType)}
                                             />
                                         </View>
                                     </View>

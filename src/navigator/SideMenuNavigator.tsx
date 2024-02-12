@@ -32,10 +32,10 @@ const SideMenuNavigator = ({ navigation }: any) => {
                                 <>
                                     <DrawerStack.Screen name="Home" component={BottomTabNavigator}
                                     />
-                                    <DrawerStack.Screen name='StoneDetails' component={StoneDetails} />
-                                    <DrawerStack.Screen name='StoneStock' component={StoneStock} />
-                                    <DrawerStack.Screen name='DesignDetails' component={DesignDetails} />
-                                    <DrawerStack.Screen name='JobWorkDetails' component={JobWorkDetails} />
+                                    <DrawerStack.Screen name='Stone Details' component={StoneDetails} />
+                                    <DrawerStack.Screen name='Stone Stock' component={StoneStock} />
+                                    <DrawerStack.Screen name='Design Details' component={DesignDetails} />
+                                    <DrawerStack.Screen name='JobWork Details' component={JobWorkDetails} />
                                     <DrawerStack.Screen name='Users' component={UserMaster} />
                                     <DrawerStack.Screen name='Challan' component={Challan} />
                                 </>
@@ -48,15 +48,22 @@ const SideMenuNavigator = ({ navigation }: any) => {
                                     />
                                 </>
                             )
+                        case 'Carrier':
+                            return (
+                                <>
+                                    <DrawerStack.Screen name='Challan' component={Challan} />
+                                    
+                                </>
+                            )
                         default:
                             return (
                                 <>
                                     <DrawerStack.Screen name="Home" component={BottomTabNavigator}
                                     />
-                                    <DrawerStack.Screen name='StoneDetails' component={StoneDetails} />
-                                    <DrawerStack.Screen name='StoneStock' component={StoneStock} />
-                                    <DrawerStack.Screen name='DesignDetails' component={DesignDetails} />
-                                    <DrawerStack.Screen name='JobWorkDetails' component={JobWorkDetails} />
+                                    <DrawerStack.Screen name='Stone Details' component={StoneDetails} />
+                                    <DrawerStack.Screen name='Stone Stock' component={StoneStock} />
+                                    <DrawerStack.Screen name='Design Details' component={DesignDetails} />
+                                    <DrawerStack.Screen name='JobWork Details' component={JobWorkDetails} />
                                 </>
                             )
                     }

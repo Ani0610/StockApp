@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, Pressable, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native'
 import { GlobalStyle } from '../../../globalStyle'
 import Icon from 'react-native-easy-icon'
@@ -11,20 +11,30 @@ const Challan = ({ navigation }: any) => {
     const [data, setdata] = useState<any | null>(null); // Track the selected card's ID
     const [isVisible, setisVisible] = useState(false);
     const { challan } = useSelector((state: RootState) => state.challan)
-
+    const {user}:any = useSelector((state: RootState) => state.user)
+    const [challans,setchallans]=useState<any>([])
     const dispatch = useDispatch()
     const selectCard = (item: number) => {
         setisVisible(true)
         setdata(item);
     };
+    useEffect(() => {
+    if (user.userType ==="Carrier") {
+        const cha:any = challan.filter((item: any) => item.carrierPersonUid === user.useruid)
+        setchallans([...cha])
+    } else {
+        setchallans([...challan])
+
+    }
+    }, [user.userType,challan])
+    
     const onClose = () => {
         setisVisible(false)
     }
     const editDesignDetails = () => {
-
         setUpdate(true)
-        setisVisible(false)
-
+        navigation.navigate('Create Challan', data)
+                setisVisible(false)
     }
     const deleteDesignDetails = () => {
         dispatch(deleteChallan(data))

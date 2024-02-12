@@ -57,7 +57,7 @@ const DrawerView = ({ navigation, state }: any) => {
                                                         styles.drawerItem,
                                                         state.index === 1 && styles.activeDrawerItem, { marginHorizontal: 0 }
                                                     ]}
-                                                    onPress={() => handlePress('StoneDetails')}
+                                                    onPress={() => handlePress('Stone Details')}
                                                 >
                                                     <Text style={styles.drawerText}>Stone Details</Text>
                                                 </TouchableOpacity>
@@ -66,7 +66,7 @@ const DrawerView = ({ navigation, state }: any) => {
                                                         styles.drawerItem,
                                                         state.index === 2 && styles.activeDrawerItem, { borderBottomWidth: 0, marginHorizontal: 0 }
                                                     ]}
-                                                    onPress={() => handlePress('StoneStock')}
+                                                    onPress={() => handlePress('Stone Stock')}
                                                 >
                                                     <Text style={styles.drawerText}>Stone Stock</Text>
                                                 </TouchableOpacity>
@@ -77,7 +77,7 @@ const DrawerView = ({ navigation, state }: any) => {
                                                 styles.drawerItem,
                                                 state.index === 3 && styles.activeDrawerItem,
                                             ]}
-                                            onPress={() => handlePress('DesignDetails')}
+                                            onPress={() => handlePress('Design Details')}
                                         >
                                             <Text style={styles.drawerText}>Design Details</Text>
                                         </TouchableOpacity>
@@ -86,7 +86,7 @@ const DrawerView = ({ navigation, state }: any) => {
                                                 styles.drawerItem,
                                                 state.index === 4 && styles.activeDrawerItem,
                                             ]}
-                                            onPress={() => handlePress('JobWorkDetails')}
+                                            onPress={() => handlePress('JobWork Details')}
                                         >
                                             <Text style={styles.drawerText}>Job Details</Text>
                                         </TouchableOpacity>
@@ -135,6 +135,23 @@ const DrawerView = ({ navigation, state }: any) => {
 
                                     </>
                                 )
+                            case 'Carrier':
+                                return (
+                                    <>
+                                        <TouchableOpacity
+                                            style={[
+                                                styles.drawerItem,
+                                                state.index === 0 && styles.activeDrawerItem,
+                                            ]}
+                                            onPress={() => handlePress('Challan')}
+                                        >
+                                            <Text style={styles.drawerText}>Challan</Text>
+                                        </TouchableOpacity>
+
+                                    
+
+                                    </>
+                                )
                             default:
                                 return (
                                     <>
@@ -168,7 +185,7 @@ const DrawerView = ({ navigation, state }: any) => {
                                                         styles.drawerItem,
                                                         state.index === 1 && styles.activeDrawerItem, { marginHorizontal: 0 }
                                                     ]}
-                                                    onPress={() => handlePress('StoneDetails')}
+                                                    onPress={() => handlePress('Stone Details')}
                                                 >
                                                     <Text style={styles.drawerText}>Stone Details</Text>
                                                 </TouchableOpacity>
@@ -177,7 +194,7 @@ const DrawerView = ({ navigation, state }: any) => {
                                                         styles.drawerItem,
                                                         state.index === 2 && styles.activeDrawerItem, { borderBottomWidth: 0, marginHorizontal: 0 }
                                                     ]}
-                                                    onPress={() => handlePress('StoneStock')}
+                                                    onPress={() => handlePress('Stone Stock')}
                                                 >
                                                     <Text style={styles.drawerText}>Stone Stock</Text>
                                                 </TouchableOpacity>
@@ -188,7 +205,7 @@ const DrawerView = ({ navigation, state }: any) => {
                                                 styles.drawerItem,
                                                 state.index === 3 && styles.activeDrawerItem,
                                             ]}
-                                            onPress={() => handlePress('DesignDetails')}
+                                            onPress={() => handlePress('Design Details')}
                                         >
                                             <Text style={styles.drawerText}>Design Details</Text>
                                         </TouchableOpacity>
@@ -197,7 +214,7 @@ const DrawerView = ({ navigation, state }: any) => {
                                                 styles.drawerItem,
                                                 state.index === 4 && styles.activeDrawerItem,
                                             ]}
-                                            onPress={() => handlePress('JobWorkDetails')}
+                                            onPress={() => handlePress('JobWork Details')}
                                         >
                                             <Text style={styles.drawerText}>Job Details</Text>
                                         </TouchableOpacity>

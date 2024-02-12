@@ -218,6 +218,7 @@ const UserMaster = () => {
                                                 onChangeText={handleChange('mobileNumber')}
                                                 onBlur={() => { handleBlur('mobileNumber') }}
                                                 value={values.mobileNumber}
+                                                keyboardType={'phone-pad'}
                                                 style={{ flex: 1, fontSize: 16, color: '#000' }}
                                                 placeholderTextColor='gray'
                                                 placeholder='Enter Mobile Nunber'
@@ -240,7 +241,7 @@ const UserMaster = () => {
                                                 onSelect={(selectedItem) => {
                                                     setFieldValue('userType', selectedItem)
                                                 }}
-                                                buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                                buttonStyle={{ backgroundColor: 'transparent',width:'100%'}}
                                                 defaultButtonText='Select User Type'
                                                 buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                 dropdownStyle={{ width: '80%', borderRadius: 10 }}
@@ -272,11 +273,11 @@ const UserMaster = () => {
                                                     rowTextForSelection={(item: any, index: number) => {
                                                         return `${item.partyName}`;
                                                     }}
-                                                    buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                                    buttonStyle={{ backgroundColor: 'transparent' ,width:'100%'}}
                                                     defaultButtonText='Select Party Name'
                                                     buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                     dropdownStyle={{ width: '80%', borderRadius: 10 }}
-                                                    defaultValue={values.partyName}
+                                                    defaultValue={jobWorks.find((job:any) => job.id === values.useruid)}
                                                 />
 
                                             </View>

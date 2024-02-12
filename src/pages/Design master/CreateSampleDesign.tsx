@@ -108,15 +108,16 @@ const CreateSampleDesign = ({ navigation }: any) => {
         initialValues: initialFormValues,
         validationSchema: sampleSchema,
         onSubmit: async (values: any) => {
-            console.log(values, 'sample design');
             values.stoneDetails.map((stone: any) => updateStock(stone))
-            // dispatch(addDesignMaster({ ...values, id: Math.floor(2000 + Math.random() * 9000), total: Number(values.total).toFixed(2) }))
+            values.id=Math.floor(2000 + Math.random() * 9000)
+            values.total= Number(values.total).toFixed(2)
+            // dispatch(addDesignMaster({ ...values}))
+            console.log(values, 'sample design');
             resetForm()
             navigation.goBack()
 
         },
     });
-    // { console.log(formik.values, 'new formik') }
     const { handleChange, handleBlur, handleSubmit, values, errors, isValid, touched, setFieldValue, resetForm } = formik
     const updateStock = async (item: any) => {
         const findIndex = await stoneStock.findIndex((item1: any) => item1.id === item.stoneuid)
@@ -170,7 +171,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
         setSelectedImage(null)
     }
     return (
-        <SafeAreaView style={[GlobalStyle.safeAreaCotainer, { height: '100%', marginBottom: 20 }]}>
+        <SafeAreaView style={[GlobalStyle.safeAreaCotainer, { height: '100%'}]}>
             <StatusBar
                 backgroundColor="#fff"
                 barStyle="dark-content" // Here is where you change the font-color
@@ -183,7 +184,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                     <Text style={{ textAlign: 'center', fontSize: 20, color: '#000', fontWeight: 'bold' }}>Create Design</Text>
                 </View>
             </View>
-            <GestureHandlerRootView>
+            <GestureHandlerRootView style={{marginBottom:100}}>
                 <ScrollView>
                     <FormikProvider value={formik}>
                         <View style={{
@@ -212,13 +213,13 @@ const CreateSampleDesign = ({ navigation }: any) => {
                             </View>
                             <View style={{ marginTop: 15 }}>
                                 <View
-                                    style={[styles.inputField, { width: '100%', height: sampleimg ? 110 : 55 }]}>
+                                    style={[styles.inputField, { width: '100%', height: sampleimg ? 110 : 80 }]}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View>
 
-                                            <Text style={styles.inputLabel}>Sample Imgage</Text>
-                                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                <Pressable onPress={() => setIscamaraModalVisible(true)}><Text>Upload Sample</Text></Pressable>
+                                            <Text style={[styles.inputLabel]}>Sample Imgage</Text>
+                                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',marginTop:10 }}>
+                                                <Pressable onPress={() => setIscamaraModalVisible(true)}><Text style={{color:'gray'}}>Upload Sample</Text></Pressable>
                                             </View>
                                         </View>
                                         <View>
@@ -325,7 +326,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                             rowTextForSelection={(item: any, index: number) => {
                                                                                 return `${item?.stoneType}`;
                                                                             }}
-                                                                            buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                                                            buttonStyle={{ backgroundColor: 'transparent',width:'100%' }}
                                                                             defaultButtonText='Select stone Type'
                                                                             buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                                             dropdownStyle={{ width: '80%', borderRadius: 10 }}
@@ -379,7 +380,6 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.stoneDetails[i].stoneunit}</Text>
                                                                 }
                                                             </View>
-
                                                         </View>
                                                     </View>
                                                 ))
@@ -441,7 +441,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                             rowTextForSelection={(item: any, index: number) => {
                                                                                 return `${item?.mesurement}`;
                                                                             }}
-                                                                            buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                                                            buttonStyle={{ backgroundColor: 'transparent',width:'100%' }}
                                                                             defaultButtonText='Select Design'
                                                                             buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                                             dropdownStyle={{ width: '80%', borderRadius: 10 }}
@@ -554,7 +554,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                             rowTextForSelection={(item: any, index: number) => {
                                                                                 return `${item?.workType} - ${item.partyName}`;
                                                                             }}
-                                                                            buttonStyle={{ backgroundColor: 'transparent', height: 20 }}
+                                                                            buttonStyle={{ backgroundColor: 'transparent' }}
                                                                             defaultButtonText='Select Work Type'
                                                                             buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                                             dropdownStyle={{ width: '80%', borderRadius: 10 }}
