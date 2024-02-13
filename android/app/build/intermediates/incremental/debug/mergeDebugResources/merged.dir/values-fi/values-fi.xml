@@ -32,6 +32,7 @@
     <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"Jaa: <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
     <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"Tiivistä"</string>
     <string gender="unknown" name="alert_description">Hälytys</string>
+    <string name="ampm_description">Valitse am/pm</string>
     <string name="bottomsheet_action_collapse">Tiivistä alapaneeli</string>
     <string name="bottomsheet_action_expand">Laajenna alapaneeli</string>
     <string name="bottomsheet_action_expand_halfway">Laajenna puoliväliin</string>
@@ -43,9 +44,13 @@
     <string name="character_counter_overflowed_content_description">Merkkiraja ylitetty: %1$d/%2$d</string>
     <string name="clear_text_end_icon_content_description">Tyhjennä teksti</string>
     <string gender="unknown" name="combobox_description">Yhdistelmäruutu</string>
+    <string name="date_description">Valitse Päivämäärä</string>
+    <string name="day_description">Valitse Päivä</string>
     <string name="error_icon_content_description">Virhe</string>
     <string name="exposed_dropdown_menu_content_description">Näytä avattava valikko</string>
     <string gender="unknown" name="header_description">Otsikko</string>
+    <string name="hour_description">Valitse Tunti</string>
+    <string name="hour_tag">Tunti:</string>
     <string name="icon_content_description">Valintaikkunan kuvake</string>
     <string gender="unknown" name="image_description">Kuva</string>
     <string gender="unknown" name="imagebutton_description">Painike, kuva</string>
@@ -67,6 +72,9 @@
     <string gender="unknown" name="menu_description">Valikko</string>
     <string gender="unknown" name="menubar_description">Valikkopalkki</string>
     <string gender="unknown" name="menuitem_description">Valikkokohde</string>
+    <string name="minutes_description">Valitse Minuutit</string>
+    <string name="minutes_tag">Minuutit</string>
+    <string name="month_description">Valitse Kuukausi</string>
     <string name="mtrl_badge_numberless_content_description">Uusi ilmoitus</string>
     <string name="mtrl_chip_close_icon_content_description">Poista %1$s</string>
     <string name="mtrl_exceed_max_badge_number_content_description" ns2:ignore="PluralsCandidate">Yli %1$d uutta ilmoitusta</string>
@@ -103,6 +111,7 @@
     <string name="mtrl_picker_toggle_to_year_selection">Siirry vuoden valintaan napauttamalla</string>
     <string name="mtrl_timepicker_cancel">Peru</string>
     <string name="mtrl_timepicker_confirm">OK</string>
+    <string name="overlay">Päivämääränvalitsin</string>
     <string name="password_toggle_content_description">Näytä salasana</string>
     <string gender="unknown" name="progressbar_description">Edistymispalkki</string>
     <string gender="unknown" name="radiogroup_description">Valintanappiryhmä</string>
@@ -120,10 +129,12 @@
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string gender="unknown" name="summary_description">Yhteenveto</string>
     <string gender="unknown" name="tablist_description">Välilehtilista</string>
+    <string name="time_tag">Kello on</string>
     <string gender="unknown" name="timer_description">Ajastin</string>
     <string gender="unknown" name="toolbar_description">Työkalupalkki</string>
     <string name="ucrop_error_input_data_is_absent">Sekä sisäänmeno- että ulostulo-Urit täytyy olla määritettyinä</string>
     <string name="ucrop_label_edit_photo">Muokkaa kuvaa</string>
     <string name="ucrop_menu_crop">Rajaa</string>
     <string name="ucrop_mutate_exception_hint"/>
+    <string name="year_description">Valitse Vuosi</string>
 </resources>

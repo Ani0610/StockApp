@@ -906,6 +906,34 @@ attr navigationViewStyle
 attr nestedScrollFlags
 attr nestedScrollViewStyle
 attr nestedScrollable
+attr npv_AlternativeHint
+attr npv_AlternativeTextArrayWithMeasureHint
+attr npv_AlternativeTextArrayWithoutMeasureHint
+attr npv_DividerColor
+attr npv_DividerHeight
+attr npv_DividerMarginLeft
+attr npv_DividerMarginRight
+attr npv_EmptyItemHint
+attr npv_HintText
+attr npv_ItemPaddingHorizontal
+attr npv_ItemPaddingVertical
+attr npv_MarginEndOfHint
+attr npv_MarginStartOfHint
+attr npv_MaxValue
+attr npv_MinValue
+attr npv_RespondChangeInMainThread
+attr npv_RespondChangeOnDetached
+attr npv_ShowDivider
+attr npv_ShownCount
+attr npv_TextArray
+attr npv_TextColorHint
+attr npv_TextColorNormal
+attr npv_TextColorSelected
+attr npv_TextEllipsize
+attr npv_TextSizeHint
+attr npv_TextSizeNormal
+attr npv_TextSizeSelected
+attr npv_WrapSelectorWheel
 attr number
 attr numericModifiers
 attr offsetAlignmentMode
@@ -3047,6 +3075,7 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable overlay
 drawable redbox_top_border_background
 drawable rn_edit_text_material
 drawable src_assets_sample1
@@ -3157,6 +3186,7 @@ id alertTitle
 id aligned
 id all
 id always
+id ampm
 id animateToEnd
 id animateToStart
 id arc
@@ -3211,7 +3241,9 @@ id cradle
 id custom
 id customPanel
 id cut
+id date
 id date_picker_actions
+id day
 id decelerate
 id decelerateAndComplete
 id decor_content_parent
@@ -3243,6 +3275,8 @@ id edge
 id edit_query
 id elastic
 id embed
+id empty_end
+id empty_start
 id end
 id endToStart
 id enterAlways
@@ -3283,6 +3317,7 @@ id hideable
 id home
 id homeAsUp
 id honorRequest
+id hour
 id icon
 id icon_group
 id ifRoom
@@ -3347,6 +3382,8 @@ id menu_loader
 id message
 id middle
 id mini
+id minutes
+id month
 id month_grid
 id month_navigation_bar
 id month_navigation_fragment_toggle
@@ -3396,6 +3433,9 @@ id off
 id on
 id outline
 id outward
+id overlay_bottom
+id overlay_image
+id overlay_top
 id packed
 id parallax
 id parent
@@ -3407,6 +3447,7 @@ id path
 id pathRelative
 id peekHeight
 id percent
+id pickerWrapper
 id pin
 id pointer_events
 id position
@@ -3589,6 +3630,7 @@ id wrapper_controls
 id wrapper_reset_rotate
 id wrapper_rotate_by_angle
 id wrapper_states
+id year
 integer abc_config_activityDefaultDur
 integer abc_config_activityShortDur
 integer app_bar_elevation_anim_duration
@@ -3724,6 +3766,7 @@ layout design_text_input_end_icon
 layout design_text_input_start_icon
 layout dev_loading_view
 layout fps_view
+layout ios_clone
 layout m3_alert_dialog
 layout m3_alert_dialog_actions
 layout m3_alert_dialog_title
@@ -3775,6 +3818,7 @@ layout mtrl_picker_text_input_date
 layout mtrl_picker_text_input_date_range
 layout mtrl_search_bar
 layout mtrl_search_view
+layout native_picker
 layout notification_action
 layout notification_action_tombstone
 layout notification_template_custom_big
@@ -3827,6 +3871,7 @@ string abc_shareactionprovider_share_with
 string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
 string alert_description
+string ampm_description
 string androidx_startup
 string app_name
 string appbar_scrolling_view_behavior
@@ -3868,6 +3913,8 @@ string character_counter_overflowed_content_description
 string character_counter_pattern
 string clear_text_end_icon_content_description
 string combobox_description
+string date_description
+string day_description
 string error_a11y_label
 string error_icon_content_description
 string exposed_dropdown_menu_content_description
@@ -3875,6 +3922,8 @@ string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
 string header_description
 string hide_bottom_view_on_scroll_behavior
+string hour_description
+string hour_tag
 string icon_content_description
 string image_description
 string imagebutton_description
@@ -3920,6 +3969,9 @@ string material_timepicker_text_input_mode_description
 string menu_description
 string menubar_description
 string menuitem_description
+string minutes_description
+string minutes_tag
+string month_description
 string mtrl_badge_numberless_content_description
 string mtrl_checkbox_button_icon_path_checked
 string mtrl_checkbox_button_icon_path_group_name
@@ -3982,6 +4034,7 @@ string mtrl_switch_track_decoration_path
 string mtrl_switch_track_path
 string mtrl_timepicker_cancel
 string mtrl_timepicker_confirm
+string overlay
 string password_toggle_content_description
 string path_password_eye
 string path_password_eye_mask_strike_through
@@ -4008,6 +4061,7 @@ string state_unselected_description
 string status_bar_notification_info_overflow
 string summary_description
 string tablist_description
+string time_tag
 string timer_description
 string toolbar_description
 string ucrop_crop
@@ -4018,6 +4072,7 @@ string ucrop_menu_crop
 string ucrop_mutate_exception_hint
 string ucrop_rotate
 string ucrop_scale
+string year_description
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog
@@ -4307,6 +4362,8 @@ style CalendarDatePickerStyle
 style CardView
 style CardView_Dark
 style CardView_Light
+style DatePickerBaseTheme
+style DatePickerTheme
 style DialogAnimationFade
 style DialogAnimationSlide
 style MaterialAlertDialog_Material3
@@ -5145,6 +5202,8 @@ style Widget_MaterialComponents_Toolbar_PrimarySurface
 style Widget_MaterialComponents_Toolbar_Surface
 style Widget_MaterialComponents_Tooltip
 style Widget_Support_CoordinatorLayout
+style android_native
+style android_native_small
 style redboxButton
 style ucrop_ImageViewWidgetIcon
 style ucrop_TextViewCropAspectRatio
@@ -5258,6 +5317,7 @@ styleable NavigationBarActiveIndicator android_height android_width android_colo
 styleable NavigationBarView backgroundTint elevation itemActiveIndicatorStyle itemBackground itemIconSize itemIconTint itemPaddingBottom itemPaddingTop itemRippleColor itemTextAppearanceActive itemTextAppearanceInactive itemTextColor labelVisibilityMode menu
 styleable NavigationRailView headerLayout itemMinHeight menuGravity paddingBottomSystemWindowInsets paddingTopSystemWindowInsets
 styleable NavigationView android_layout_gravity android_background android_fitsSystemWindows android_maxWidth bottomInsetScrimEnabled dividerInsetEnd dividerInsetStart drawerLayoutCornerSize elevation headerLayout itemBackground itemHorizontalPadding itemIconPadding itemIconSize itemIconTint itemMaxLines itemRippleColor itemShapeAppearance itemShapeAppearanceOverlay itemShapeFillColor itemShapeInsetBottom itemShapeInsetEnd itemShapeInsetStart itemShapeInsetTop itemTextAppearance itemTextColor itemVerticalPadding menu shapeAppearance shapeAppearanceOverlay subheaderColor subheaderInsetEnd subheaderInsetStart subheaderTextAppearance topInsetScrimEnabled
+styleable NumberPickerView npv_AlternativeHint npv_AlternativeTextArrayWithMeasureHint npv_AlternativeTextArrayWithoutMeasureHint npv_DividerColor npv_DividerHeight npv_DividerMarginLeft npv_DividerMarginRight npv_EmptyItemHint npv_HintText npv_ItemPaddingHorizontal npv_ItemPaddingVertical npv_MarginEndOfHint npv_MarginStartOfHint npv_MaxValue npv_MinValue npv_RespondChangeInMainThread npv_RespondChangeOnDetached npv_ShowDivider npv_ShownCount npv_TextArray npv_TextColorHint npv_TextColorNormal npv_TextColorSelected npv_TextEllipsize npv_TextSizeHint npv_TextSizeNormal npv_TextSizeSelected npv_WrapSelectorWheel
 styleable OnClick clickAction targetId
 styleable OnSwipe dragDirection dragScale dragThreshold limitBoundsTo maxAcceleration maxVelocity moveWhenScrollAtTop nestedScrollFlags onTouchUp touchAnchorId touchAnchorSide touchRegionId
 styleable PopupWindow android_popupBackground android_popupAnimationStyle overlapAnchor

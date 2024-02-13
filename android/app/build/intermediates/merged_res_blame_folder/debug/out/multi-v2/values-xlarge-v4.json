@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.stockapp-mergeDebugResources-35:/values-xlarge-v4/values-xlarge-v4.xml",
+            "outputFile": "com.stockapp-mergeDebugResources-36:/values-xlarge-v4/values-xlarge-v4.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Lenovo\\.gradle\\caches\\transforms-3\\291739c7e62f0cf7d74cd658d7be977b\\transformed\\appcompat-1.6.1\\res\\values-xlarge-v4\\values-xlarge-v4.xml",

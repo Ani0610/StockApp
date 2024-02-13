@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.stockapp-mergeDebugResources-35:/values-ro/values-ro.xml",
+            "outputFile": "com.stockapp-mergeDebugResources-36:/values-ro/values-ro.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Lenovo\\.gradle\\caches\\transforms-3\\5ff1ce3ec4c7364dc0dcdb3fbb601af1\\transformed\\material-1.9.0\\res\\values-ro\\values-ro.xml",

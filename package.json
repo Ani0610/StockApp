@@ -22,6 +22,7 @@
     "formik": "^2.4.5",
     "react": "18.2.0",
     "react-native": "0.73.2",
+    "react-native-date-picker": "^4.3.6",
     "react-native-easy-icon": "^1.0.10",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.14.1",

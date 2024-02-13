@@ -11,166 +11,172 @@
 11    <uses-permission android:name="android.permission.INTERNET" />
 11-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:3:5-67
 11-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:3:22-64
-12    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-12-->[:react-native-fs] D:\skyban projects\New folder\StockApp\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-81
-12-->[:react-native-fs] D:\skyban projects\New folder\StockApp\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:22-78
-13    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-14
-15    <queries>
-15-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-11:15
-16        <intent>
-16-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-10:18
-17            <action android:name="android.media.action.IMAGE_CAPTURE" />
-17-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-73
-17-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:21-70
-18        </intent>
-19    </queries>
-20    <!--
-21    This manifest file is used only by Gradle to configure debug-only capabilities
-22    for React Native Apps.
-23    -->
-24    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-24-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:16:5-78
-24-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:16:22-75
-25    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-25-->[com.facebook.flipper:flipper:0.201.0] C:\Users\Lenovo\.gradle\caches\transforms-3\1b40c15f339c518456129d3a4e309447\transformed\jetified-flipper-0.201.0\AndroidManifest.xml:14:5-76
-25-->[com.facebook.flipper:flipper:0.201.0] C:\Users\Lenovo\.gradle\caches\transforms-3\1b40c15f339c518456129d3a4e309447\transformed\jetified-flipper-0.201.0\AndroidManifest.xml:14:22-73
-26
-27    <permission
-27-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
-28        android:name="com.stockapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-28-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
-29        android:protectionLevel="signature" />
-29-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
-30
-31    <uses-permission android:name="com.stockapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-31-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
-31-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+12    <uses-permission android:name="android.permission.CAMERA" />
+12-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:4:3-63
+12-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:4:20-60
+13    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+13-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:5:3-74
+13-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:5:20-71
+14    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+14-->[:react-native-fs] D:\skyban projects\New folder\StockApp\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-81
+14-->[:react-native-fs] D:\skyban projects\New folder\StockApp\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:22-78
+15    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+16
+17    <queries>
+17-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-11:15
+18        <intent>
+18-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-10:18
+19            <action android:name="android.media.action.IMAGE_CAPTURE" />
+19-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-73
+19-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:21-70
+20        </intent>
+21    </queries>
+22    <!--
+23    This manifest file is used only by Gradle to configure debug-only capabilities
+24    for React Native Apps.
+25    -->
+26    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+26-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:16:5-78
+26-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:16:22-75
+27    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+27-->[com.facebook.flipper:flipper:0.201.0] C:\Users\Lenovo\.gradle\caches\transforms-3\1b40c15f339c518456129d3a4e309447\transformed\jetified-flipper-0.201.0\AndroidManifest.xml:14:5-76
+27-->[com.facebook.flipper:flipper:0.201.0] C:\Users\Lenovo\.gradle\caches\transforms-3\1b40c15f339c518456129d3a4e309447\transformed\jetified-flipper-0.201.0\AndroidManifest.xml:14:22-73
+28
+29    <permission
+29-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+30        android:name="com.stockapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+30-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+31        android:protectionLevel="signature" />
+31-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
 32
-33    <application
-33-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:5:5-24:19
-34        android:name="com.stockapp.MainApplication"
-34-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:6:7-38
-35        android:allowBackup="false"
-35-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:10:7-34
-36        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-36-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
-37        android:debuggable="true"
-38        android:extractNativeLibs="true"
-39        android:icon="@mipmap/ic_launcher"
-39-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:8:7-41
-40        android:label="@string/app_name"
-40-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:7:7-39
-41        android:roundIcon="@mipmap/ic_launcher_round"
-41-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:9:7-52
-42        android:theme="@style/AppTheme"
-42-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:11:7-38
-43        android:usesCleartextTraffic="true" >
-43-->D:\skyban projects\New folder\StockApp\android\app\src\debug\AndroidManifest.xml:6:9-44
-44        <activity
-44-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:12:7-23:18
-45            android:name="com.stockapp.MainActivity"
-45-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:13:9-37
-46            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
-46-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:15:9-118
-47            android:exported="true"
-47-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:18:9-32
-48            android:label="@string/app_name"
-48-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:14:9-41
-49            android:launchMode="singleTask"
-49-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:16:9-40
-50            android:windowSoftInputMode="adjustResize" >
-50-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:17:9-51
-51            <intent-filter>
-51-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:19:9-22:25
-52                <action android:name="android.intent.action.MAIN" />
-52-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:20:13-65
-52-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:20:21-62
-53
-54                <category android:name="android.intent.category.LAUNCHER" />
-54-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:21:13-73
-54-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:21:23-70
-55            </intent-filter>
-56        </activity>
-57
-58        <provider
-58-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:9-24:20
-59            android:name="com.reactnative.ivpusic.imagepicker.IvpusicImagePickerFileProvider"
-59-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:13-94
-60            android:authorities="com.stockapp.provider"
-60-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-60
-61            android:exported="false"
-61-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-37
-62            android:grantUriPermissions="true" >
-62-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-47
-63            <meta-data
-63-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
-64                android:name="android.support.FILE_PROVIDER_PATHS"
-64-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
-65                android:resource="@xml/ivpusic_imagepicker_provider_paths" />
-65-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
-66        </provider>
-67
-68        <activity
-68-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:9-28:72
-69            android:name="com.yalantis.ucrop.UCropActivity"
-69-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-60
-70            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-70-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-69
-71
-72        <provider
-72-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-16:20
-73            android:name="com.imagepicker.ImagePickerProvider"
-73-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-63
-74            android:authorities="com.stockapp.imagepickerprovider"
-74-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-71
-75            android:exported="false"
-75-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-37
-76            android:grantUriPermissions="true" >
-76-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-47
-77            <meta-data
-77-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
-78                android:name="android.support.FILE_PROVIDER_PATHS"
-78-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
-79                android:resource="@xml/imagepicker_provider_paths" />
-79-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
-80        </provider>
-81
-82        <activity
-82-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:19:9-21:40
-83            android:name="com.facebook.react.devsupport.DevSettingsActivity"
-83-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:20:13-77
-84            android:exported="false" />
-84-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:21:13-37
-85
-86        <provider
-86-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-87            android:name="androidx.startup.InitializationProvider"
-87-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
-88            android:authorities="com.stockapp.androidx-startup"
-88-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
-89            android:exported="false" >
-89-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
-90            <meta-data
-90-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
-91                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-91-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
-92                android:value="androidx.startup" />
-92-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
-93            <meta-data
-93-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Lenovo\.gradle\caches\transforms-3\4bb01ff517dea9f20351c3f169ca52bf\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
-94                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-94-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Lenovo\.gradle\caches\transforms-3\4bb01ff517dea9f20351c3f169ca52bf\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
-95                android:value="androidx.startup" />
-95-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Lenovo\.gradle\caches\transforms-3\4bb01ff517dea9f20351c3f169ca52bf\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
-96        </provider>
-97
-98        <meta-data
-98-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Lenovo\.gradle\caches\transforms-3\ab28b1bd78def24f1cf09f543278dc18\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:12:9-14:37
-99            android:name="com.facebook.soloader.enabled"
-99-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Lenovo\.gradle\caches\transforms-3\ab28b1bd78def24f1cf09f543278dc18\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:13:13-57
-100            android:value="false" />
-100-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Lenovo\.gradle\caches\transforms-3\ab28b1bd78def24f1cf09f543278dc18\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:14:13-34
-101    </application>
-102
-103</manifest>
+33    <uses-permission android:name="com.stockapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+33-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+33-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+34
+35    <application
+35-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:7:5-26:19
+36        android:name="com.stockapp.MainApplication"
+36-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:8:7-38
+37        android:allowBackup="false"
+37-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:12:7-34
+38        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+38-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\43abcdf137700df62cb964efd16f6a46\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+39        android:debuggable="true"
+40        android:extractNativeLibs="true"
+41        android:icon="@mipmap/ic_launcher"
+41-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:10:7-41
+42        android:label="@string/app_name"
+42-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:9:7-39
+43        android:roundIcon="@mipmap/ic_launcher_round"
+43-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:11:7-52
+44        android:theme="@style/AppTheme"
+44-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:13:7-38
+45        android:usesCleartextTraffic="true" >
+45-->D:\skyban projects\New folder\StockApp\android\app\src\debug\AndroidManifest.xml:6:9-44
+46        <activity
+46-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:14:7-25:18
+47            android:name="com.stockapp.MainActivity"
+47-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:15:9-37
+48            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+48-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:17:9-118
+49            android:exported="true"
+49-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:20:9-32
+50            android:label="@string/app_name"
+50-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:16:9-41
+51            android:launchMode="singleTask"
+51-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:18:9-40
+52            android:windowSoftInputMode="adjustResize" >
+52-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:19:9-51
+53            <intent-filter>
+53-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:21:9-24:25
+54                <action android:name="android.intent.action.MAIN" />
+54-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:22:13-65
+54-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:22:21-62
+55
+56                <category android:name="android.intent.category.LAUNCHER" />
+56-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:23:13-73
+56-->D:\skyban projects\New folder\StockApp\android\app\src\main\AndroidManifest.xml:23:23-70
+57            </intent-filter>
+58        </activity>
+59
+60        <provider
+60-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:9-24:20
+61            android:name="com.reactnative.ivpusic.imagepicker.IvpusicImagePickerFileProvider"
+61-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:13-94
+62            android:authorities="com.stockapp.provider"
+62-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-60
+63            android:exported="false"
+63-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-37
+64            android:grantUriPermissions="true" >
+64-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-47
+65            <meta-data
+65-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
+66                android:name="android.support.FILE_PROVIDER_PATHS"
+66-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
+67                android:resource="@xml/ivpusic_imagepicker_provider_paths" />
+67-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
+68        </provider>
+69
+70        <activity
+70-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:9-28:72
+71            android:name="com.yalantis.ucrop.UCropActivity"
+71-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-60
+72            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+72-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-69
+73
+74        <provider
+74-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-16:20
+75            android:name="com.imagepicker.ImagePickerProvider"
+75-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-63
+76            android:authorities="com.stockapp.imagepickerprovider"
+76-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-71
+77            android:exported="false"
+77-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-37
+78            android:grantUriPermissions="true" >
+78-->[:react-native-image-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-47
+79            <meta-data
+79-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
+80                android:name="android.support.FILE_PROVIDER_PATHS"
+80-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
+81                android:resource="@xml/imagepicker_provider_paths" />
+81-->[:react-native-image-crop-picker] D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
+82        </provider>
+83
+84        <activity
+84-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:19:9-21:40
+85            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+85-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:20:13-77
+86            android:exported="false" />
+86-->[com.facebook.react:react-android:0.73.2] C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\AndroidManifest.xml:21:13-37
+87
+88        <provider
+88-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+89            android:name="androidx.startup.InitializationProvider"
+89-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+90            android:authorities="com.stockapp.androidx-startup"
+90-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+91            android:exported="false" >
+91-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+92            <meta-data
+92-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+93                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+93-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+94                android:value="androidx.startup" />
+94-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+95            <meta-data
+95-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Lenovo\.gradle\caches\transforms-3\4bb01ff517dea9f20351c3f169ca52bf\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+96                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+96-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Lenovo\.gradle\caches\transforms-3\4bb01ff517dea9f20351c3f169ca52bf\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+97                android:value="androidx.startup" />
+97-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Lenovo\.gradle\caches\transforms-3\4bb01ff517dea9f20351c3f169ca52bf\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+98        </provider>
+99
+100        <meta-data
+100-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Lenovo\.gradle\caches\transforms-3\ab28b1bd78def24f1cf09f543278dc18\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:12:9-14:37
+101            android:name="com.facebook.soloader.enabled"
+101-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Lenovo\.gradle\caches\transforms-3\ab28b1bd78def24f1cf09f543278dc18\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:13:13-57
+102            android:value="false" />
+102-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Lenovo\.gradle\caches\transforms-3\ab28b1bd78def24f1cf09f543278dc18\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:14:13-34
+103    </application>
+104
+105</manifest>

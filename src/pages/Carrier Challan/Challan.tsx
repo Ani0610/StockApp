@@ -5,6 +5,7 @@ import Icon from 'react-native-easy-icon'
 import { deleteChallan } from '../../redux/action/Challan/ChallanSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
+import { formatDate } from '../../services/dateFormate'
 
 const Challan = ({ navigation }: any) => {
     const [update, setUpdate] = useState(false);
@@ -57,15 +58,19 @@ const Challan = ({ navigation }: any) => {
                                 flexDirection: 'row'
                             }]}>
                                 <View style={GlobalStyle.leftSide}>
-                                    <Text style={GlobalStyle.label}>Design No</Text>
-                                    <Text style={GlobalStyle.label}>Samples</Text>
+                                    <Text style={GlobalStyle.label}>Date</Text>
+                                    <Text style={GlobalStyle.label}>Job No</Text>
+                                    <Text style={GlobalStyle.label}>Party Name</Text>
+                                    <Text style={GlobalStyle.label}>Pieces</Text>
                                     <Text style={GlobalStyle.label}>Carrier</Text>
                                     <Text style={GlobalStyle.label}>Mobile No</Text>
                                     <Text style={GlobalStyle.label}>Status</Text>
                                 </View>
                                 <View style={GlobalStyle.middleSide}>
-                                    <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.designNo}</Text>
-                                    <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.numberOfSample}</Text>
+                                    <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{formatDate(item.date)}</Text>
+                                    <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.jobNumber}</Text>
+                                    <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.partyName}</Text>
+                                    <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.piece}</Text>
                                     <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.carrierPersonName}</Text>
                                     <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.carrierPersonMobNo}</Text>
                                     <Text style={GlobalStyle.textcolor} numberOfLines={1} ellipsizeMode="tail">{item.status}</Text>

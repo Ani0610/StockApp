@@ -32,6 +32,7 @@
     <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"Partager avec <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
     <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"Réduire"</string>
     <string gender="unknown" name="alert_description">Alerte</string>
+    <string name="ampm_description">Sélectionnez AM/PM</string>
     <string name="bottomsheet_action_collapse">Réduire la bottom sheet</string>
     <string name="bottomsheet_action_expand">Développer la bottom sheet</string>
     <string name="bottomsheet_action_expand_halfway">Développer en entier</string>
@@ -42,9 +43,13 @@
     <string name="character_counter_overflowed_content_description">Nombre maximal de caractères dépassé : %1$d sur %2$d</string>
     <string name="clear_text_end_icon_content_description">Effacer le texte</string>
     <string gender="unknown" name="combobox_description">Liste déroulante</string>
+    <string name="date_description">Sélectionnez la date</string>
+    <string name="day_description">Sélectionnez le jour</string>
     <string name="error_icon_content_description">Erreur</string>
     <string name="exposed_dropdown_menu_content_description">Afficher le menu déroulant</string>
     <string gender="unknown" name="header_description">Titre</string>
+    <string name="hour_description">Sélectionnez l\'heure</string>
+    <string name="hour_tag">Heure :</string>
     <string name="icon_content_description">Icône de la boîte de dialogue</string>
     <string gender="unknown" name="imagebutton_description">Bouton, image</string>
     <string name="item_view_role_description">Tabulation</string>
@@ -64,6 +69,9 @@
     <string name="material_timepicker_text_input_mode_description">Passer en mode saisie de texte pour la saisie de l\'heure.</string>
     <string gender="unknown" name="menubar_description">Barre de menu</string>
     <string gender="unknown" name="menuitem_description">Élément du menu</string>
+    <string name="minutes_description">Sélectionnez les minutes</string>
+    <string name="minutes_tag">Minutes </string>
+    <string name="month_description">Sélectionnez le mois</string>
     <string name="mtrl_badge_numberless_content_description">Nouvelle notification</string>
     <string name="mtrl_chip_close_icon_content_description">Supprimer %1$s</string>
     <string name="mtrl_exceed_max_badge_number_content_description" ns2:ignore="PluralsCandidate">Plus de %1$d nouvelles notifications</string>
@@ -100,6 +108,7 @@
     <string name="mtrl_picker_toggle_to_year_selection">Appuyer pour sélectionner une année</string>
     <string name="mtrl_timepicker_cancel">Annuler</string>
     <string name="mtrl_timepicker_confirm">OK</string>
+    <string name="overlay">Date Picker Overlay</string>
     <string name="password_toggle_content_description">Afficher le mot de passe</string>
     <string gender="unknown" name="progressbar_description">Barre de progression</string>
     <string gender="unknown" name="radiogroup_description">Groupe de boutons radio</string>
@@ -117,9 +126,11 @@
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string gender="unknown" name="summary_description">Récapitulatif</string>
     <string gender="unknown" name="tablist_description">Liste d’onglets</string>
+    <string name="time_tag">Le temps est</string>
     <string gender="unknown" name="timer_description">Minuteur</string>
     <string gender="unknown" name="toolbar_description">Barre d’outils</string>
     <string name="ucrop_label_edit_photo">Modifier la photo</string>
     <string name="ucrop_label_original">Original</string>
     <string name="ucrop_menu_crop">Recadrer</string>
+    <string name="year_description">Sélectionnez l\'année</string>
 </resources>

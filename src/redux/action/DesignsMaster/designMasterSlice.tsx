@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    designsMasterMaster: [],
+    designsMaster: [],
 }
 const designMasterSlice = createSlice({
     name: 'SET_DESIGN_MASTER',
@@ -11,7 +11,11 @@ const designMasterSlice = createSlice({
             state.designsMaster = action.payload
         },
         addDesignMaster: (state: any, action) => {
-            state.designsMaster = [...state.designsMaster, action.payload]
+             state.designsMaster = [...state.designsMaster, action.payload]
+        },
+        addMaster: (state: any, action) => {
+            console.log('action',action.payload);            
+             state.designsMaster = [...state.designsMaster, action.payload]
         },
         editDesignMaster: (state: any, action) => {
             const findIndex = state.designsMaster.findIndex((item: any) => item.id === action.payload.id)

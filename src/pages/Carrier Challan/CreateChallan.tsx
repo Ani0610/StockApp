@@ -10,11 +10,16 @@ import { useFormik } from 'formik'
 import { RootState } from '../../redux/store'
 import SelectDropdown from 'react-native-select-dropdown'
 import { addChallan, editChallan } from '../../redux/action/Challan/ChallanSlice'
+import DatePicker from 'react-native-date-picker'
+import { formatDate } from '../../services/dateFormate'
 interface InitialFormValues {
-    designNo: string,
-    numberOfSample: string,
-    materialImg: string,
-    sampleImg: string,
+    jobNumber: string,
+    piece: string,
+    maalImg: string,
+    itemName:string,
+    partyName:string,
+    date:any,
+    challanImg: string,
     status: string,
     carrierPersonName: string,
     carrierPersonUid: string,
@@ -27,17 +32,22 @@ const CreateChallan = ({ navigation ,route}: any) => {
     const [iscamaraModalVisibleMaterial, setIscamaraModalVisibleMaterial] = useState(false);
     const {user}:any = useSelector((state: RootState) => state.user)
     const [update, setUpdate] = useState(false);
+    const [datePickerVisible, setDatePickerVisible] = useState(false);
+    const [selectedDate, setselectedDate] = useState<any>();
 
     const dispatch = useDispatch()
-    const [sampleimg, setSampleimg] = useState<any>();
+    const [challanimg, setchallanimg] = useState<any>();
     const [selectedImage, setSelectedImage] = useState<any>();
     const { userMaster } = useSelector((state: RootState) => state.userMaster)
     const [carrierPersons, setCarrierPersons] = useState<any>([])
     const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>({
-        designNo: '',
-        numberOfSample: '',
-        materialImg: '',
-        sampleImg: '',
+        jobNumber: '',
+        piece: '',
+        maalImg: '',
+        challanImg: '',
+        itemName:'',
+    partyName:'',
+    date:'',
         status: '',
         carrierPersonName: '',
         carrierPersonUid: '',
@@ -46,10 +56,10 @@ const CreateChallan = ({ navigation ,route}: any) => {
 
     });
     const challanSchema = Yup.object().shape({
-        designNo: Yup.string().required('Design Number is required'),
-        numberOfSample: Yup.string().required('Number of Sample is required'),
-        materialImg: Yup.string().required('Material Image is required'),
-        sampleImg: Yup.string().required('Sample Image is required'),
+        jobNumber: Yup.string().required('Design Number is required'),
+        piece: Yup.string().required('Number of Sample is required'),
+        maalImg: Yup.string().required('Material Image is required'),
+        challanImg: Yup.string().required('Sample Image is required'),
         status: Yup.string().required('Status is required'),
         carrierPersonName: Yup.string().required('Carrier Person Name is required'),
         id: Yup.number(),
@@ -80,10 +90,13 @@ useEffect(() => {
     setUpdate(true)
   }else{
     setInitialFormValues({
-        designNo: '',
-        numberOfSample: '',
-        materialImg: '',
-        sampleImg: '',
+        jobNumber: '',
+        piece: '',
+        maalImg: '',
+        challanImg: '',
+        itemName:'',
+        partyName:'',
+        date:'',
         status: '',
         carrierPersonName: user.userType?user.fullName:'',
         carrierPersonUid: user.userType?user.useruid:'',
@@ -92,12 +105,16 @@ useEffect(() => {
     })
     setUpdate(false)
   }
+  
 }, [route.params])
 const patchData =()=>{
-    setFieldValue('designNo',route.params?.designNo)
-    setFieldValue('numberOfSample',route.params?.numberOfSample)
-    setFieldValue('materialImg',route.params?.materialImg)
-    setFieldValue('sampleImg',route.params?.sampleImg)
+    setFieldValue('jobNumber',route.params?.jobNumber)
+    setFieldValue('piece',route.params?.piece)
+    setFieldValue('maalImg',route.params?.maalImg)
+    setFieldValue('challanImg',route.params?.challanImg)
+    setFieldValue('itemName',route.params?.itemName)
+    setFieldValue('partyName',route.params?.partyName)
+    setFieldValue('date',route.params?.date)
     setFieldValue('status',route.params?.status)
     setFieldValue('carrierPersonName',route.params?.carrierPersonName)
     setFieldValue('carrierPersonUid',route.params?.carrierPersonUid)
@@ -110,19 +127,27 @@ const patchData =()=>{
     }
     const uploadProfileImage = (selectedImage: any) => {
         fs.readFile(selectedImage.uri, "base64").then((imgRes) => {
-            setFieldValue('sampleImg', `data:image/jpeg;base64,${imgRes}`)
+            setFieldValue('challanImg', `data:image/jpeg;base64,${imgRes}`)
         })
     }
     const uploadProfileImageMaterial = (selectedImage: any) => {
         fs.readFile(selectedImage.uri, "base64").then((imgRes) => {
-            setFieldValue('materialImg', `data:image/jpeg;base64,${imgRes}`)
+            setFieldValue('maalImg', `data:image/jpeg;base64,${imgRes}`)
         })
     }
     const closeImage = () => {
-        setSampleimg(null);
+        setchallanimg(null);
     };
     const closeImageModal = () => {
         setSelectedImage(null)
+    }
+    const openDatePicker = () => {
+        setDatePickerVisible(true);
+    };
+   
+    const handleDateChange = (date: any) => {        
+        setFieldValue('date',date)
+        setDatePickerVisible(false)
     }
     return (
         <>
@@ -146,57 +171,121 @@ const patchData =()=>{
 
                         <View style={{ marginTop: 10 }}>
                             <View
-                                style={styles.inputField}>
-                                <Text style={styles.inputLabel}>Design No</Text>
-                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                    <TextInput
-                                        onChangeText={handleChange('designNo')}
-                                        onBlur={() => { handleBlur('designNo') }}
-                                        value={values.designNo}
-                                        style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                        placeholderTextColor='gray'
-                                        placeholder='Enter design No'
-                                    />
-
+                                style={[styles.inputField,{height:80}]}>
+                                <Text style={styles.inputLabel}>Date</Text>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',marginTop:10 }}>
+                                <Text style={{ width: '100%', fontSize: 14, color: 'gray' }} onPress={() => openDatePicker()}>{values.date ? formatDate(values.date) : 'Select Date'}</Text>
                                 </View>
+                                <DatePicker
+                                        modal
+                                        open={datePickerVisible}
+                                        date={values.date || new Date()}
+                                        mode='date'
+                                        onConfirm={(date) => {
+                                            handleDateChange(date)
+                                        }}
+                                        onCancel={() => {
+                                            setDatePickerVisible(false)
+                                        }}
+                                    />
                             </View>
-                            {errors.designNo && touched.designNo &&
-                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.designNo}</Text>
+                            {errors.date && touched.date &&
+                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.date}</Text>
                             }
                         </View>
                         <View style={{ marginTop: 15 }}>
                             <View
                                 style={styles.inputField}>
-                                <Text style={styles.inputLabel}>Number of Sample</Text>
+                                <Text style={styles.inputLabel}>Job No</Text>
                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                     <TextInput
-                                        onChangeText={handleChange('numberOfSample')}
-                                        onBlur={() => { handleBlur('numberOfSample') }}
-                                        value={values.numberOfSample}
+                                        onChangeText={handleChange('jobNumber')}
+                                        onBlur={() => { handleBlur('jobNumber') }}
+                                        value={values.jobNumber}
                                         style={{ flex: 1, fontSize: 16, color: '#000' }}
                                         placeholderTextColor='gray'
-                                        placeholder='Enter Number of Sample'
+                                        placeholder='Enter Job No'
                                     />
 
                                 </View>
                             </View>
-                            {errors.numberOfSample && touched.numberOfSample &&
-                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.numberOfSample}</Text>
+                            {errors.jobNumber && touched.jobNumber &&
+                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobNumber}</Text>
                             }
                         </View>
                         <View style={{ marginTop: 15 }}>
                             <View
-                                style={[styles.inputField, { width: '100%', height: values.materialImg ? 110 : 80 }]}>
+                                style={styles.inputField}>
+                                <Text style={styles.inputLabel}>Party Name</Text>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <TextInput
+                                        onChangeText={handleChange('partyName')}
+                                        onBlur={() => { handleBlur('partyName') }}
+                                        value={values.partyName}
+                                        style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                        placeholderTextColor='gray'
+                                        placeholder='Enter Party Name'
+                                    />
+
+                                </View>
+                            </View>
+                            {errors.partyName && touched.partyName &&
+                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.partyName}</Text>
+                            }
+                        </View>
+                        <View style={{ marginTop: 15 }}>
+                            <View
+                                style={styles.inputField}>
+                                <Text style={styles.inputLabel}>Item Name</Text>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <TextInput
+                                        onChangeText={handleChange('itemName')}
+                                        onBlur={() => { handleBlur('itemName') }}
+                                        value={values.itemName}
+                                        style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                        placeholderTextColor='gray'
+                                        placeholder='Enter Item Name'
+                                    />
+
+                                </View>
+                            </View>
+                            {errors.itemName && touched.itemName &&
+                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.itemName}</Text>
+                            }
+                        </View>
+                        <View style={{ marginTop: 15 }}>
+                            <View
+                                style={styles.inputField}>
+                                <Text style={styles.inputLabel}>Piece /Meter</Text>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <TextInput
+                                        onChangeText={handleChange('piece')}
+                                        onBlur={() => { handleBlur('piece') }}
+                                        value={values.piece}
+                                        style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                        placeholderTextColor='gray'
+                                        placeholder='Enter Number of piece'
+                                    />
+
+                                </View>
+                            </View>
+                            {errors.piece && touched.piece &&
+                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.piece}</Text>
+                            }
+                        </View>
+                        <View style={{ marginTop: 15 }}>
+                            <View
+                                style={[styles.inputField, { width: '100%', height: values.maalImg ? 110 : 80 }]}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View>
 
-                                        <Text style={styles.inputLabel}>Material Image</Text>
+                                        <Text style={styles.inputLabel}>Maal Photo</Text>
                                         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',marginTop:10 }}>
-                                            <Pressable onPress={() => setIscamaraModalVisibleMaterial(true)}><Text style={{color:'gray'}}>Upload Sample</Text></Pressable>
+                                            <Pressable onPress={() => setIscamaraModalVisibleMaterial(true)}><Text style={{color:'gray'}}>Upload Maal Photo</Text></Pressable>
                                         </View>
                                     </View>
                                     <View>
-                                        {values.materialImg && (
+                                        {values.maalImg && (
                                             <View style={{ width: '100%' }}>
                                                 <View style={{
                                                     borderTopLeftRadius: 5,
@@ -212,10 +301,10 @@ const patchData =()=>{
                                                         borderColor: 'white',
                                                         borderRadius: 10
                                                     }}>
-                                                        <TouchableOpacity onPress={() => setSelectedImage(values.materialImg)}>
+                                                        <TouchableOpacity onPress={() => setSelectedImage(values.maalImg)}>
 
                                                             <Image
-                                                                source={{ uri: values.materialImg }}
+                                                                source={{ uri: values.maalImg }}
                                                                 style={{
                                                                     width: 80,
                                                                     height: 80,
@@ -245,23 +334,23 @@ const patchData =()=>{
                                     </View>
                                 </View>
                             </View>
-                            {errors.materialImg && touched.materialImg &&
-                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.materialImg}</Text>
+                            {errors.maalImg && touched.maalImg &&
+                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.maalImg}</Text>
                             }
                         </View>
                         <View style={{ marginTop: 15 }}>
                             <View
-                                style={[styles.inputField, { width: '100%', height: values.sampleImg ? 110 : 80 }]}>
+                                style={[styles.inputField, { width: '100%', height: values.challanImg ? 110 : 80 }]}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View>
 
-                                        <Text style={styles.inputLabel}>Sample Image</Text>
+                                        <Text style={styles.inputLabel}>Challan Photo</Text>
                                         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' ,marginTop:10}}>
-                                            <Pressable onPress={() => setIscamaraModalVisible(true)}><Text style={{color:'gray'}}>Upload Sample</Text></Pressable>
+                                            <Pressable onPress={() => setIscamaraModalVisible(true)}><Text style={{color:'gray'}}>Upload Challan Photo</Text></Pressable>
                                         </View>
                                     </View>
                                     <View>
-                                        {values.sampleImg && (
+                                        {values.challanImg && (
                                             <View style={{ width: '100%' }}>
                                                 <View style={{
                                                     borderTopLeftRadius: 5,
@@ -277,10 +366,10 @@ const patchData =()=>{
                                                         borderColor: 'white',
                                                         borderRadius: 10
                                                     }}>
-                                                        <TouchableOpacity onPress={() => setSelectedImage(values.sampleImg)}>
+                                                        <TouchableOpacity onPress={() => setSelectedImage(values.challanImg)}>
 
                                                             <Image
-                                                                source={{ uri: values.sampleImg }}
+                                                                source={{ uri: values.challanImg }}
                                                                 style={{
                                                                     width: 80,
                                                                     height: 80,
@@ -310,8 +399,8 @@ const patchData =()=>{
                                     </View>
                                 </View>
                             </View>
-                            {errors.sampleImg && touched.sampleImg &&
-                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.sampleImg}</Text>
+                            {errors.challanImg && touched.challanImg &&
+                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.challanImg}</Text>
                             }
                         </View>
                         <View style={{ marginTop: 15 }}>

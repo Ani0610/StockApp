@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.stockapp-mergeDebugResources-35:/values-ms/values-ms.xml",
+            "outputFile": "com.stockapp-mergeDebugResources-36:/values-ms/values-ms.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Lenovo\\.gradle\\caches\\transforms-3\\43abcdf137700df62cb964efd16f6a46\\transformed\\core-1.9.0\\res\\values-ms\\values-ms.xml",

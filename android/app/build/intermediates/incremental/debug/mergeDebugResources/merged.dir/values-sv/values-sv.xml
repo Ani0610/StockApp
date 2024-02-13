@@ -32,6 +32,7 @@
     <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"Dela med <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
     <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"Komprimera"</string>
     <string gender="unknown" name="alert_description">Avisering</string>
+    <string name="ampm_description">Välj am/pm</string>
     <string name="bottomsheet_action_collapse">Komprimera arket på nedre delen av skärmen</string>
     <string name="bottomsheet_action_expand">Utöka arket på nedre delen av skärmen</string>
     <string name="bottomsheet_action_expand_halfway">Utöka till hälften</string>
@@ -42,9 +43,13 @@
     <string name="character_counter_overflowed_content_description">Teckengränsen har överskridits: %1$d av %2$d</string>
     <string name="clear_text_end_icon_content_description">Rensa text</string>
     <string gender="unknown" name="combobox_description">Kombinationsruta</string>
+    <string name="date_description">Välj ett datum</string>
+    <string name="day_description">Välj en dag</string>
     <string name="error_icon_content_description">Fel</string>
     <string name="exposed_dropdown_menu_content_description">Visa rullgardinsmenyn</string>
     <string gender="unknown" name="header_description">Rubrik</string>
+    <string name="hour_description">Välj en timme</string>
+    <string name="hour_tag">Timme:</string>
     <string name="icon_content_description">Dialogikon</string>
     <string gender="unknown" name="image_description">Bild</string>
     <string gender="unknown" name="imagebutton_description">Knapp, bild</string>
@@ -66,6 +71,9 @@
     <string gender="unknown" name="menu_description">Meny</string>
     <string gender="unknown" name="menubar_description">Menyfält</string>
     <string gender="unknown" name="menuitem_description">Menyobjekt</string>
+    <string name="minutes_description">Välj minuter</string>
+    <string name="minutes_tag">Minuter</string>
+    <string name="month_description">Välj en månad</string>
     <string name="mtrl_badge_numberless_content_description">Ny avisering</string>
     <string name="mtrl_chip_close_icon_content_description">Ta bort (%1$s)</string>
     <string name="mtrl_exceed_max_badge_number_content_description" ns2:ignore="PluralsCandidate">Fler än %1$d nya aviseringar</string>
@@ -102,6 +110,7 @@
     <string name="mtrl_picker_toggle_to_year_selection">Byt till att välja ett år genom att trycka</string>
     <string name="mtrl_timepicker_cancel">Avbryt</string>
     <string name="mtrl_timepicker_confirm">OK</string>
+    <string name="overlay">Datumväljare på</string>
     <string name="password_toggle_content_description">Visa lösenord</string>
     <string gender="unknown" name="progressbar_description">Förloppsfält</string>
     <string gender="unknown" name="radiogroup_description">Radiogrupp</string>
@@ -119,5 +128,7 @@
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string gender="unknown" name="summary_description">Sammanfattning</string>
     <string gender="unknown" name="tablist_description">Fliklista</string>
+    <string name="time_tag">Tiden är</string>
     <string gender="unknown" name="toolbar_description">Verktygsfält</string>
+    <string name="year_description">Välj ett år</string>
 </resources>

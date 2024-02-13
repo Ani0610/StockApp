@@ -10,12 +10,14 @@ import { RootState } from '../../redux/store'
 import ImageUploadScreen from '../../components/imageUpload/ImageUploadScreen'
 import fs, { touch } from 'react-native-fs'
 import * as Yup from "yup"
-import { addDesignMaster } from '../../redux/action/DesignsMaster/designMasterSlice'
+import { addDesignMaster,editDesignMaster,deleteDesignMaster, setDesignMaster, addMaster } from '../../redux/action/DesignsMaster/designMasterSlice'
 import { editstoneStock } from '../../redux/action/Stone Stock/stoneStock'
+import HorizontalSlider from '../../components/HorizontalSlider/HorizontalSlider'
+import MultipleImageUploadScreen from '../../components/imageUpload/MultipleImageUpload'
 
 interface InitialFormValues {
     designNo: string,
-    sampleImg: string,
+    sampleImg: any,
     stoneDetails: any,
     designDetails: any,
     jobworkDetails: any,
@@ -33,10 +35,10 @@ const CreateSampleDesign = ({ navigation }: any) => {
     const [iscamaraModalVisible, setIscamaraModalVisible] = useState(false);
     const dispatch = useDispatch()
     const [sampleimg, setSampleimg] = useState<any>();
-    const [selectedImage, setSelectedImage] = useState<any>();
+    const [selectedImage, setSelectedImage] = useState<any>(false);
     const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>({
         designNo: '',
-        sampleImg: '',
+        sampleImg: [],
         stoneDetails: [{
             stoneType: '',
             stoneunit: '',
@@ -69,7 +71,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
     });
     const sampleSchema = Yup.object().shape({
         designNo: Yup.string().required('Design Number is required'),
-        sampleImg: Yup.string().required('Sample Image is required'),
+         sampleImg: Yup.array().min(1, 'At least one sample image is required'),
         stoneDetails: Yup.array().of(
             Yup.object().shape({
                 stoneType: Yup.string().required('Stone Type is required'),
@@ -111,8 +113,8 @@ const CreateSampleDesign = ({ navigation }: any) => {
             values.stoneDetails.map((stone: any) => updateStock(stone))
             values.id=Math.floor(2000 + Math.random() * 9000)
             values.total= Number(values.total).toFixed(2)
-            // dispatch(addDesignMaster({ ...values}))
-            console.log(values, 'sample design');
+              dispatch(addDesignMaster({...values}))
+            console.log(values.id, 'sample design');
             resetForm()
             navigation.goBack()
 
@@ -156,17 +158,36 @@ const CreateSampleDesign = ({ navigation }: any) => {
     const closecamaraModel = () => {
         setIscamaraModalVisible(false)
     }
-    const uploadProfileImage = (selectedImage: any) => {
-        console.log('uploades image', selectedImage.uri);
-        fs.readFile(selectedImage.uri, "base64").then((imgRes) => {
-            setFieldValue('sampleImg', `data:image/jpeg;base64,${imgRes}`)
-            setSampleimg(`data:image/jpeg;base64,${imgRes}`)
-        })
-    }
-    const closeImage = () => {
-        setFieldValue('sampleImg', '')
-        setSampleimg(null);
+    const uploadProfileImage = async (selectedImage: any) => {
+        console.log('uploaded image', selectedImage);
+        const images: any[] = [];
+    
+        try {
+            await Promise.all(selectedImage.map(async (img: any) => {
+                const imgRes = await fs.readFile(img.uri, "base64");
+                images.push(`data:image/jpeg;base64,${imgRes}`);
+            }));
+    
+            console.log('length', images.length);
+    setFieldValue('sampleImg',[...values.sampleImg,...images])
+            // Do whatever you need with the images array here
+        } catch (error) {
+            console.error('Error uploading images:', error);
+        }
     };
+    const closeImage = (i:any) => {
+        console.log('selected index', i);
+        
+        // Create a copy of the sampleImg array
+        const updatedSampleImg = [...values.sampleImg];
+        
+        // Remove the element at index i
+        updatedSampleImg.splice(i, 1);
+        
+        // Update the state with the new array
+        setFieldValue('sampleImg', updatedSampleImg);
+    };
+    
     const closeImageModal = () => {
         setSelectedImage(null)
     }
@@ -222,7 +243,15 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                 <Pressable onPress={() => setIscamaraModalVisible(true)}><Text style={{color:'gray'}}>Upload Sample</Text></Pressable>
                                             </View>
                                         </View>
-                                        <View>
+                                        <View style={{marginTop:30}}>
+                                            <TouchableOpacity onPress={()=>setSelectedImage(true)}>
+                                            {values.sampleImg.length >0 &&<View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                                                <Icon type="foundation" name="photo" color="#000" size={30} />
+                                            <Text style={{color:'#000',fontWeight:'bold'}} > {values.sampleImg.length} Images Uploaded</Text>
+                                            </View>}
+                                            </TouchableOpacity>
+                                        </View>
+                                        {/* <View>
                                             {sampleimg && (
                                                 <View style={{ width: '100%' }}>
                                                     <View style={{
@@ -269,7 +298,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                     </View>
                                                 </View>
                                             )}
-                                        </View>
+                                        </View> */}
                                     </View>
                                 </View>
                                 {errors.sampleImg && touched.sampleImg &&
@@ -284,6 +313,14 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                                 <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Stone Details</Text>
+                                                {values.stoneDetails && 
+ values.stoneDetails.every((st:any) => 
+   st.stoneType && 
+   st.stoneunit && 
+   st.stoneuid && 
+   st.price && 
+   st.totalOneStone
+ ) && (
                                                 <Pressable onPress={() => push({
                                                     stoneType: '',
                                                     stoneunit: '',
@@ -292,8 +329,10 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                     totalOneStone: '',
                                                 })}>
                                                     <Icon type="feather" name="plus" color="blue" size={25} />
-                                                </Pressable>
+                                                </Pressable>)}
                                             </View>
+                                                                                <HorizontalSlider>
+
                                             {values.stoneDetails?.length > 0 &&
                                                 values.stoneDetails.map((stone1: any, i: any) => (
                                                     <View key={i} style={[{
@@ -305,9 +344,10 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                         // marginVertical: 10,
                                                     }, { borderWidth: 0.5, borderColor: 'lightgray', padding: 5, marginVertical: 5 }]}>
                                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                        {values.stoneDetails.length >1 &&
                                                             <Pressable onPress={() => remove(i)} >
                                                                 <Icon type="entypo" name="cross" color="black" size={25} />
-                                                            </Pressable>
+                                                            </Pressable>}
                                                         </View>
                                                         <View>
                                                             <View style={{ marginTop: 10 }}>
@@ -327,7 +367,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                                 return `${item?.stoneType}`;
                                                                             }}
                                                                             buttonStyle={{ backgroundColor: 'transparent',width:'100%' }}
-                                                                            defaultButtonText='Select stone Type'
+                                                                            defaultButtonText= {stone1.stoneType ?stone1.stoneType:'Select stone Type'}
                                                                             buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                                             dropdownStyle={{ width: '80%', borderRadius: 10 }}
                                                                             defaultValue={''}
@@ -338,10 +378,10 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.stoneDetails[i].stoneType}</Text>
                                                                 }
                                                             </View>
-                                                            <View style={{ marginTop: 15 }}>
+                                                            <View style={{ marginTop: 15,flexDirection:'row',justifyContent:'space-between',width:'100%' }}>
                                                                 <View
-                                                                    style={styles.inputField}>
-                                                                    <Text style={styles.inputLabel}>Price</Text>
+style={[styles.inputField,{width:'50%',marginRight:3}]}>
+                                                                        <Text style={styles.inputLabel}>Price</Text>
                                                                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                                                         <TextInput
                                                                             onChangeText={handleChange('price')}
@@ -354,12 +394,31 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                         />
 
                                                                     </View>
-                                                                </View>
                                                                 {errors.stoneDetails && errors.stoneDetails[i] && touched.stoneDetails && touched.stoneDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.stoneDetails[i].price}</Text>
                                                                 }
+                                                                </View>
+                                                                <View
+                                                                    style={[styles.inputField,{width:'50%',marginLeft:3}]}>
+                                                                    <Text style={styles.inputLabel}>Unit</Text>
+                                                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                                                        <TextInput
+                                                                            onChangeText={async (text: any) => {
+                                                                                replace(i, { ...stone1, stoneunit: text, totalOneStone: text * stone1.price })
+                                                                            }}
+                                                                            value={stone1.stoneunit}
+                                                                            style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                                                            placeholderTextColor='gray'
+                                                                            placeholder='Enter unit'
+                                                                        />
+
+                                                                    </View>
+                                                                {errors.stoneDetails && errors.stoneDetails[i] && touched.stoneDetails && touched.stoneDetails[i] &&
+                                                                    <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.stoneDetails[i].stoneunit}</Text>
+                                                                }
+                                                                </View>
                                                             </View>
-                                                            <View style={{ marginTop: 15 }}>
+                                                            {/* <View style={{ marginTop: 15 }}>
                                                                 <View
                                                                     style={styles.inputField}>
                                                                     <Text style={styles.inputLabel}>Unit</Text>
@@ -375,39 +434,48 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                         />
 
                                                                     </View>
-                                                                </View>
                                                                 {errors.stoneDetails && errors.stoneDetails[i] && touched.stoneDetails && touched.stoneDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.stoneDetails[i].stoneunit}</Text>
                                                                 }
-                                                            </View>
+                                                                </View>
+                                                            </View> */}
                                                         </View>
                                                     </View>
                                                 ))
                                             }
-
+</HorizontalSlider>
                                         </View>
                                     )}
                                 </FieldArray>
                             </View>
                             <View style={{ marginTop: 10 }}>
-
                                 <FieldArray name="designDetails">
                                     {({ replace, remove, push }) => (
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                                 <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Design Details</Text>
-                                                <Pressable onPress={() => push({
-                                                    measurement: '',
-                                                    designunit: '',
-                                                    designuid: '',
-                                                    price: '',
-                                                    totalOneDesign: ''
+                                                {values.designDetails && 
+ values.designDetails.every((dsgn:any) => 
+   dsgn.measurement && 
+   dsgn.designunit && 
+   dsgn.designuid && 
+   dsgn.price && 
+   dsgn.totalOneDesign
+ ) && (
+  <Pressable onPress={() => push({
+    measurement: '',
+    designunit: '',
+    designuid: '',
+    price: '',
+    totalOneDesign: ''
+  })}>
+    <Icon type="feather" name="plus" color="blue" size={25} />
+  </Pressable>
+)}
 
-                                                })}>
-                                                    <Icon type="feather" name="plus" color="blue" size={25} />
-                                                </Pressable>
                                             </View>
-                                            {values.designDetails?.length > 0 &&
+                                            <HorizontalSlider>
+                                         {values.designDetails?.length > 0 &&
                                                 values.designDetails.map((design: any, i: any) => (
                                                     <View key={i} style={[{
                                                         // backgroundColor: '#f5f5f5',
@@ -418,9 +486,10 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                         // marginVertical: 10,
                                                     }, { borderWidth: 0.5, borderColor: 'lightgray', padding: 5, marginVertical: 5 }]}>
                                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                            {values.designDetails.length >1 &&
                                                             <Pressable onPress={() => remove(i)} >
                                                                 <Icon type="entypo" name="cross" color="black" size={25} />
-                                                            </Pressable>
+                                                            </Pressable>}
                                                         </View>
                                                         <View>
                                                             <View style={{ marginTop: 10 }}>
@@ -442,7 +511,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                                 return `${item?.mesurement}`;
                                                                             }}
                                                                             buttonStyle={{ backgroundColor: 'transparent',width:'100%' }}
-                                                                            defaultButtonText='Select Design'
+                                                                            defaultButtonText={design.measurement?design.measurement:'Select Design'}
                                                                             buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                                             dropdownStyle={{ width: '80%', borderRadius: 10 }}
                                                                             defaultValue={''}
@@ -453,9 +522,9 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.designDetails[i].measurement}</Text>
                                                                 }
                                                             </View>
-                                                            <View style={{ marginTop: 15 }}>
+                                                            <View style={{ marginTop: 15 ,flexDirection:'row',justifyContent:'space-between',width:'100%',}}>
                                                                 <View
-                                                                    style={styles.inputField}>
+                                                                    style={[styles.inputField,{width:'50%',marginRight:3}]}>
                                                                     <Text style={styles.inputLabel}>Price</Text>
                                                                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                                                         <TextInput
@@ -469,12 +538,31 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                         />
 
                                                                     </View>
-                                                                </View>
                                                                 {errors.designDetails && errors.designDetails[i] && touched.designDetails && touched.designDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.designDetails[i].price}</Text>
                                                                 }
+                                                                </View>
+                                                                <View
+                                                                    style={[styles.inputField,{width:'50%',marginLeft:3}]}>
+                                                                    <Text style={styles.inputLabel}>Unit</Text>
+                                                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                                                        <TextInput
+                                                                            onChangeText={(text: any) => {
+                                                                                replace(i, { ...design, designunit: text, totalOneDesign: text * design.price })
+                                                                            }}
+                                                                            value={design.designunit}
+                                                                            style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                                                            placeholderTextColor='gray'
+                                                                            placeholder='Enter unit'
+                                                                        />
+
+                                                                    </View>
+                                                                {errors.designDetails && errors.designDetails[i] && touched.designDetails && touched.designDetails[i] &&
+                                                                    <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.designDetails[i].designunit}</Text>
+                                                                }
+                                                                </View>
                                                             </View>
-                                                            <View style={{ marginTop: 15 }}>
+                                                            {/* <View style={{ marginTop: 15 }}>
                                                                 <View
                                                                     style={styles.inputField}>
                                                                     <Text style={styles.inputLabel}>Unit</Text>
@@ -490,16 +578,17 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                         />
 
                                                                     </View>
-                                                                </View>
                                                                 {errors.designDetails && errors.designDetails[i] && touched.designDetails && touched.designDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.designDetails[i].designunit}</Text>
                                                                 }
-                                                            </View>
+                                                                </View>
+                                                            </View> */}
 
                                                         </View>
                                                     </View>
                                                 ))
                                             }
+                                            </HorizontalSlider>
                                         </View>
                                     )}
                                 </FieldArray>
@@ -511,6 +600,15 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                                 <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Job Details</Text>
+                                                {values.jobworkDetails && 
+ values.jobworkDetails.every((jb:any) => 
+   jb.partyName && 
+   jb.workType && 
+   jb.unit && 
+   jb.jobuid && 
+   jb.totalOnewJobWork&&
+   jb.price
+ ) && (
                                                 <Pressable onPress={() => push({
                                                     partyName: '',
                                                     workType: '',
@@ -520,8 +618,9 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                     totalOnewJobWork: '',
                                                 })}>
                                                     <Icon type="feather" name="plus" color="blue" size={25} />
-                                                </Pressable>
+                                                </Pressable>)}
                                             </View>
+                                            <HorizontalSlider>
                                             {values.jobworkDetails?.length > 0 &&
                                                 values.jobworkDetails.map((job: any, i: any) => (
                                                     <View key={i} style={[{
@@ -533,9 +632,10 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                         // marginVertical: 10,
                                                     }, { borderWidth: 0.5, borderColor: 'lightgray', padding: 5, marginVertical: 5 }]}>
                                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                            {values.jobworkDetails.length >1 &&
                                                             <Pressable onPress={() => remove(i)} >
                                                                 <Icon type="entypo" name="cross" color="black" size={25} />
-                                                            </Pressable>
+                                                            </Pressable>}
                                                         </View>
                                                         <View>
                                                             <View style={{ marginTop: 10 }}>
@@ -555,7 +655,7 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                                 return `${item?.workType} - ${item.partyName}`;
                                                                             }}
                                                                             buttonStyle={{ backgroundColor: 'transparent' }}
-                                                                            defaultButtonText='Select Work Type'
+                                                                            defaultButtonText={job.workType?job.workType:'Select Work Type'}
                                                                             buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
                                                                             dropdownStyle={{ width: '80%', borderRadius: 10 }}
                                                                             defaultValue={''}
@@ -587,9 +687,9 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobworkDetails[i].partyName}</Text>
                                                                 }
                                                             </View>
-                                                            <View style={{ marginTop: 15 }}>
+                                                            <View style={{ marginTop: 15 ,flexDirection:'row',justifyContent:'space-between',width:'100%'}}>
                                                                 <View
-                                                                    style={styles.inputField}>
+                                                                    style={[styles.inputField,{width:'50%',marginRight:3}]}>
                                                                     <Text style={styles.inputLabel}>Price</Text>
                                                                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                                                         <TextInput
@@ -603,13 +703,32 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                         />
 
                                                                     </View>
-                                                                </View>
                                                                 {errors.jobworkDetails && errors.jobworkDetails[i] && touched.jobworkDetails && touched.jobworkDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobworkDetails[i].price}</Text>
                                                                 }
+                                                                </View>
+                                                                <View
+                                                                    style={[styles.inputField,{width:'50%',marginRight:3}]}>
+                                                                    <Text style={styles.inputLabel}>Unit</Text>
+                                                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                                                        <TextInput
+                                                                            onChangeText={(text: any) => {
+                                                                                replace(i, { ...job, unit: text, totalOnewJobWork: text * Number(job.price) })
+                                                                            }}
+                                                                            value={job.unit}
+                                                                            style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                                                            placeholderTextColor='gray'
+                                                                            placeholder='Enter unit'
+                                                                        />
+
+                                                                    </View>
+                                                                {errors.jobworkDetails && errors.jobworkDetails[i] && touched.jobworkDetails && touched.jobworkDetails[i] &&
+                                                                    <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobworkDetails[i].unit}</Text>
+                                                                }
+                                                                </View>
                                                             </View>
 
-                                                            <View style={{ marginTop: 15 }}>
+                                                            {/* <View style={{ marginTop: 15 }}>
                                                                 <View
                                                                     style={styles.inputField}>
                                                                     <Text style={styles.inputLabel}>Unit</Text>
@@ -625,17 +744,17 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                                                         />
 
                                                                     </View>
-                                                                </View>
                                                                 {errors.jobworkDetails && errors.jobworkDetails[i] && touched.jobworkDetails && touched.jobworkDetails[i] &&
                                                                     <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobworkDetails[i].unit}</Text>
                                                                 }
-                                                            </View>
+                                                                </View>
+                                                            </View> */}
 
                                                         </View>
                                                     </View>
                                                 ))
                                             }
-
+</HorizontalSlider>
                                         </View>
                                     )}
                                 </FieldArray>
@@ -670,19 +789,66 @@ const CreateSampleDesign = ({ navigation }: any) => {
                 </ScrollView>
             </GestureHandlerRootView>
             {
-                iscamaraModalVisible && <ImageUploadScreen isVisible={iscamaraModalVisible} onClose={closecamaraModel} uploadFunction={uploadProfileImage}
+                iscamaraModalVisible && <MultipleImageUploadScreen isVisible={iscamaraModalVisible} onClose={closecamaraModel} uploadFunction={uploadProfileImage}
                 />
             }
-            {selectedImage && (
-                <Modal transparent={true} animationType="fade" visible={selectedImage !== null}>
-                    <View style={{ flex: 1, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', paddingTop: Platform.OS == 'ios' ? 25 : 0 }}>
-                        <Image source={{ uri: selectedImage }} style={{ width: '90%', height: '90%', resizeMode: 'contain' }} />
-                        <TouchableOpacity style={{ position: 'absolute', top: Platform.OS === "ios" ? 60 : 20, right: 20 }} onPress={closeImageModal}>
-                            <Icon type="entypo" name="cross" color="white" size={30} />
-                        </TouchableOpacity>
+           {selectedImage && (
+    <Modal transparent={true} animationType="fade" visible={selectedImage}>
+        <View style={{ flex: 1, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', paddingTop: Platform.OS == 'ios' ? 25 : 0 }}>
+            <ScrollView style={{marginTop:50}}>
+                {values.sampleImg.map((img:any, i:any) => (
+                    <View style={{ width: '100%', alignItems: 'center' }} key={i}>
+                        <View style={{
+                            borderTopLeftRadius: 5,
+                            borderTopRightRadius: 15,
+                            padding: 10,
+                            width: '90%',
+                            alignItems: 'center',
+                        }}>
+                            <View style={{
+                                width: '100%',
+                                aspectRatio: 1,
+                                borderWidth: 2,
+                                borderColor: 'white',
+                                borderRadius: 10,
+                                overflow: 'hidden',
+                            }}>
+                                <Image
+                                    source={{ uri: img }}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        resizeMode: 'cover',
+                                    }}
+                                />
+                            </View>
+                            <TouchableOpacity
+                                style={{
+                                    position: 'absolute',
+                                    top: 5,
+                                    right: 5,
+                                    backgroundColor: 'black',
+                                    borderRadius: 50,
+                                    width: 28,
+                                    height: 28,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                                onPress={() => closeImage(i)}
+                            >
+                                <Icon type="entypo" name="cross" color="white" size={20} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </Modal>
-            )}
+                ))}
+            </ScrollView>
+            <TouchableOpacity style={{ position: 'absolute', top: Platform.OS === "ios" ? 60 : 20, right: 20 }} onPress={closeImageModal}>
+                <Icon type="entypo" name="cross" color="white" size={30} />
+            </TouchableOpacity>
+        </View>
+    </Modal>
+)}
+
         </SafeAreaView>
     )
 }

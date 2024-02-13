@@ -32,6 +32,7 @@
     <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"Delen met <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
     <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"Samenvouwen"</string>
     <string gender="unknown" name="alert_description">Waarschuwing</string>
+    <string name="ampm_description">Selecteer AM/PM</string>
     <string name="bottomsheet_action_collapse">Het blad onderaan samenvouwen</string>
     <string name="bottomsheet_action_expand">Het blad onderaan uitvouwen</string>
     <string name="bottomsheet_action_expand_halfway">Half uitvouwen</string>
@@ -43,9 +44,13 @@
     <string name="character_counter_overflowed_content_description">Tekenlimiet heeft %1$d van %2$d overschreden</string>
     <string name="clear_text_end_icon_content_description">Tekst wissen</string>
     <string gender="unknown" name="combobox_description">Combivak</string>
+    <string name="date_description">Selecteer datum</string>
+    <string name="day_description">Selecteer dag</string>
     <string name="error_icon_content_description">Fout</string>
     <string name="exposed_dropdown_menu_content_description">Dropdownmenu tonen</string>
     <string gender="unknown" name="header_description">Kop</string>
+    <string name="hour_description">Selecteer uur</string>
+    <string name="hour_tag">Uur :</string>
     <string name="icon_content_description">Icoon voor dialoogvenster</string>
     <string gender="unknown" name="image_description">Afbeelding</string>
     <string gender="unknown" name="imagebutton_description">Knop, afbeelding</string>
@@ -65,6 +70,9 @@
     <string name="material_timepicker_text_input_mode_description">Schakel naar de tekstinvoermodus om de tijd in te voeren.</string>
     <string gender="unknown" name="menubar_description">Menubalk</string>
     <string gender="unknown" name="menuitem_description">Menu-item</string>
+    <string name="minutes_description">Selecteer minuten</string>
+    <string name="minutes_tag">Minuten </string>
+    <string name="month_description">Selecteer maand</string>
     <string name="mtrl_badge_numberless_content_description">Nieuwe melding</string>
     <string name="mtrl_chip_close_icon_content_description">%1$s verwijderen</string>
     <string name="mtrl_exceed_max_badge_number_content_description" ns2:ignore="PluralsCandidate">Meer dan %1$d nieuwe meldingen</string>
@@ -101,6 +109,7 @@
     <string name="mtrl_picker_toggle_to_year_selection">Tik om naar jaarselectie te schakelen</string>
     <string name="mtrl_timepicker_cancel">Annuleren</string>
     <string name="mtrl_timepicker_confirm">OK</string>
+    <string name="overlay">Date Picker Overlay</string>
     <string name="password_toggle_content_description">Wachtwoord tonen</string>
     <string gender="unknown" name="progressbar_description">Voortgangsbalk</string>
     <string gender="unknown" name="radiogroup_description">Keuzegroep</string>
@@ -118,8 +127,10 @@
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string gender="unknown" name="summary_description">Samenvatting</string>
     <string gender="unknown" name="tablist_description">Lijst met tabbladen</string>
+    <string name="time_tag">Tijd is</string>
     <string gender="unknown" name="toolbar_description">Werkbalk</string>
     <string name="ucrop_label_edit_photo">Foto bewerken</string>
     <string name="ucrop_label_original">Origineel</string>
     <string name="ucrop_menu_crop">Bijsnijden</string>
+    <string name="year_description">Selecteer jaar</string>
 </resources>

@@ -1,20 +1,28 @@
-import React, { } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Pressable, SafeAreaView, ScrollView, StatusBar, Text, View, StyleSheet, ImageBackground } from 'react-native'
 import Icon from 'react-native-easy-icon'
 import { GlobalStyle } from '../../../globalStyle'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/store'
 
 const AllSampleDesign = ({ navigation }: any) => {
     const allSamples = [
-        { designNo: '1', sampleImg: require('../../assets/sample1.jpg'), stoneDeails: [], designDetails: [], jobWorkDetails: [], total: 1300 },
-        { designNo: '2', sampleImg: require('../../assets/sample2.jpg'), stoneDeails: [], designDetails: [], jobWorkDetails: [], total: 700 },
-        { designNo: '3', sampleImg: require('../../assets/sample3.jpg'), stoneDeails: [], designDetails: [], jobWorkDetails: [], total: 1500 },
-        { designNo: '4', sampleImg: require('../../assets/sample4.jpg'), stoneDeails: [], designDetails: [], jobWorkDetails: [], total: 950 },
+        { designNo: '1', sampleImg: ['https://thumbs.dreamstime.com/b/close-up-indian-saree-design-banarasi-indain-wedding-party-traditional-red-silk-sari-yellow-gold-border-great-130471986.jpg?w=768'], stoneDeails: [], designDetails: [], jobWorkDetails: [], total: 1300 },
+        { designNo: '2', sampleImg:['https://thumbs.dreamstime.com/b/indian-traditional-silk-saree-beautiful-latest-design-130345708.jpg?w=768'], stoneDeails: [], designDetails: [], jobWorkDetails: [], total: 700 },
+        { designNo: '3', sampleImg: ['https://thumbs.dreamstime.com/b/black-saree-8535408.jpg?w=768'], stoneDeails: [], designDetails: [], jobWorkDetails: [], total: 1500 },
+        { designNo: '4', sampleImg: ['https://thumbs.dreamstime.com/b/seamless-colorful-border-traditional-asian-design-elements-seamless-colorful-border-traditional-asian-design-elements-165011556.jpg?w=992'], stoneDeails: [], designDetails: [], jobWorkDetails: [], total: 950 },
     ];
-
+    const { designsMaster } = useSelector((state: RootState) => state.designMaster)
+const [allsample ,setallsample]=useState<any>([])
+useEffect(() => {
+    console.log('designsMaster',designsMaster);
+    
+  setallsample([...allSamples,...designsMaster])
+}, [designsMaster])
 
     const renderThumbnail = (uri: any, designNo: any, total: any) => {
         return (
-            <ImageBackground source={uri} style={styles.thumbnail}>
+            <ImageBackground source={{uri:uri}} style={styles.thumbnail}>
                 <View style={styles.textContainer}>
                     <Text style={[styles.designNoText, styles.thumbnailTextbg]}>#{designNo}</Text>
                 </View>
@@ -33,7 +41,7 @@ const AllSampleDesign = ({ navigation }: any) => {
             />
             <ScrollView>
                 <View style={[GlobalStyle.container]}>
-                    {allSamples.map((sample: any, i: any) => (
+                    {allsample.map((sample: any, i: any) => (
 
                         <View key={i} style={[GlobalStyle.card, GlobalStyle.shadowProp, {
                             paddingVertical: 8,
@@ -41,7 +49,7 @@ const AllSampleDesign = ({ navigation }: any) => {
                             height: 'auto',
 
                         }]}>
-                            {renderThumbnail(sample.sampleImg, sample.designNo, sample.total)}
+                            {renderThumbnail(sample.sampleImg[0], sample.designNo, sample.total)}
 
                         </View>
                     ))}

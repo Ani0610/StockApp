@@ -19,34 +19,36 @@ com.stockapp-jetified-autofill-1.1.0-17 C:\Users\Lenovo\.gradle\caches\transform
 com.stockapp-jetified-activity-1.6.0-18 C:\Users\Lenovo\.gradle\caches\transforms-3\7ae4f40a372c3926387039e54076e559\transformed\jetified-activity-1.6.0\res
 com.stockapp-jetified-emoji2-1.2.0-19 C:\Users\Lenovo\.gradle\caches\transforms-3\8455765b8f60ee621323de0fbb0567ba\transformed\jetified-emoji2-1.2.0\res
 com.stockapp-constraintlayout-2.0.1-20 C:\Users\Lenovo\.gradle\caches\transforms-3\95029146debe55a5a402448556f4c7b6\transformed\constraintlayout-2.0.1\res
-com.stockapp-sqlite-2.2.0-21 C:\Users\Lenovo\.gradle\caches\transforms-3\9f95b9dbc61433a889cedd9d8cbcb139\transformed\sqlite-2.2.0\res
-com.stockapp-jetified-viewpager2-1.0.0-22 C:\Users\Lenovo\.gradle\caches\transforms-3\aa19983ea9c565518a02aa7a2457a47c\transformed\jetified-viewpager2-1.0.0\res
-com.stockapp-fragment-1.3.6-23 C:\Users\Lenovo\.gradle\caches\transforms-3\adba6fe07e7fc58d1946ca17b399d47c\transformed\fragment-1.3.6\res
-com.stockapp-recyclerview-1.1.0-24 C:\Users\Lenovo\.gradle\caches\transforms-3\ae8700af4b2e0eda9ffacc752c08d20e\transformed\recyclerview-1.1.0\res
-com.stockapp-jetified-react-android-0.73.2-debug-25 C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\res
-com.stockapp-sqlite-framework-2.2.0-26 C:\Users\Lenovo\.gradle\caches\transforms-3\c2fb4fdcbde7f0d5a248973322144cca\transformed\sqlite-framework-2.2.0\res
-com.stockapp-swiperefreshlayout-1.1.0-27 C:\Users\Lenovo\.gradle\caches\transforms-3\d2395f42d512a8dcb5357d1af42784d3\transformed\swiperefreshlayout-1.1.0\res
-com.stockapp-coordinatorlayout-1.2.0-28 C:\Users\Lenovo\.gradle\caches\transforms-3\e1c071278f273613dd884245d6872760\transformed\coordinatorlayout-1.2.0\res
-com.stockapp-jetified-core-ktx-1.9.0-29 C:\Users\Lenovo\.gradle\caches\transforms-3\e3b0ddcd0d55f1b9ed4f5a03b15bd1ba\transformed\jetified-core-ktx-1.9.0\res
-com.stockapp-lifecycle-viewmodel-2.5.1-30 C:\Users\Lenovo\.gradle\caches\transforms-3\e5ab6afbc1fb2e92aca9401bae289621\transformed\lifecycle-viewmodel-2.5.1\res
-com.stockapp-lifecycle-runtime-2.5.1-31 C:\Users\Lenovo\.gradle\caches\transforms-3\f19e91f4055963385be77108540a71bc\transformed\lifecycle-runtime-2.5.1\res
-com.stockapp-jetified-lifecycle-viewmodel-savedstate-2.5.1-32 C:\Users\Lenovo\.gradle\caches\transforms-3\f8c7179ce8e3b9ca3c83701e7c1ef2f3\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.1\res
-com.stockapp-pngs-33 D:\skyban projects\New folder\StockApp\android\app\build\generated\res\pngs\debug
-com.stockapp-resValues-34 D:\skyban projects\New folder\StockApp\android\app\build\generated\res\resValues\debug
-com.stockapp-packageDebugResources-35 D:\skyban projects\New folder\StockApp\android\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.stockapp-packageDebugResources-36 D:\skyban projects\New folder\StockApp\android\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.stockapp-merged_res-37 D:\skyban projects\New folder\StockApp\android\app\build\intermediates\merged_res\debug
-com.stockapp-debug-38 D:\skyban projects\New folder\StockApp\android\app\src\debug\res
-com.stockapp-main-39 D:\skyban projects\New folder\StockApp\android\app\src\main\res
-com.stockapp-packaged_res-40 D:\skyban projects\New folder\StockApp\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-41 D:\skyban projects\New folder\StockApp\node_modules\@react-native-community\masked-view\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-42 D:\skyban projects\New folder\StockApp\node_modules\react-native-fs\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-43 D:\skyban projects\New folder\StockApp\node_modules\react-native-gesture-handler\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-44 D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-45 D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-46 D:\skyban projects\New folder\StockApp\node_modules\react-native-permissions\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-47 D:\skyban projects\New folder\StockApp\node_modules\react-native-reanimated\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-48 D:\skyban projects\New folder\StockApp\node_modules\react-native-safe-area-context\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-49 D:\skyban projects\New folder\StockApp\node_modules\react-native-screens\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-50 D:\skyban projects\New folder\StockApp\node_modules\react-native-svg\android\build\intermediates\packaged_res\debug
-com.stockapp-packaged_res-51 D:\skyban projects\New folder\StockApp\node_modules\react-native-vector-icons\android\build\intermediates\packaged_res\debug
+com.stockapp-jetified-numberpickerview-v1.1.5-21 C:\Users\Lenovo\.gradle\caches\transforms-3\962606c02491a4df4b00d0e543888440\transformed\jetified-numberpickerview-v1.1.5\res
+com.stockapp-sqlite-2.2.0-22 C:\Users\Lenovo\.gradle\caches\transforms-3\9f95b9dbc61433a889cedd9d8cbcb139\transformed\sqlite-2.2.0\res
+com.stockapp-jetified-viewpager2-1.0.0-23 C:\Users\Lenovo\.gradle\caches\transforms-3\aa19983ea9c565518a02aa7a2457a47c\transformed\jetified-viewpager2-1.0.0\res
+com.stockapp-fragment-1.3.6-24 C:\Users\Lenovo\.gradle\caches\transforms-3\adba6fe07e7fc58d1946ca17b399d47c\transformed\fragment-1.3.6\res
+com.stockapp-recyclerview-1.1.0-25 C:\Users\Lenovo\.gradle\caches\transforms-3\ae8700af4b2e0eda9ffacc752c08d20e\transformed\recyclerview-1.1.0\res
+com.stockapp-jetified-react-android-0.73.2-debug-26 C:\Users\Lenovo\.gradle\caches\transforms-3\b18853f37933c4e5e6de7b5c5d7e814d\transformed\jetified-react-android-0.73.2-debug\res
+com.stockapp-sqlite-framework-2.2.0-27 C:\Users\Lenovo\.gradle\caches\transforms-3\c2fb4fdcbde7f0d5a248973322144cca\transformed\sqlite-framework-2.2.0\res
+com.stockapp-swiperefreshlayout-1.1.0-28 C:\Users\Lenovo\.gradle\caches\transforms-3\d2395f42d512a8dcb5357d1af42784d3\transformed\swiperefreshlayout-1.1.0\res
+com.stockapp-coordinatorlayout-1.2.0-29 C:\Users\Lenovo\.gradle\caches\transforms-3\e1c071278f273613dd884245d6872760\transformed\coordinatorlayout-1.2.0\res
+com.stockapp-jetified-core-ktx-1.9.0-30 C:\Users\Lenovo\.gradle\caches\transforms-3\e3b0ddcd0d55f1b9ed4f5a03b15bd1ba\transformed\jetified-core-ktx-1.9.0\res
+com.stockapp-lifecycle-viewmodel-2.5.1-31 C:\Users\Lenovo\.gradle\caches\transforms-3\e5ab6afbc1fb2e92aca9401bae289621\transformed\lifecycle-viewmodel-2.5.1\res
+com.stockapp-lifecycle-runtime-2.5.1-32 C:\Users\Lenovo\.gradle\caches\transforms-3\f19e91f4055963385be77108540a71bc\transformed\lifecycle-runtime-2.5.1\res
+com.stockapp-jetified-lifecycle-viewmodel-savedstate-2.5.1-33 C:\Users\Lenovo\.gradle\caches\transforms-3\f8c7179ce8e3b9ca3c83701e7c1ef2f3\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.1\res
+com.stockapp-pngs-34 D:\skyban projects\New folder\StockApp\android\app\build\generated\res\pngs\debug
+com.stockapp-resValues-35 D:\skyban projects\New folder\StockApp\android\app\build\generated\res\resValues\debug
+com.stockapp-packageDebugResources-36 D:\skyban projects\New folder\StockApp\android\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.stockapp-packageDebugResources-37 D:\skyban projects\New folder\StockApp\android\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.stockapp-merged_res-38 D:\skyban projects\New folder\StockApp\android\app\build\intermediates\merged_res\debug
+com.stockapp-debug-39 D:\skyban projects\New folder\StockApp\android\app\src\debug\res
+com.stockapp-main-40 D:\skyban projects\New folder\StockApp\android\app\src\main\res
+com.stockapp-packaged_res-41 D:\skyban projects\New folder\StockApp\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-42 D:\skyban projects\New folder\StockApp\node_modules\@react-native-community\masked-view\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-43 D:\skyban projects\New folder\StockApp\node_modules\react-native-date-picker\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-44 D:\skyban projects\New folder\StockApp\node_modules\react-native-fs\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-45 D:\skyban projects\New folder\StockApp\node_modules\react-native-gesture-handler\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-46 D:\skyban projects\New folder\StockApp\node_modules\react-native-image-crop-picker\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-47 D:\skyban projects\New folder\StockApp\node_modules\react-native-image-picker\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-48 D:\skyban projects\New folder\StockApp\node_modules\react-native-permissions\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-49 D:\skyban projects\New folder\StockApp\node_modules\react-native-reanimated\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-50 D:\skyban projects\New folder\StockApp\node_modules\react-native-safe-area-context\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-51 D:\skyban projects\New folder\StockApp\node_modules\react-native-screens\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-52 D:\skyban projects\New folder\StockApp\node_modules\react-native-svg\android\build\intermediates\packaged_res\debug
+com.stockapp-packaged_res-53 D:\skyban projects\New folder\StockApp\node_modules\react-native-vector-icons\android\build\intermediates\packaged_res\debug
