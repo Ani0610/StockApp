@@ -19,6 +19,8 @@ import jobTeamReducer from "./action/ job work/JobTeamSlice";
 import worPerDayReducer from "./action/ job work/WorkPerDaySlice";
 import usersMasterReducer from "./action/User Master/userMasterSlice";
 import challanReducer from "./action/Challan/ChallanSlice";
+import partyMasterReducer from "./action/party master/PartymasterSlice";
+import uiReducer from "./action/Ui/Uislice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -31,6 +33,8 @@ const rootReducer = combineReducers({
   teams: jobTeamReducer,
   userMaster: usersMasterReducer,
   challan: challanReducer,
+  partyMaster: partyMasterReducer,
+  ui: uiReducer,
 });
 
 const persistConfig = {
@@ -45,6 +49,7 @@ const persistConfig = {
     "userMaster",
     "challan",
     "designMaster",
+    "partyMaster",
   ],
 };
 

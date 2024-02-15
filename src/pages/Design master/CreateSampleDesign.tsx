@@ -34,6 +34,9 @@ import {
 import { editstoneStock } from "../../redux/action/Stone Stock/stoneStock";
 import HorizontalSlider from "../../components/HorizontalSlider/HorizontalSlider";
 import MultipleImageUploadScreen from "../../components/imageUpload/MultipleImageUpload";
+import { formatDate } from "../../services/dateFormate";
+import DatePicker from "react-native-date-picker";
+import { setLoading } from "../../redux/action/Ui/Uislice";
 
 interface InitialFormValues {
   designNo: string;
@@ -45,9 +48,13 @@ interface InitialFormValues {
   totlDesigns: string;
   totalJobWorks: string;
   total: string;
+  partyName: string;
+  partyUID: undefined;
+  availableStocks: string;
   id: undefined;
+  date: any;
 }
-const CreateSampleDesign = ({ navigation }: any) => {
+const CreateSampleDesign = ({ navigation, route }: any) => {
   const { stoneStock } = useSelector((state: RootState) => state.stoneStock);
   const { designs } = useSelector((state: RootState) => state.designs);
   const { jobWorks } = useSelector((state: RootState) => state.jobWorks);
@@ -55,9 +62,12 @@ const CreateSampleDesign = ({ navigation }: any) => {
   const dispatch = useDispatch();
   const [sampleimg, setSampleimg] = useState<any>();
   const [selectedImage, setSelectedImage] = useState<any>(false);
+  const { partyMaster } = useSelector((state: RootState) => state.partyMaster);
+
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
       designNo: "",
+      availableStocks: "",
       sampleImg: [],
       stoneDetails: [
         {
@@ -92,10 +102,66 @@ const CreateSampleDesign = ({ navigation }: any) => {
       totalJobWorks: "",
       total: "",
       id: undefined,
+      partyName: "",
+      partyUID: undefined,
+      date: "",
     }
   );
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [update, setUpdate] = useState(false);
+  useEffect(() => {
+    if (route.params) {
+      patchData();
+      setUpdate(true);
+    } else {
+      setInitialFormValues({
+        designNo: "",
+        availableStocks: "",
+        sampleImg: [],
+        stoneDetails: [
+          {
+            stoneType: "",
+            stoneunit: "",
+            stoneuid: "",
+            totalOneStone: "",
+            price: "",
+          },
+        ],
+        designDetails: [
+          {
+            measurement: "",
+            designunit: "",
+            designuid: "",
+            totalOneDesign: "",
+            price: "",
+          },
+        ],
+        jobworkDetails: [
+          {
+            partyName: "",
+            workType: "",
+            unit: "",
+            jobuid: "",
+            totalOnewJobWork: "",
+            price: "",
+          },
+        ],
+        totalstones: "",
+        totlDesigns: "",
+        totalJobWorks: "",
+        total: "",
+        id: undefined,
+        partyName: "",
+        partyUID: undefined,
+        date: "",
+      });
+      setUpdate(false);
+    }
+  }, [route.params]);
   const sampleSchema = Yup.object().shape({
     designNo: Yup.string().required("Design Number is required"),
+    partyName: Yup.string().required("Party Name is required"),
+    availableStocks: Yup.string().required("Stock is required"),
     sampleImg: Yup.array().min(1, "At least one sample image is required"),
     stoneDetails: Yup.array().of(
       Yup.object().shape({
@@ -138,9 +204,14 @@ const CreateSampleDesign = ({ navigation }: any) => {
     validationSchema: sampleSchema,
     onSubmit: async (values: any) => {
       values.stoneDetails.map((stone: any) => updateStock(stone));
-      values.id = Math.floor(2000 + Math.random() * 9000);
-      values.total = Number(values.total).toFixed(2);
-      dispatch(addDesignMaster({ ...values }));
+      if (update) {
+        values.total = Number(values.total).toFixed(2);
+        dispatch(editDesignMaster({ ...values }));
+      } else {
+        values.id = Math.floor(2000 + Math.random() * 9000);
+        values.total = Number(values.total).toFixed(2);
+        dispatch(addDesignMaster({ ...values }));
+      }
       resetForm();
       navigation.goBack();
     },
@@ -167,6 +238,23 @@ const CreateSampleDesign = ({ navigation }: any) => {
     };
     dispatch(editstoneStock({ ...newObj }));
     stoneStock[findIndex] = newObj;
+  };
+  const patchData = () => {
+    setFieldValue("designNo", route.params.designNo);
+    setFieldValue("sampleImg", route.params.sampleImg);
+    setFieldValue("stoneDetails", route.params.stoneDetails);
+    setFieldValue("designDetails", route.params.designDetails);
+    setFieldValue("jobworkDetails", route.params.jobworkDetails);
+    setFieldValue("totalstones", route.params.totalstones);
+    setFieldValue("totlDesigns", route.params.totlDesigns);
+    setFieldValue("totalJobWorks", route.params.totalJobWorks);
+    setFieldValue("total", route.params.total);
+    setFieldValue("partyName", route.params.partyName);
+    setFieldValue("partyUID", route.params.partyUID);
+    setFieldValue("availableStocks", route.params.availableStocks);
+    setFieldValue("id", route.params.id);
+    setFieldValue("date", route.params.date);
+    dispatch(setLoading(false));
   };
   useEffect(() => {
     totalofStone();
@@ -256,12 +344,20 @@ const CreateSampleDesign = ({ navigation }: any) => {
   const closeImageModal = () => {
     setSelectedImage(false);
   };
+  const openDatePicker = () => {
+    setDatePickerVisible(true);
+  };
+
+  const handleDateChange = (date: any) => {
+    setFieldValue("date", date);
+    setDatePickerVisible(false);
+  };
   return (
     <SafeAreaView style={[GlobalStyle.safeAreaCotainer, { height: "100%" }]}>
-      <StatusBar
+      {/* <StatusBar
         backgroundColor="#fff"
         barStyle="dark-content" // Here is where you change the font-color
-      />
+      /> */}
       <View
         style={{
           flexDirection: "row",
@@ -305,6 +401,45 @@ const CreateSampleDesign = ({ navigation }: any) => {
               }}
             >
               <View style={{ marginTop: 10 }}>
+                <View style={[styles.inputField, { height: 80 }]}>
+                  <Text style={styles.inputLabel}>Date</Text>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: 10,
+                    }}
+                  >
+                    <Text
+                      style={{ width: "100%", fontSize: 14, color: "gray" }}
+                      onPress={() => openDatePicker()}
+                    >
+                      {values.date ? formatDate(values.date) : "Select Date"}
+                    </Text>
+                  </View>
+                  <DatePicker
+                    modal
+                    open={datePickerVisible}
+                    date={new Date()}
+                    mode="date"
+                    onConfirm={(date) => {
+                      handleDateChange(date);
+                    }}
+                    onCancel={() => {
+                      setDatePickerVisible(false);
+                    }}
+                  />
+                </View>
+                {errors.date && touched.date && (
+                  <Text
+                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
+                  >
+                    {errors.date}
+                  </Text>
+                )}
+              </View>
+              <View style={{ marginTop: 15 }}>
                 <View style={styles.inputField}>
                   <Text style={styles.inputLabel}>Design No</Text>
                   <View
@@ -335,11 +470,88 @@ const CreateSampleDesign = ({ navigation }: any) => {
                 )}
               </View>
               <View style={{ marginTop: 15 }}>
+                <View style={styles.inputField}>
+                  <Text style={styles.inputLabel}>Stock /Piece</Text>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextInput
+                      onChangeText={handleChange("availableStocks")}
+                      onBlur={() => {
+                        handleBlur("availableStocks");
+                      }}
+                      keyboardType="numeric"
+                      value={values.availableStocks}
+                      style={{ flex: 1, fontSize: 16, color: "#000" }}
+                      placeholderTextColor="gray"
+                      placeholder="Enter Stock/Piece"
+                    />
+                  </View>
+                </View>
+                {errors.availableStocks && touched.availableStocks && (
+                  <Text
+                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
+                  >
+                    {errors.availableStocks}
+                  </Text>
+                )}
+              </View>
+              <View style={{ marginTop: 15 }}>
+                <View style={styles.inputField}>
+                  <Text style={styles.inputLabel}>Select Party Name</Text>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <SelectDropdown
+                      data={[...partyMaster]}
+                      onSelect={(selectedItem) => {
+                        setFieldValue("partyUID", selectedItem.id);
+                        setFieldValue("partyName", selectedItem.partyName);
+                      }}
+                      buttonTextAfterSelection={(
+                        selectedItem: any,
+                        index: number
+                      ) => {
+                        return `${selectedItem?.partyName}`;
+                      }}
+                      rowTextForSelection={(item: any, index: number) => {
+                        return `${item.partyName}`;
+                      }}
+                      buttonStyle={{
+                        backgroundColor: "transparent",
+                        width: "100%",
+                      }}
+                      defaultButtonText="Select Party Name"
+                      buttonTextStyle={{
+                        textAlign: "left",
+                        marginLeft: -6,
+                      }}
+                      dropdownStyle={{ width: "80%", borderRadius: 10 }}
+                      defaultValue={partyMaster.find(
+                        (Party: any) => Party.id === values.partyUID
+                      )}
+                    />
+                  </View>
+                </View>
+                {errors.partyName && touched.partyName && (
+                  <Text
+                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
+                  >
+                    {errors.partyName}
+                  </Text>
+                )}
+              </View>
+              <View style={{ marginTop: 15 }}>
                 <View
-                  style={[
-                    styles.inputField,
-                    { width: "100%", height: sampleimg ? 110 : 80 },
-                  ]}
+                  style={[styles.inputField, { width: "100%", height: 80 }]}
                 >
                   <View
                     style={{
@@ -388,54 +600,6 @@ const CreateSampleDesign = ({ navigation }: any) => {
                         )}
                       </TouchableOpacity>
                     </View>
-                    {/* <View>
-                                            {sampleimg && (
-                                                <View style={{ width: '100%' }}>
-                                                    <View style={{
-                                                        borderTopLeftRadius: 5,
-                                                        borderTopRightRadius: 15,
-                                                        padding: 10,
-                                                        width: '30%',
-                                                    }}>
-                                                        <View style={{
-                                                            width: '100%',
-                                                            aspectRatio: 1, // Create a perfect square
-                                                            // overflow: 'hidden', // Hide any content outside the square
-                                                            borderWidth: 2, // Add a border for a circular shape
-                                                            borderColor: 'white',
-                                                            borderRadius: 10
-                                                        }}>
-                                                            <TouchableOpacity onPress={() => setSelectedImage(sampleimg)}>
-
-                                                                <Image
-                                                                    source={{ uri: sampleimg }}
-                                                                    style={{
-                                                                        width: 80,
-                                                                        height: 80,
-                                                                        resizeMode: 'cover', // Cover the entire circle
-                                                                    }}
-                                                                />
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                        <TouchableOpacity
-                                                            style={{
-                                                                position: 'absolute',
-                                                                left: 80,
-                                                                backgroundColor: 'black',
-                                                                borderRadius: 50,
-                                                                width: 28,
-                                                                height: 28,
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                            }}
-                                                            onPress={closeImage}
-                                                        >
-                                                            <Icon type="entypo" name="cross" color="white" size={20} />
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </View>
-                                            )}
-                                        </View> */}
                   </View>
                 </View>
                 {errors.sampleImg && touched.sampleImg && (
@@ -697,27 +861,6 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                       )}
                                   </View>
                                 </View>
-                                {/* <View style={{ marginTop: 15 }}>
-                                                                <View
-                                                                    style={styles.inputField}>
-                                                                    <Text style={styles.inputLabel}>Unit</Text>
-                                                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                                        <TextInput
-                                                                            onChangeText={async (text: any) => {
-                                                                                replace(i, { ...stone1, stoneunit: text, totalOneStone: text * stone1.price })
-                                                                            }}
-                                                                            value={stone1.stoneunit}
-                                                                            style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                                            placeholderTextColor='gray'
-                                                                            placeholder='Enter unit'
-                                                                        />
-
-                                                                    </View>
-                                                                {errors.stoneDetails && errors.stoneDetails[i] && touched.stoneDetails && touched.stoneDetails[i] &&
-                                                                    <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.stoneDetails[i].stoneunit}</Text>
-                                                                }
-                                                                </View>
-                                                            </View> */}
                               </View>
                             </View>
                           ))}
@@ -977,27 +1120,6 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                       )}
                                   </View>
                                 </View>
-                                {/* <View style={{ marginTop: 15 }}>
-                                                                <View
-                                                                    style={styles.inputField}>
-                                                                    <Text style={styles.inputLabel}>Unit</Text>
-                                                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                                        <TextInput
-                                                                            onChangeText={(text: any) => {
-                                                                                replace(i, { ...design, designunit: text, totalOneDesign: text * design.price })
-                                                                            }}
-                                                                            value={design.designunit}
-                                                                            style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                                            placeholderTextColor='gray'
-                                                                            placeholder='Enter unit'
-                                                                        />
-
-                                                                    </View>
-                                                                {errors.designDetails && errors.designDetails[i] && touched.designDetails && touched.designDetails[i] &&
-                                                                    <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.designDetails[i].designunit}</Text>
-                                                                }
-                                                                </View>
-                                                            </View> */}
                               </View>
                             </View>
                           ))}
@@ -1057,12 +1179,8 @@ const CreateSampleDesign = ({ navigation }: any) => {
                               key={i}
                               style={[
                                 {
-                                  // backgroundColor: '#f5f5f5',
                                   borderRadius: 10,
-                                  // paddingVertical: 15,
-                                  // paddingHorizontal: 20,
                                   width: "100%",
-                                  // marginVertical: 10,
                                 },
                                 {
                                   borderWidth: 0.5,
@@ -1302,28 +1420,6 @@ const CreateSampleDesign = ({ navigation }: any) => {
                                       )}
                                   </View>
                                 </View>
-
-                                {/* <View style={{ marginTop: 15 }}>
-                                                                <View
-                                                                    style={styles.inputField}>
-                                                                    <Text style={styles.inputLabel}>Unit</Text>
-                                                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                                        <TextInput
-                                                                            onChangeText={(text: any) => {
-                                                                                replace(i, { ...job, unit: text, totalOnewJobWork: text * Number(job.price) })
-                                                                            }}
-                                                                            value={job.unit}
-                                                                            style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                                            placeholderTextColor='gray'
-                                                                            placeholder='Enter unit'
-                                                                        />
-
-                                                                    </View>
-                                                                {errors.jobworkDetails && errors.jobworkDetails[i] && touched.jobworkDetails && touched.jobworkDetails[i] &&
-                                                                    <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.jobworkDetails[i].unit}</Text>
-                                                                }
-                                                                </View>
-                                                            </View> */}
                               </View>
                             </View>
                           ))}
@@ -1368,7 +1464,9 @@ const CreateSampleDesign = ({ navigation }: any) => {
                 style={GlobalStyle.button}
                 onPress={() => handleSubmit()}
               >
-                <Text style={GlobalStyle.btntext}>{"Submit"}</Text>
+                <Text style={GlobalStyle.btntext}>
+                  {update ? "Update" : "Submit"}
+                </Text>
               </Pressable>
             </View>
           </FormikProvider>

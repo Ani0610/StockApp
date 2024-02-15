@@ -18,6 +18,7 @@ import JobWorkTeam from "../pages/job work module/JobWorkTeam";
 import TeamWorkPerDay from "../pages/job work module/TeamWorkPerDay";
 import UserMaster from "../pages/Users Master/UserMaster";
 import Challan from "../pages/Carrier Challan/Challan";
+import PartyMaster from "../pages/Party Master/PartyMaster";
 const DrawerStack = createDrawerNavigator();
 const SideMenuNavigator = ({ navigation }: any) => {
   const { user }: any = useSelector((state: RootState) => state.user);
@@ -62,6 +63,10 @@ const SideMenuNavigator = ({ navigation }: any) => {
                 <DrawerStack.Screen
                   name="Per Day Work by Team"
                   component={TeamWorkPerDay}
+                />
+                <DrawerStack.Screen
+                  name="Party Master"
+                  component={PartyMaster}
                 />
               </>
             );
@@ -131,6 +136,18 @@ const SideMenuNavigator = ({ navigation }: any) => {
                 />
                 <DrawerStack.Screen name="Users" component={UserMaster} />
                 <DrawerStack.Screen name="Challan" component={Challan} />
+                <DrawerStack.Screen
+                  name="Job work Team"
+                  component={JobWorkTeam}
+                />
+                <DrawerStack.Screen
+                  name="Per Day Work by Team"
+                  component={TeamWorkPerDay}
+                />
+                <DrawerStack.Screen
+                  name="Party Master"
+                  component={PartyMaster}
+                />
               </>
             );
         }

@@ -84,7 +84,7 @@ const DesignDetails = () => {
   };
   useEffect(() => {
     setAllDesign([...designs]);
-  }, []);
+  }, [designs]);
 
   const onClose = () => {
     setisVisible(false);

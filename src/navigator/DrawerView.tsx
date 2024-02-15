@@ -180,6 +180,15 @@ const DrawerView = ({ navigation, state }: any) => {
                   >
                     <Text style={styles.drawerText}>Challan</Text>
                   </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.drawerItem,
+                      state.index === 9 && styles.activeDrawerItem,
+                    ]}
+                    onPress={() => handlePress("Party Master")}
+                  >
+                    <Text style={styles.drawerText}>Party Master</Text>
+                  </TouchableOpacity>
                 </>
               );
             case "Godown":
@@ -512,6 +521,15 @@ const DrawerView = ({ navigation, state }: any) => {
                     onPress={() => handlePress("Challan")}
                   >
                     <Text style={styles.drawerText}>Challan</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.drawerItem,
+                      state.index === 9 && styles.activeDrawerItem,
+                    ]}
+                    onPress={() => handlePress("Party Master")}
+                  >
+                    <Text style={styles.drawerText}>Party Master</Text>
                   </TouchableOpacity>
                 </>
               );

@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import Icon from "react-native-easy-icon";
+import { formatDate } from "../../services/dateFormate";
 
 const ViewDesignDetails = ({ navigation, route }: any) => {
   const [selectedImage, setSelectedImage] = useState<any>(false);
@@ -75,11 +76,29 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <Text style={{ fontSize: 16, color: "#000", fontWeight: "bold" }}>
+                Date
+              </Text>
+              <Text style={{ fontSize: 16, color: "gray", fontWeight: "bold" }}>
+                {formatDate(route.params?.date)}
+              </Text>
+            </View>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={{ fontSize: 16, color: "#000", fontWeight: "bold" }}>
+                Stock
+              </Text>
+              <Text style={{ fontSize: 16, color: "gray", fontWeight: "bold" }}>
+                {route.params?.availableStocks}
+              </Text>
+            </View>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={{ fontSize: 16, color: "#000", fontWeight: "bold" }}>
                 Design Number
               </Text>
-              <Text
-                style={{ fontSize: 16, color: "#gray", fontWeight: "bold" }}
-              >
+              <Text style={{ fontSize: 16, color: "gray", fontWeight: "bold" }}>
                 {route.params?.designNo}
               </Text>
             </View>
@@ -89,9 +108,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
               <Text style={{ fontSize: 16, color: "#000", fontWeight: "bold" }}>
                 Total
               </Text>
-              <Text
-                style={{ fontSize: 16, color: "#gray", fontWeight: "bold" }}
-              >
+              <Text style={{ fontSize: 16, color: "gray", fontWeight: "bold" }}>
                 ₹{route.params?.total}
               </Text>
             </View>
@@ -165,7 +182,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -190,7 +207,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -215,7 +232,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -240,7 +257,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -289,7 +306,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -314,7 +331,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -339,7 +356,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -364,7 +381,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -413,7 +430,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -438,7 +455,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -463,7 +480,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -488,7 +505,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
@@ -513,7 +530,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#gray",
+                          color: "gray",
                           fontWeight: "bold",
                         }}
                       >
