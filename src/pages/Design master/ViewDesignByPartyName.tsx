@@ -15,17 +15,45 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { formatDate } from "../../services/dateFormate";
 import { setLoading } from "../../redux/action/Ui/Uislice";
+import { useIsFocused } from "@react-navigation/native";
 
 const ViewDesignByPartyName = ({ navigation, route }: any) => {
   const { partyMaster } = useSelector((state: RootState) => state.partyMaster);
   const dispatch = useDispatch();
+  const [update, setUpdate] = useState(true);
   const [partyData, setPartyData] = useState<any>();
+  const focus = useIsFocused(); // useIsFocused as shown
+  const [data, setData] = useState<any>();
+  const { designsMaster } = useSelector(
+    (state: RootState) => state.designMaster
+  );
+  const { deliveredDesigns } = useSelector(
+    (state: RootState) => state.deliveredDesigns
+  );
   useEffect(() => {
     const party = partyMaster.find(
       (obj: any) => obj.partyName === route.params.partyName
     );
     setPartyData(party);
+    if (route.params?.edit === false) {
+      setUpdate(false);
+    }
   }, [route.params]);
+  useEffect(() => {
+    if (focus) {
+      if (route.params?.edit === false) {
+        const design: any = deliveredDesigns.filter(
+          (obj: any) => obj.partyName === route.params.partyName
+        );
+        setData(design);
+      } else {
+        const design: any = designsMaster.filter(
+          (obj: any) => obj.partyName === route.params.partyName
+        );
+        setData(design);
+      }
+    }
+  }, [focus]);
   const editDesign = (item: any) => {
     dispatch(setLoading(true));
     navigation.navigate("Add Design", item);
@@ -95,13 +123,13 @@ const ViewDesignByPartyName = ({ navigation, route }: any) => {
                 marginLeft: 20,
               }}
             >
-              <Text style={{ color: "gray" }}>{route.params.data.length}</Text>
+              <Text style={{ color: "gray" }}>{data?.length}</Text>
             </View>
           </View>
         </View>
 
         <View>
-          {route.params.data.map((item: any, index: any) => (
+          {data?.map((item: any, index: any) => (
             <View
               key={index}
               style={{
@@ -164,20 +192,22 @@ const ViewDesignByPartyName = ({ navigation, route }: any) => {
                     flex: 2,
                   }}
                 >
-                  <Pressable
-                    style={{
-                      backgroundColor: "gray",
-                      padding: 5,
-                      borderRadius: 50,
-                      marginRight: 5,
-                    }}
-                    onPress={
-                      () => editDesign(item)
-                      //  navigation.navigate("Add Design", item)
-                    }
-                  >
-                    <Icon type="feather" name="edit" color="#fff" size={15} />
-                  </Pressable>
+                  {update && (
+                    <Pressable
+                      style={{
+                        backgroundColor: "gray",
+                        padding: 5,
+                        borderRadius: 50,
+                        marginRight: 5,
+                      }}
+                      onPress={
+                        () => editDesign(item)
+                        //  navigation.navigate("Add Design", item)
+                      }
+                    >
+                      <Icon type="feather" name="edit" color="#fff" size={15} />
+                    </Pressable>
+                  )}
                   <Pressable
                     style={{
                       backgroundColor: "gray",
@@ -204,7 +234,7 @@ const ViewDesignByPartyName = ({ navigation, route }: any) => {
             Party name & address
           </Text>
           <Text style={{ fontSize: 18, color: "#000", fontWeight: "bold" }}>
-            {route.params.partyName}{" "}
+            {route.params.partyName}
             {partyData?.address ? `, ${partyData.address}` : ""}
           </Text>
         </View>

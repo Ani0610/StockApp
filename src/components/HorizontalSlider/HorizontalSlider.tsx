@@ -9,8 +9,8 @@ const HorizontalSlider = ({ children }: any) => {
   const prevChildrenLength = useRef(children.length);
 
   const goToNext = () => {
-    if (currentIndex+1 <= children.length) {        
-        setCurrentIndex(currentIndex + 1);
+    if (currentIndex + 1 <= children.length) {
+      setCurrentIndex(currentIndex + 1);
     }
   };
   const goToPrevious = () => {
@@ -23,28 +23,47 @@ const HorizontalSlider = ({ children }: any) => {
   }, [children, currentIndex]);
   useEffect(() => {
     // Check if new items were added to children array
-    if (children.length > prevChildrenLength.current) {       
+    if (children.length > prevChildrenLength.current) {
       setCurrentIndex(children.length - 1); // Set currentIndex to the last item
     }
     prevChildrenLength.current = children.length; // Update previous length reference
   }, [children]);
   return (
     <View style={styles.container}>
-      <View style={styles.buttonsContainer}>
-        <Pressable onPress={goToPrevious} style={styles.leftButton}>
-        {currentIndex !==0 &&
-          <Icon name="left" size={25} color="blue" />
-        }
-        </Pressable>
+      <View>
         <View style={styles.centerContainer}>
           <View style={styles.childContainer}>{children[currentIndex]}</View>
-        </View>      
-        <Pressable onPress={goToNext} style={styles.rightButton}>
-          {currentIndex < children.length - 1  &&
+        </View>
+        <View style={styles.buttonsContainer}>
+          <Pressable
+            onPress={goToPrevious}
+            style={[
+              styles.leftButton,
+              { backgroundColor: currentIndex !== 0 ? "blue" : "lightgray" },
+            ]}
+            disabled={currentIndex !== 0 ? false : true}
+          >
+            {/* {currentIndex !== 0 &&  */}
+            <Icon name="arrowleft" size={20} color="white" />
+            {/* } */}
+          </Pressable>
+          <Pressable
+            onPress={goToNext}
+            style={[
+              styles.rightButton,
+              {
+                backgroundColor:
+                  currentIndex < children.length - 1 ? "blue" : "lightgray",
+              },
+            ]}
+            disabled={currentIndex < children.length - 1 ? false : true}
+          >
+            {/* {currentIndex < children.length - 1 && ( */}
 
-          <Icon name="right" size={25} color="blue" />
-        }
-        </Pressable>
+            <Icon name="arrowright" size={20} color="white" />
+            {/* )} */}
+          </Pressable>
+        </View>
       </View>
     </View>
   );
@@ -57,20 +76,29 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: "row",
     paddingHorizontal: 0,
+    justifyContent: "center",
   },
   leftButton: {
-    alignSelf: "center",
-    marginHorizontal:0,
-    paddingHorizontal:0,
-    width:25
-
+    marginHorizontal: 0,
+    paddingHorizontal: 0,
+    backgroundColor: "blue",
+    padding: 5,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 30,
+    marginRight: 5,
   },
   rightButton: {
-    alignSelf: "center",
-    marginHorizontal:0,
-    paddingHorizontal:0,
-    width:25
-
+    marginHorizontal: 0,
+    paddingHorizontal: 0,
+    backgroundColor: "blue",
+    padding: 5,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 30,
+    marginLeft: 5,
   },
   centerContainer: {
     flex: 1,

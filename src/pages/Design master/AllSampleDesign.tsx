@@ -218,14 +218,14 @@ const AllSampleDesign = ({ navigation }: any) => {
           backgroundColor="#fff"
           barStyle="dark-content" // Here is where you change the font-color
         />
-        <View style={{ paddingHorizontal: 15 }}>
+        {/* <View style={{ paddingHorizontal: 15 }}>
           <SearchableComponent
             data={allsampleData}
             searchKey="designNo"
             placeholder={"design no"}
             onFilter={handleFilter}
           />
-        </View>
+        </View> */}
         <ScrollView>
           <View style={[GlobalStyle.container, { marginHorizontal: 0 }]}>
             {/* <>

@@ -142,7 +142,7 @@ const DrawerView = ({ navigation, state }: any) => {
                           style={[
                             styles.drawerItem,
                             state.index === 7 && styles.activeDrawerItem,
-                            { borderBottomWidth: 0, marginHorizontal: 0 },
+                            { marginHorizontal: 0 },
                           ]}
                           onPress={() => handlePress("Job work Team")}
                         >
@@ -484,7 +484,7 @@ const DrawerView = ({ navigation, state }: any) => {
                           style={[
                             styles.drawerItem,
                             state.index === 7 && styles.activeDrawerItem,
-                            { borderBottomWidth: 0, marginHorizontal: 0 },
+                            { marginHorizontal: 0 },
                           ]}
                           onPress={() => handlePress("Job work Team")}
                         >

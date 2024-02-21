@@ -34,7 +34,7 @@ const Challan = ({ navigation }: any) => {
     setdata(item);
   };
   useEffect(() => {
-    if (user.userType === "Carrier") {
+    if (user?.userType === "Carrier") {
       const cha: any = challan.filter(
         (item: any) => item.carrierPersonUid === user.useruid
       );
@@ -44,7 +44,7 @@ const Challan = ({ navigation }: any) => {
       setchallansData([...challan]);
       setchallans([...challan]);
     }
-  }, [user.userType, challan]);
+  }, [user?.userType, challan]);
 
   const onClose = () => {
     setisVisible(false);
@@ -95,7 +95,7 @@ const Challan = ({ navigation }: any) => {
               >
                 <View style={GlobalStyle.leftSide}>
                   <Text style={GlobalStyle.label}>Date</Text>
-                  <Text style={GlobalStyle.label}>Job No</Text>
+                  <Text style={GlobalStyle.label}>Design No</Text>
                   <Text style={GlobalStyle.label}>Party Name</Text>
                   <Text style={GlobalStyle.label}>Pieces</Text>
                   <Text style={GlobalStyle.label}>Carrier</Text>
@@ -115,7 +115,7 @@ const Challan = ({ navigation }: any) => {
                     numberOfLines={1}
                     ellipsizeMode="tail"
                   >
-                    {item.jobNumber}
+                    {item.designNo}
                   </Text>
                   <Text
                     style={GlobalStyle.textcolor}
@@ -172,20 +172,6 @@ const Challan = ({ navigation }: any) => {
                     </Pressable>
                   </View>
                 </View>
-
-                {/* <View style={{ flex: 1, width: 'auto' }}>
-                                        <View style={{
-                                            display: 'flex', flexDirection: 'column',
-                                        }}>
-                                            <Text style={[GlobalStyle.blackColor, Style.mesurement]}>
-                                                Stone Type :-{item.mesurement}
-                                            </Text>
-                                            <Text style={[GlobalStyle.blackColor, Style.price]}>
-                                                Price :- {item.price}
-                                            </Text>
-                                        </View>
-
-                                    </View> */}
               </View>
             ))}
           </View>

@@ -28,8 +28,11 @@ import {
 } from "../../redux/action/Challan/ChallanSlice";
 import DatePicker from "react-native-date-picker";
 import { formatDate } from "../../services/dateFormate";
+import { addDeliveredDesign } from "../../redux/action/delivered design/deliveredDesignSlice";
+import { editDesignMaster } from "../../redux/action/DesignsMaster/designMasterSlice";
 interface InitialFormValues {
-  jobNumber: string;
+  designNo: string;
+  challanType: string;
   piece: string;
   maalImg: string;
   itemName: string;
@@ -56,9 +59,13 @@ const CreateChallan = ({ navigation, route }: any) => {
   const [selectedImage, setSelectedImage] = useState<any>();
   const { userMaster } = useSelector((state: RootState) => state.userMaster);
   const [carrierPersons, setCarrierPersons] = useState<any>([]);
+  const { designsMaster } = useSelector(
+    (state: RootState) => state.designMaster
+  );
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
-      jobNumber: "",
+      challanType: "",
+      designNo: "",
       piece: "",
       maalImg: "",
       challanImg: "",
@@ -76,7 +83,8 @@ const CreateChallan = ({ navigation, route }: any) => {
   const { partyMaster } = useSelector((state: RootState) => state.partyMaster);
 
   const challanSchema = Yup.object().shape({
-    jobNumber: Yup.string().required("Job Number is required"),
+    designNo: Yup.string().required("Job Number is required"),
+    challanType: Yup.string().required("Challan Type is required"),
     partyName: Yup.string().required("Party Name is required"),
     date: Yup.string().required("Date is required"),
     piece: Yup.string().required("Number of Sample is required"),
@@ -101,6 +109,19 @@ const CreateChallan = ({ navigation, route }: any) => {
         values.id = Math.floor(2360 + Math.random() * 6438);
         dispatch(addChallan({ ...values }));
       }
+      if (values.challanType === "Out" && values.status === "Delivered") {
+        const data: any = designsMaster.find(
+          (obj: any) =>
+            obj.partyUID === values.partyUID && obj.designNo == values.designNo
+        );
+        const newData = { ...data, availableStocks: values.piece };
+        const newData1 = {
+          ...data,
+          availableStocks: data.availableStocks - values.piece,
+        };
+        dispatch(addDeliveredDesign({ ...newData }));
+        dispatch(editDesignMaster({ ...newData1 }));
+      }
       resetForm();
       navigation.goBack();
     },
@@ -122,7 +143,7 @@ const CreateChallan = ({ navigation, route }: any) => {
       setUpdate(true);
     } else {
       setInitialFormValues({
-        jobNumber: "",
+        designNo: "",
         piece: "",
         maalImg: "",
         challanImg: "",
@@ -135,12 +156,13 @@ const CreateChallan = ({ navigation, route }: any) => {
         carrierPersonMobNo: user.userType ? user.mobileNumber : "",
         id: undefined,
         partyUID: undefined,
+        challanType: "",
       });
       setUpdate(false);
     }
   }, [route.params]);
   const patchData = () => {
-    setFieldValue("jobNumber", route.params?.jobNumber);
+    setFieldValue("designNo", route.params?.designNo);
     setFieldValue("piece", route.params?.piece);
     setFieldValue("maalImg", route.params?.maalImg);
     setFieldValue("challanImg", route.params?.challanImg);
@@ -152,6 +174,7 @@ const CreateChallan = ({ navigation, route }: any) => {
     setFieldValue("carrierPersonUid", route.params?.carrierPersonUid);
     setFieldValue("carrierPersonMobNo", route.params?.carrierPersonMobNo);
     setFieldValue("partyUID", route.params?.partyUID);
+    setFieldValue("challanType", route.params?.challanType);
     setFieldValue("id", route.params?.id);
   };
   const closecamaraModel = () => {
@@ -268,7 +291,42 @@ const CreateChallan = ({ navigation, route }: any) => {
             </View>
             <View style={{ marginTop: 15 }}>
               <View style={styles.inputField}>
-                <Text style={styles.inputLabel}>Job No</Text>
+                <Text style={styles.inputLabel}>Select Challan Type</Text>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <SelectDropdown
+                    data={["In", "Out"]}
+                    onSelect={(selectedItem) => {
+                      setFieldValue("challanType", selectedItem);
+                    }}
+                    buttonStyle={{
+                      backgroundColor: "transparent",
+                      width: "100%",
+                    }}
+                    defaultButtonText="Select Challan Type"
+                    buttonTextStyle={{
+                      textAlign: "left",
+                      marginLeft: -6,
+                    }}
+                    dropdownStyle={{ width: "80%", borderRadius: 10 }}
+                    defaultValue={values.challanType}
+                  />
+                </View>
+              </View>
+              {errors.challanType && touched.challanType && (
+                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                  {errors.challanType}
+                </Text>
+              )}
+            </View>
+            <View style={{ marginTop: 15 }}>
+              <View style={styles.inputField}>
+                <Text style={styles.inputLabel}>Design No</Text>
                 <View
                   style={{
                     display: "flex",
@@ -277,20 +335,20 @@ const CreateChallan = ({ navigation, route }: any) => {
                   }}
                 >
                   <TextInput
-                    onChangeText={handleChange("jobNumber")}
+                    onChangeText={handleChange("designNo")}
                     onBlur={() => {
-                      handleBlur("jobNumber");
+                      handleBlur("designNo");
                     }}
-                    value={values.jobNumber}
+                    value={values.designNo}
                     style={{ flex: 1, fontSize: 16, color: "#000" }}
                     placeholderTextColor="gray"
-                    placeholder="Enter Job No"
+                    placeholder="Enter Design No"
                   />
                 </View>
               </View>
-              {errors.jobNumber && touched.jobNumber && (
+              {errors.designNo && touched.designNo && (
                 <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
-                  {errors.jobNumber}
+                  {errors.designNo}
                 </Text>
               )}
             </View>
@@ -602,7 +660,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                   }}
                 >
                   <SelectDropdown
-                    data={["Dispatch", "In Transit", "Shipped", "Completed"]}
+                    data={["Dispatch", "In Transit", "Shipped", "Delivered"]}
                     onSelect={(selectedItem) => {
                       setFieldValue("status", selectedItem);
                     }}
