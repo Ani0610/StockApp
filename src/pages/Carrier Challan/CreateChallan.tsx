@@ -83,7 +83,12 @@ const CreateChallan = ({ navigation, route }: any) => {
   const { partyMaster } = useSelector((state: RootState) => state.partyMaster);
 
   const challanSchema = Yup.object().shape({
-    designNo: Yup.string().required("Job Number is required"),
+    designNo: Yup.string().when([], (inputs: any, schema: any) => {
+      if (user?.userType === "Carrier") {
+        return schema;
+      }
+      return schema.required("Design Number is required");
+    }),
     challanType: Yup.string().required("Challan Type is required"),
     partyName: Yup.string().required("Party Name is required"),
     date: Yup.string().required("Date is required"),
@@ -151,14 +156,20 @@ const CreateChallan = ({ navigation, route }: any) => {
         partyName: "",
         date: "",
         status: "",
-        carrierPersonName: user.userType ? user.fullName : "",
-        carrierPersonUid: user.userType ? user.useruid : "",
-        carrierPersonMobNo: user.userType ? user.mobileNumber : "",
+        carrierPersonName: "",
+        carrierPersonUid: "",
+        carrierPersonMobNo: "",
         id: undefined,
         partyUID: undefined,
         challanType: "",
       });
+      if (user?.userType === "Carrier") {
+        setFieldValue("carrierPersonName", user.fullName);
+        setFieldValue("carrierPersonUid", user.useruid);
+        setFieldValue("carrierPersonMobNo", user.mobileNumber);
+      }
       setUpdate(false);
+      console.log(user);
     }
   }, [route.params]);
   const patchData = () => {
@@ -205,6 +216,7 @@ const CreateChallan = ({ navigation, route }: any) => {
     setFieldValue("date", date);
     setDatePickerVisible(false);
   };
+
   return (
     <>
       <SafeAreaView style={[GlobalStyle.safeAreaCotainer, { height: "100%" }]}>
@@ -249,11 +261,11 @@ const CreateChallan = ({ navigation, route }: any) => {
         <ScrollView>
           <View
             style={{
-              padding: 20,
+              padding: 10,
             }}
           >
             <View style={{ marginTop: 10 }}>
-              <View style={[styles.inputField, { height: 80 }]}>
+              <View style={[styles.inputField]}>
                 <Text style={styles.inputLabel}>Date</Text>
                 <View
                   style={{
@@ -297,6 +309,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   <SelectDropdown
@@ -307,6 +320,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                     buttonStyle={{
                       backgroundColor: "transparent",
                       width: "100%",
+                      height: 30,
                     }}
                     defaultButtonText="Select Challan Type"
                     buttonTextStyle={{
@@ -324,34 +338,43 @@ const CreateChallan = ({ navigation, route }: any) => {
                 </Text>
               )}
             </View>
-            <View style={{ marginTop: 15 }}>
-              <View style={styles.inputField}>
-                <Text style={styles.inputLabel}>Design No</Text>
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <TextInput
-                    onChangeText={handleChange("designNo")}
-                    onBlur={() => {
-                      handleBlur("designNo");
+            {user?.userType !== "Carrier" && (
+              <View style={{ marginTop: 15 }}>
+                <View style={styles.inputField}>
+                  <Text style={styles.inputLabel}>Design No</Text>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
-                    value={values.designNo}
-                    style={{ flex: 1, fontSize: 16, color: "#000" }}
-                    placeholderTextColor="gray"
-                    placeholder="Enter Design No"
-                  />
+                  >
+                    <TextInput
+                      onChangeText={handleChange("designNo")}
+                      onBlur={() => {
+                        handleBlur("designNo");
+                      }}
+                      value={values.designNo}
+                      style={{
+                        flex: 1,
+                        fontSize: 16,
+                        color: "#000",
+                        padding: 0,
+                      }}
+                      placeholderTextColor="gray"
+                      placeholder="Enter Design No"
+                    />
+                  </View>
                 </View>
+                {errors.designNo && touched.designNo && (
+                  <Text
+                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
+                  >
+                    {errors.designNo}
+                  </Text>
+                )}
               </View>
-              {errors.designNo && touched.designNo && (
-                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
-                  {errors.designNo}
-                </Text>
-              )}
-            </View>
+            )}
             <View style={{ marginTop: 15 }}>
               <View style={styles.inputField}>
                 <Text style={styles.inputLabel}>Select Party Name</Text>
@@ -360,6 +383,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   <SelectDropdown
@@ -380,6 +404,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                     buttonStyle={{
                       backgroundColor: "transparent",
                       width: "100%",
+                      height: 30,
                     }}
                     defaultButtonText="Select Party Name"
                     buttonTextStyle={{
@@ -415,7 +440,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                       handleBlur("itemName");
                     }}
                     value={values.itemName}
-                    style={{ flex: 1, fontSize: 16, color: "#000" }}
+                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0 }}
                     placeholderTextColor="gray"
                     placeholder="Enter Item Name"
                   />
@@ -443,7 +468,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                       handleBlur("piece");
                     }}
                     value={values.piece}
-                    style={{ flex: 1, fontSize: 16, color: "#000" }}
+                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0 }}
                     placeholderTextColor="gray"
                     placeholder="Enter Number of piece"
                   />
@@ -459,7 +484,7 @@ const CreateChallan = ({ navigation, route }: any) => {
               <View
                 style={[
                   styles.inputField,
-                  { width: "100%", height: values.maalImg ? 110 : 80 },
+                  { width: "100%", height: values.maalImg ? 110 : "auto" },
                 ]}
               >
                 <View
@@ -475,7 +500,6 @@ const CreateChallan = ({ navigation, route }: any) => {
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
-                        marginTop: 10,
                       }}
                     >
                       <Pressable
@@ -555,7 +579,7 @@ const CreateChallan = ({ navigation, route }: any) => {
               <View
                 style={[
                   styles.inputField,
-                  { width: "100%", height: values.challanImg ? 110 : 80 },
+                  { width: "100%", height: values.challanImg ? 110 : "auto" },
                 ]}
               >
                 <View
@@ -571,7 +595,6 @@ const CreateChallan = ({ navigation, route }: any) => {
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
-                        marginTop: 10,
                       }}
                     >
                       <Pressable onPress={() => setIscamaraModalVisible(true)}>
@@ -657,6 +680,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   <SelectDropdown
@@ -667,6 +691,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                     buttonStyle={{
                       backgroundColor: "transparent",
                       width: "100%",
+                      height: 30,
                     }}
                     defaultButtonText="Select Status"
                     buttonTextStyle={{ textAlign: "left", marginLeft: -6 }}
@@ -690,6 +715,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
                     <SelectDropdown
@@ -717,6 +743,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                       buttonStyle={{
                         backgroundColor: "transparent",
                         width: "100%",
+                        height: 30,
                       }}
                       defaultButtonText="Select Carrier Person"
                       buttonTextStyle={{ textAlign: "left", marginLeft: -6 }}

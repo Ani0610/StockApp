@@ -42,6 +42,7 @@ interface InitialFormValues {
   designNo: string;
   sampleImg: any;
   stoneDetails: any;
+  category: string;
   designDetails: any;
   jobworkDetails: any;
   totalstones: string;
@@ -63,11 +64,13 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   const [sampleimg, setSampleimg] = useState<any>();
   const [selectedImage, setSelectedImage] = useState<any>(false);
   const { partyMaster } = useSelector((state: RootState) => state.partyMaster);
+  const { categoryes } = useSelector((state: RootState) => state.categoryes);
 
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
       designNo: "",
       availableStocks: "",
+      category: "",
       sampleImg: [],
       stoneDetails: [
         {
@@ -117,6 +120,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       setInitialFormValues({
         designNo: "",
         availableStocks: "",
+        category: "",
         sampleImg: [],
         stoneDetails: [
           {
@@ -161,6 +165,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   const sampleSchema = Yup.object().shape({
     designNo: Yup.string().required("Design Number is required"),
     partyName: Yup.string().required("Party Name is required"),
+    category: Yup.string().required("Category is required"),
     availableStocks: Yup.string().required("Stock is required"),
     sampleImg: Yup.array().min(1, "At least one sample image is required"),
     stoneDetails: Yup.array().of(
@@ -248,6 +253,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     setFieldValue("totalstones", route.params.totalstones);
     setFieldValue("totlDesigns", route.params.totlDesigns);
     setFieldValue("totalJobWorks", route.params.totalJobWorks);
+    setFieldValue("category", route.params.category);
     setFieldValue("total", route.params.total);
     setFieldValue("partyName", route.params.partyName);
     setFieldValue("partyUID", route.params.partyUID);
@@ -392,227 +398,274 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
           </Text>
         </View>
       </View>
-      <GestureHandlerRootView style={{ marginBottom: 100 }}>
-        <ScrollView>
-          <FormikProvider value={formik}>
-            <View
-              style={{
-                padding: 20,
-              }}
-            >
-              <View style={{ marginTop: 10 }}>
-                <View style={[styles.inputField, { height: 80 }]}>
-                  <Text style={styles.inputLabel}>Date</Text>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 10,
-                    }}
+      {/* <GestureHandlerRootView> */}
+      <ScrollView>
+        <FormikProvider value={formik}>
+          <View
+            style={{
+              padding: 0,
+            }}
+          >
+            <View style={{ marginTop: 10 }}>
+              <View style={[styles.inputField]}>
+                <Text style={styles.inputLabel}>Date</Text>
+                <View style={{ width: "60%" }}>
+                  <Text
+                    style={{ width: "100%", fontSize: 14, color: "gray" }}
+                    onPress={() => openDatePicker()}
                   >
-                    <Text
-                      style={{ width: "100%", fontSize: 14, color: "gray" }}
-                      onPress={() => openDatePicker()}
-                    >
-                      {values.date ? formatDate(values.date) : "Select Date"}
-                    </Text>
-                  </View>
-                  <DatePicker
-                    modal
-                    open={datePickerVisible}
-                    date={new Date()}
-                    mode="date"
-                    onConfirm={(date) => {
-                      handleDateChange(date);
+                    {values.date ? formatDate(values.date) : "Select Date"}
+                  </Text>
+                </View>
+                <DatePicker
+                  modal
+                  open={datePickerVisible}
+                  date={new Date()}
+                  mode="date"
+                  onConfirm={(date) => {
+                    handleDateChange(date);
+                  }}
+                  onCancel={() => {
+                    setDatePickerVisible(false);
+                  }}
+                />
+              </View>
+              {errors.date && touched.date && (
+                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                  {errors.date}
+                </Text>
+              )}
+            </View>
+            <View style={{ marginTop: 15 }}>
+              <View style={[styles.inputField, { flexDirection: "row" }]}>
+                <Text style={styles.inputLabel}>Design No</Text>
+                <View style={{ width: "60%" }}>
+                  <TextInput
+                    onChangeText={handleChange("designNo")}
+                    onBlur={() => {
+                      handleBlur("designNo");
                     }}
-                    onCancel={() => {
-                      setDatePickerVisible(false);
+                    value={values.designNo}
+                    style={{
+                      flex: 1,
+                      fontSize: 16,
+                      color: "#000",
+                      padding: 0,
                     }}
+                    placeholderTextColor="gray"
+                    placeholder="Enter design No"
                   />
                 </View>
-                {errors.date && touched.date && (
-                  <Text
-                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
-                  >
-                    {errors.date}
-                  </Text>
-                )}
               </View>
-              <View style={{ marginTop: 15 }}>
-                <View style={styles.inputField}>
-                  <Text style={styles.inputLabel}>Design No</Text>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TextInput
-                      onChangeText={handleChange("designNo")}
-                      onBlur={() => {
-                        handleBlur("designNo");
-                      }}
-                      value={values.designNo}
-                      style={{ flex: 1, fontSize: 16, color: "#000" }}
-                      placeholderTextColor="gray"
-                      placeholder="Enter design No"
-                    />
-                  </View>
-                </View>
-                {errors.designNo && touched.designNo && (
-                  <Text
-                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
-                  >
-                    {errors.designNo}
-                  </Text>
-                )}
-              </View>
-              <View style={{ marginTop: 15 }}>
-                <View style={styles.inputField}>
-                  <Text style={styles.inputLabel}>Stock /Piece</Text>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TextInput
-                      onChangeText={handleChange("availableStocks")}
-                      onBlur={() => {
-                        handleBlur("availableStocks");
-                      }}
-                      keyboardType="numeric"
-                      value={values.availableStocks}
-                      style={{ flex: 1, fontSize: 16, color: "#000" }}
-                      placeholderTextColor="gray"
-                      placeholder="Enter Stock/Piece"
-                    />
-                  </View>
-                </View>
-                {errors.availableStocks && touched.availableStocks && (
-                  <Text
-                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
-                  >
-                    {errors.availableStocks}
-                  </Text>
-                )}
-              </View>
-              <View style={{ marginTop: 15 }}>
-                <View style={styles.inputField}>
-                  <Text style={styles.inputLabel}>Select Party Name</Text>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <SelectDropdown
-                      data={[...partyMaster]}
-                      onSelect={(selectedItem) => {
-                        setFieldValue("partyUID", selectedItem.id);
-                        setFieldValue("partyName", selectedItem.partyName);
-                      }}
-                      buttonTextAfterSelection={(
-                        selectedItem: any,
-                        index: number
-                      ) => {
-                        return `${selectedItem?.partyName}`;
-                      }}
-                      rowTextForSelection={(item: any, index: number) => {
-                        return `${item.partyName}`;
-                      }}
-                      buttonStyle={{
-                        backgroundColor: "transparent",
-                        width: "100%",
-                      }}
-                      defaultButtonText="Select Party Name"
-                      buttonTextStyle={{
-                        textAlign: "left",
-                        marginLeft: -6,
-                      }}
-                      dropdownStyle={{ width: "80%", borderRadius: 10 }}
-                      defaultValue={partyMaster.find(
-                        (Party: any) => Party.id === values.partyUID
-                      )}
-                    />
-                  </View>
-                </View>
-                {errors.partyName && touched.partyName && (
-                  <Text
-                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
-                  >
-                    {errors.partyName}
-                  </Text>
-                )}
-              </View>
-              <View style={{ marginTop: 15 }}>
+              {errors.designNo && touched.designNo && (
+                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                  {errors.designNo}
+                </Text>
+              )}
+            </View>
+            <View style={{ marginTop: 15 }}>
+              <View style={styles.inputField}>
+                <Text style={styles.inputLabel}>Select Category</Text>
                 <View
-                  style={[styles.inputField, { width: "100%", height: 80 }]}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    padding: 0,
+                    justifyContent: "center",
+                    width: "60%",
+                  }}
                 >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
+                  <SelectDropdown
+                    data={[...categoryes]}
+                    onSelect={(selectedItem) => {
+                      setFieldValue("category", selectedItem.category);
                     }}
-                  >
-                    <View>
-                      <Text style={[styles.inputLabel]}>Sample Image</Text>
-                      <View
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          marginTop: 10,
-                        }}
-                      >
-                        <Pressable
-                          onPress={() => setIscamaraModalVisible(true)}
-                        >
-                          <Text style={{ color: "gray" }}>Upload Sample</Text>
-                        </Pressable>
-                      </View>
-                    </View>
-                    <View style={{ marginTop: 30 }}>
-                      <TouchableOpacity onPress={() => setSelectedImage(true)}>
-                        {values.sampleImg.length > 0 && (
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            <Icon
-                              type="foundation"
-                              name="photo"
-                              color="#000"
-                              size={30}
-                            />
-                            <Text style={{ color: "#000", fontWeight: "bold" }}>
-                              {" "}
-                              {values.sampleImg.length} Images Uploaded
-                            </Text>
-                          </View>
-                        )}
-                      </TouchableOpacity>
+                    buttonTextAfterSelection={(
+                      selectedItem: any,
+                      index: number
+                    ) => {
+                      return `${selectedItem?.category}`;
+                    }}
+                    rowTextForSelection={(item: any, index: number) => {
+                      return `${item.category}`;
+                    }}
+                    buttonStyle={{
+                      backgroundColor: "transparent",
+                      width: "100%",
+                      height: 30,
+                    }}
+                    defaultButtonText="Select Category"
+                    buttonTextStyle={{
+                      textAlign: "left",
+                      marginLeft: -5,
+                    }}
+                    dropdownStyle={{
+                      width: "60%",
+                      borderRadius: 10,
+                      marginRight: 50,
+                    }}
+                    defaultValue={categoryes.find(
+                      (cate: any) => cate.category === values.category
+                    )}
+                  />
+                </View>
+              </View>
+              {errors.partyName && touched.partyName && (
+                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                  {errors.partyName}
+                </Text>
+              )}
+            </View>
+            <View style={{ marginTop: 15 }}>
+              <View style={styles.inputField}>
+                <Text style={styles.inputLabel}>Stock /Piece</Text>
+                <View style={{ width: "60%" }}>
+                  <TextInput
+                    onChangeText={handleChange("availableStocks")}
+                    onBlur={() => {
+                      handleBlur("availableStocks");
+                    }}
+                    keyboardType="numeric"
+                    value={values.availableStocks}
+                    style={{
+                      flex: 1,
+                      fontSize: 16,
+                      color: "#000",
+                      padding: 0,
+                    }}
+                    placeholderTextColor="gray"
+                    placeholder="Enter Stock/Piece"
+                  />
+                </View>
+              </View>
+              {errors.availableStocks && touched.availableStocks && (
+                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                  {errors.availableStocks}
+                </Text>
+              )}
+            </View>
+            <View style={{ marginTop: 15 }}>
+              <View style={styles.inputField}>
+                <Text style={styles.inputLabel}>Select Party Name</Text>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    padding: 0,
+                    justifyContent: "center",
+                    width: "60%",
+                  }}
+                >
+                  <SelectDropdown
+                    data={[...partyMaster]}
+                    onSelect={(selectedItem) => {
+                      setFieldValue("partyUID", selectedItem.id);
+                      setFieldValue("partyName", selectedItem.partyName);
+                    }}
+                    buttonTextAfterSelection={(
+                      selectedItem: any,
+                      index: number
+                    ) => {
+                      return `${selectedItem?.partyName}`;
+                    }}
+                    rowTextForSelection={(item: any, index: number) => {
+                      return `${item.partyName}`;
+                    }}
+                    buttonStyle={{
+                      backgroundColor: "transparent",
+                      width: "100%",
+                      height: 30,
+                    }}
+                    defaultButtonText="Select Party Name"
+                    buttonTextStyle={{
+                      textAlign: "left",
+                      marginLeft: -5,
+                    }}
+                    dropdownStyle={{
+                      width: "60%",
+                      borderRadius: 10,
+                      marginRight: 50,
+                    }}
+                    defaultValue={partyMaster.find(
+                      (Party: any) => Party.id === values.partyUID
+                    )}
+                  />
+                </View>
+              </View>
+              {errors.partyName && touched.partyName && (
+                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                  {errors.partyName}
+                </Text>
+              )}
+            </View>
+            <View style={{ marginTop: 15 }}>
+              <View
+                style={[
+                  {
+                    width: "100%",
+                    backgroundColor: "#F9F9F9",
+                    borderRadius: 15,
+                    padding: 10,
+                  },
+                ]}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <View>
+                    <Text style={[styles.inputLabel]}>Sample Image</Text>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Pressable onPress={() => setIscamaraModalVisible(true)}>
+                        <Text style={{ color: "gray" }}>Upload Sample</Text>
+                      </Pressable>
                     </View>
                   </View>
+                  <View style={{ marginTop: 30 }}>
+                    <TouchableOpacity onPress={() => setSelectedImage(true)}>
+                      {values.sampleImg.length > 0 && (
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Icon
+                            type="foundation"
+                            name="photo"
+                            color="#000"
+                            size={30}
+                          />
+                          <Text style={{ color: "#000", fontWeight: "bold" }}>
+                            {" "}
+                            {values.sampleImg.length} Images Uploaded
+                          </Text>
+                        </View>
+                      )}
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                {errors.sampleImg && touched.sampleImg && (
-                  <Text
-                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
-                  >
-                    {errors.sampleImg}
-                  </Text>
-                )}
               </View>
-
-              <View style={{ marginTop: 10 }}>
-                <FieldArray name="stoneDetails">
+              {errors.sampleImg && touched.sampleImg && (
+                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                  {errors.sampleImg}
+                </Text>
+              )}
+            </View>
+            <View style={{ marginTop: 10 }}>
+              {/* <FieldArray name="stoneDetails">
                   {({ replace, remove, push }) => (
                     <View>
                       <View
@@ -867,10 +920,251 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       </HorizontalSlider>
                     </View>
                   )}
-                </FieldArray>
-              </View>
-              <View style={{ marginTop: 10 }}>
-                <FieldArray name="designDetails">
+                </FieldArray> */}
+              <FieldArray name="stoneDetails">
+                {({ replace, remove, push }) => (
+                  <View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                        Stone Details
+                      </Text>
+                      {values.stoneDetails &&
+                        values.stoneDetails.every(
+                          (st: any) =>
+                            st.stoneType &&
+                            st.stoneunit &&
+                            st.stoneuid &&
+                            st.price &&
+                            st.totalOneStone
+                        ) && (
+                          <Pressable
+                            onPress={() =>
+                              push({
+                                stoneType: "",
+                                stoneunit: "",
+                                stoneuid: "",
+                                price: "",
+                                totalOneStone: "",
+                              })
+                            }
+                          >
+                            <Icon
+                              type="feather"
+                              name="plus"
+                              color="blue"
+                              size={25}
+                            />
+                          </Pressable>
+                        )}
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        borderWidth: 0.5,
+                        borderColor: "#000",
+                        backgroundColor: "#f5f6f7",
+                        alignItems: "center",
+                        padding: 5,
+                        paddingHorizontal: 10,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "30%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Stone Type
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "30%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Price
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "30%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Unit
+                      </Text>
+                      <Text></Text>
+                    </View>
+                    {values.stoneDetails?.length > 0 &&
+                      values.stoneDetails.map((stone1: any, i: any) => (
+                        <View
+                          key={i}
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            borderBottomWidth: 1,
+                            borderColor: "lightgray",
+                            paddingHorizontal: 2,
+                          }}
+                        >
+                          <View
+                            style={{
+                              width: "30%",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <SelectDropdown
+                              data={[...stoneStock]}
+                              onSelect={(selectedItem) => {
+                                replace(i, {
+                                  ...stone1,
+                                  stoneType: selectedItem.stoneType,
+                                  price: selectedItem.pricePerStone,
+                                  stoneuid: selectedItem.id,
+                                });
+                              }}
+                              buttonTextAfterSelection={(
+                                selectedItem: any,
+                                index: number
+                              ) => {
+                                return `${selectedItem?.stoneType}`;
+                              }}
+                              rowTextForSelection={(
+                                item: any,
+                                index: number
+                              ) => {
+                                return `${item?.stoneType}`;
+                              }}
+                              buttonStyle={{
+                                backgroundColor: "transparent",
+                                width: "100%",
+                                padding: 0,
+                                height: 20,
+                              }}
+                              defaultButtonText={
+                                stone1.stoneType
+                                  ? stone1.stoneType
+                                  : "Select stone Type"
+                              }
+                              buttonTextStyle={{
+                                textAlign: "center",
+                                color: "#000",
+                                fontSize: 14,
+                                padding: 0,
+                              }}
+                              dropdownStyle={{
+                                width: "100%",
+                                padding: 0,
+                              }}
+                              defaultValue={""}
+                            />
+                            {errors.stoneDetails &&
+                              errors.stoneDetails[i] &&
+                              touched.stoneDetails &&
+                              touched.stoneDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.stoneDetails[i].stoneType}
+                                </Text>
+                              )}
+                          </View>
+                          <View style={{ width: "30%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={handleChange(
+                                `stoneDetails[${i}].price`
+                              )}
+                              editable={false}
+                              onBlur={() => {
+                                handleBlur(`stoneDetails[${i}].price`);
+                              }}
+                              value={stone1.price.toString()}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              placeholderTextColor="gray"
+                              placeholder="Enter price"
+                            />
+                            {errors.stoneDetails &&
+                              errors.stoneDetails[i] &&
+                              touched.stoneDetails &&
+                              touched.stoneDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.stoneDetails[i].price}
+                                </Text>
+                              )}
+                          </View>
+                          <View style={{ width: "30%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={async (text: any) => {
+                                replace(i, {
+                                  ...stone1,
+                                  stoneunit: text,
+                                  totalOneStone: text * stone1.price,
+                                });
+                              }}
+                              value={stone1.stoneunit}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              placeholderTextColor="gray"
+                              placeholder="Enter unit"
+                            />
+                            {errors.stoneDetails &&
+                              errors.stoneDetails[i] &&
+                              touched.stoneDetails &&
+                              touched.stoneDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.stoneDetails[i].stoneunit}
+                                </Text>
+                              )}
+                          </View>
+                          <View
+                            style={{
+                              margin: 0,
+                              paddingVertical: 0,
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {values.stoneDetails.length > 1 && (
+                              <Pressable
+                                onPress={() => remove(i)}
+                                style={{ margin: 0, paddingVertical: 0 }}
+                              >
+                                <Icon
+                                  type="entypo"
+                                  name="minus"
+                                  color="red"
+                                  size={20}
+                                />
+                              </Pressable>
+                            )}
+                          </View>
+                        </View>
+                      ))}
+                  </View>
+                )}
+              </FieldArray>
+            </View>
+            <View style={{ marginTop: 10 }}>
+              {/* <FieldArray name="designDetails">
                   {({ replace, remove, push }) => (
                     <View>
                       <View
@@ -1126,10 +1420,251 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       </HorizontalSlider>
                     </View>
                   )}
-                </FieldArray>
-              </View>
-              <View style={{ marginTop: 10 }}>
-                <FieldArray name="jobworkDetails">
+                </FieldArray> */}
+              <FieldArray name="designDetails">
+                {({ replace, remove, push }) => (
+                  <View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                        Design Details
+                      </Text>
+                      {values.designDetails &&
+                        values.designDetails.every(
+                          (dsgn: any) =>
+                            dsgn.measurement &&
+                            dsgn.designunit &&
+                            dsgn.designuid &&
+                            dsgn.price &&
+                            dsgn.totalOneDesign
+                        ) && (
+                          <Pressable
+                            onPress={() =>
+                              push({
+                                measurement: "",
+                                designunit: "",
+                                designuid: "",
+                                price: "",
+                                totalOneDesign: "",
+                              })
+                            }
+                          >
+                            <Icon
+                              type="feather"
+                              name="plus"
+                              color="blue"
+                              size={25}
+                            />
+                          </Pressable>
+                        )}
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        borderWidth: 0.5,
+                        borderColor: "#000",
+                        backgroundColor: "#f5f6f7",
+                        alignItems: "center",
+                        padding: 5,
+                        paddingHorizontal: 10,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "30%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Measurement
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "30%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Price
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "30%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Unit
+                      </Text>
+                      <Text></Text>
+                    </View>
+                    {values.designDetails?.length > 0 &&
+                      values.designDetails.map((design: any, i: any) => (
+                        <View
+                          key={i}
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            borderBottomWidth: 1,
+                            borderColor: "lightgray",
+                            paddingHorizontal: 2,
+                          }}
+                        >
+                          <View
+                            style={{
+                              width: "30%",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <SelectDropdown
+                              data={[...designs]}
+                              onSelect={(selectedItem) => {
+                                replace(i, {
+                                  ...design,
+                                  measurement: selectedItem.mesurement,
+                                  price: selectedItem.price,
+                                  designuid: selectedItem.id,
+                                });
+                              }}
+                              buttonTextAfterSelection={(
+                                selectedItem: any,
+                                index: number
+                              ) => {
+                                return `${selectedItem?.mesurement}`;
+                              }}
+                              rowTextForSelection={(
+                                item: any,
+                                index: number
+                              ) => {
+                                return `${item?.mesurement}`;
+                              }}
+                              buttonStyle={{
+                                backgroundColor: "transparent",
+                                width: "100%",
+                                padding: 0,
+                                height: 20,
+                              }}
+                              defaultButtonText={
+                                design.measurement
+                                  ? design.measurement
+                                  : "Select Measurement"
+                              }
+                              buttonTextStyle={{
+                                textAlign: "center",
+                                color: "#000",
+                                fontSize: 14,
+                                padding: 0,
+                              }}
+                              dropdownStyle={{
+                                width: "100%",
+                                padding: 0,
+                              }}
+                              defaultValue={""}
+                            />
+                            {errors.designDetails &&
+                              errors.designDetails[i] &&
+                              touched.designDetails &&
+                              touched.designDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.designDetails[i].measurement}
+                                </Text>
+                              )}
+                          </View>
+                          <View style={{ width: "30%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={handleChange(
+                                `designDetails[${i}].price`
+                              )}
+                              onBlur={() => {
+                                handleBlur(`designDetails[${i}].price`);
+                              }}
+                              value={design.price.toString()}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              placeholderTextColor="gray"
+                              placeholder="Enter price"
+                              editable={false}
+                            />
+                            {errors.designDetails &&
+                              errors.designDetails[i] &&
+                              touched.designDetails &&
+                              touched.designDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.designDetails[i].price}
+                                </Text>
+                              )}
+                          </View>
+                          <View style={{ width: "30%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={(text: any) => {
+                                replace(i, {
+                                  ...design,
+                                  designunit: text,
+                                  totalOneDesign: text * design.price,
+                                });
+                              }}
+                              value={design.designunit}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              placeholderTextColor="gray"
+                              placeholder="Enter unit"
+                            />
+                            {errors.designDetails &&
+                              errors.designDetails[i] &&
+                              touched.designDetails &&
+                              touched.designDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.designDetails[i].designunit}
+                                </Text>
+                              )}
+                          </View>
+                          <View
+                            style={{
+                              margin: 0,
+                              paddingVertical: 0,
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {values.designDetails.length > 1 && (
+                              <Pressable
+                                onPress={() => remove(i)}
+                                style={{ margin: 0, paddingVertical: 0 }}
+                              >
+                                <Icon
+                                  type="entypo"
+                                  name="minus"
+                                  color="red"
+                                  size={20}
+                                />
+                              </Pressable>
+                            )}
+                          </View>
+                        </View>
+                      ))}
+                  </View>
+                )}
+              </FieldArray>
+            </View>
+            <View style={{ marginTop: 10 }}>
+              {/* <FieldArray name="jobworkDetails">
                   {({ replace, remove, push }) => (
                     <View>
                       <View
@@ -1426,52 +1961,329 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       </HorizontalSlider>
                     </View>
                   )}
-                </FieldArray>
-              </View>
-
-              <View style={{ marginTop: 10 }}>
-                <View style={styles.inputField}>
-                  <Text style={styles.inputLabel}>Total</Text>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TextInput
-                      onChangeText={handleChange("total")}
-                      onBlur={() => {
-                        handleBlur("total");
+                </FieldArray> */}
+              <FieldArray name="jobworkDetails">
+                {({ replace, remove, push }) => (
+                  <View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
                       }}
-                      value={values.total.toString()}
-                      style={{ flex: 1, fontSize: 16, color: "#000" }}
-                      placeholderTextColor="gray"
-                      placeholder="Enter total"
-                      editable={false}
-                    />
+                    >
+                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                        Job Details
+                      </Text>
+                      {values.jobworkDetails &&
+                        values.jobworkDetails.every(
+                          (jb: any) =>
+                            jb.partyName &&
+                            jb.workType &&
+                            jb.unit &&
+                            jb.jobuid &&
+                            jb.totalOnewJobWork &&
+                            jb.price
+                        ) && (
+                          <Pressable
+                            onPress={() =>
+                              push({
+                                partyName: "",
+                                workType: "",
+                                unit: "",
+                                jobuid: "",
+                                price: "",
+                                totalOnewJobWork: "",
+                              })
+                            }
+                          >
+                            <Icon
+                              type="feather"
+                              name="plus"
+                              color="blue"
+                              size={25}
+                            />
+                          </Pressable>
+                        )}
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        borderWidth: 0.5,
+                        borderColor: "#000",
+                        backgroundColor: "#f5f6f7",
+                        alignItems: "center",
+                        padding: 5,
+                        paddingHorizontal: 10,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "30%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Work
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "20%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Party
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "20%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Price
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "20%",
+                          textAlign: "center",
+                        }}
+                      >
+                        Unit
+                      </Text>
+                      <Text></Text>
+                    </View>
+                    {values.jobworkDetails?.length > 0 &&
+                      values.jobworkDetails.map((job: any, i: any) => (
+                        <View
+                          key={i}
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            borderBottomWidth: 1,
+                            borderColor: "lightgray",
+                            paddingHorizontal: 2,
+                          }}
+                        >
+                          <View
+                            style={{
+                              width: "30%",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <SelectDropdown
+                              data={[...jobWorks]}
+                              onSelect={(selectedItem) => {
+                                replace(i, {
+                                  ...job,
+                                  workType: selectedItem.workType,
+                                  price: selectedItem.price,
+                                  jobuid: selectedItem.id,
+                                  partyName: selectedItem.partyName,
+                                });
+                              }}
+                              buttonTextAfterSelection={(
+                                selectedItem: any,
+                                index: number
+                              ) => {
+                                return `${selectedItem?.workType}`;
+                              }}
+                              rowTextForSelection={(
+                                item: any,
+                                index: number
+                              ) => {
+                                return `${item?.workType} - ${item.partyName}`;
+                              }}
+                              buttonStyle={{
+                                backgroundColor: "transparent",
+                                width: "100%",
+                                padding: 0,
+                                height: 20,
+                              }}
+                              defaultButtonText={
+                                job.workType ? job.workType : "Select Work Type"
+                              }
+                              buttonTextStyle={{
+                                textAlign: "center",
+                                color: "#000",
+                                fontSize: 14,
+                                padding: 0,
+                              }}
+                              dropdownStyle={{
+                                width: "100%",
+                                padding: 0,
+                              }}
+                              defaultValue={""}
+                            />
+                            {errors.jobworkDetails &&
+                              errors.jobworkDetails[i] &&
+                              touched.jobworkDetails &&
+                              touched.jobworkDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.jobworkDetails[i].workType}
+                                </Text>
+                              )}
+                          </View>
+                          <View style={{ width: "20%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={handleChange(
+                                `jobworkDetails[${i}].partyName`
+                              )}
+                              onBlur={() => {
+                                handleBlur(`jobworkDetails[${i}].partyName`);
+                              }}
+                              value={job.partyName}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              placeholderTextColor="gray"
+                              placeholder="party"
+                              editable={false}
+                            />
+                            {errors.jobworkDetails &&
+                              errors.jobworkDetails[i] &&
+                              touched.jobworkDetails &&
+                              touched.jobworkDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.jobworkDetails[i].partyName}
+                                </Text>
+                              )}
+                          </View>
+                          <View style={{ width: "20%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={handleChange(
+                                `jobworkDetails[${i}].price`
+                              )}
+                              onBlur={() => {
+                                handleBlur(`jobworkDetails[${i}].price`);
+                              }}
+                              value={job.price.toString()}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              placeholderTextColor="gray"
+                              placeholder=" price"
+                              editable={false}
+                            />
+                            {errors.jobworkDetails &&
+                              errors.jobworkDetails[i] &&
+                              touched.jobworkDetails &&
+                              touched.jobworkDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.jobworkDetails[i].price}
+                                </Text>
+                              )}
+                          </View>
+                          <View style={{ width: "20%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={(text: any) => {
+                                replace(i, {
+                                  ...job,
+                                  unit: text,
+                                  totalOnewJobWork: text * Number(job.price),
+                                });
+                              }}
+                              value={job.unit}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              placeholderTextColor="gray"
+                              placeholder=" unit"
+                            />
+                            {errors.jobworkDetails &&
+                              errors.jobworkDetails[i] &&
+                              touched.jobworkDetails &&
+                              touched.jobworkDetails[i] && (
+                                <Text style={GlobalStyle.errorMsg}>
+                                  {errors.jobworkDetails[i].unit}
+                                </Text>
+                              )}
+                          </View>
+                          <View
+                            style={{
+                              margin: 0,
+                              paddingVertical: 0,
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {values.jobworkDetails.length > 1 && (
+                              <Pressable
+                                onPress={() => remove(i)}
+                                style={{ margin: 0, paddingVertical: 0 }}
+                              >
+                                <Icon
+                                  type="entypo"
+                                  name="minus"
+                                  color="red"
+                                  size={20}
+                                />
+                              </Pressable>
+                            )}
+                          </View>
+                        </View>
+                      ))}
                   </View>
-                </View>
-                {errors.total && touched.total && (
-                  <Text
-                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
-                  >
-                    {errors.total}
-                  </Text>
                 )}
-              </View>
-              <Pressable
-                style={GlobalStyle.button}
-                onPress={() => handleSubmit()}
-              >
-                <Text style={GlobalStyle.btntext}>
-                  {update ? "Update" : "Submit"}
-                </Text>
-              </Pressable>
+              </FieldArray>
             </View>
-          </FormikProvider>
-        </ScrollView>
-      </GestureHandlerRootView>
+
+            <View style={{ marginTop: 10 }}>
+              <View style={styles.inputField}>
+                <Text style={styles.inputLabel}>Total</Text>
+                <View style={{ width: "60%" }}>
+                  <TextInput
+                    onChangeText={handleChange("total")}
+                    onBlur={() => {
+                      handleBlur("total");
+                    }}
+                    value={values.total.toString()}
+                    style={{
+                      flex: 1,
+                      fontSize: 16,
+                      color: "#000",
+                      padding: 0,
+                    }}
+                    placeholderTextColor="gray"
+                    placeholder="Enter total"
+                    editable={false}
+                  />
+                </View>
+              </View>
+              {errors.total && touched.total && (
+                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                  {errors.total}
+                </Text>
+              )}
+            </View>
+            <Pressable
+              style={GlobalStyle.button}
+              onPress={() => handleSubmit()}
+            >
+              <Text style={GlobalStyle.btntext}>
+                {update ? "Update" : "Submit"}
+              </Text>
+            </Pressable>
+          </View>
+        </FormikProvider>
+      </ScrollView>
+      {/* </GestureHandlerRootView> */}
       {iscamaraModalVisible && (
         <MultipleImageUploadScreen
           isVisible={iscamaraModalVisible}
@@ -1568,6 +2380,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     fontSize: 16,
     padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   inputLabel: { color: "#05E3D5", fontSize: 14 },
 });

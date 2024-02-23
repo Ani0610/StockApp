@@ -7,6 +7,7 @@ import { GlobalStyle } from "../../globalStyle";
 import { View } from "react-native";
 import Icon from "react-native-easy-icon";
 import DeliveredDesign from "../pages/Design master/DeliveredDesign";
+import DesignSample from "../pages/Design master/DesignSample";
 
 const BottomStack = createBottomTabNavigator();
 const BottomTabNavigator = () => {
@@ -49,6 +50,25 @@ const BottomTabNavigator = () => {
                 <Icon
                   type="foundation"
                   name="list-thumbnails"
+                  color={focused ? "blue" : "gray"}
+                  size={35}
+                />
+              </View>
+            );
+          },
+          headerShown: false,
+        })}
+      />
+      <BottomStack.Screen
+        name="Designs"
+        component={DesignSample}
+        options={({ route }) => ({
+          tabBarIcon: ({ size, focused, color }) => {
+            return (
+              <View>
+                <Icon
+                  type="feather"
+                  name="menu"
                   color={focused ? "blue" : "gray"}
                   size={35}
                 />

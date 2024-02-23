@@ -22,6 +22,7 @@ import challanReducer from "./action/Challan/ChallanSlice";
 import partyMasterReducer from "./action/party master/PartymasterSlice";
 import uiReducer from "./action/Ui/Uislice";
 import deliveredDesignReducer from "./action/delivered design/deliveredDesignSlice";
+import categoryReducer from "./action/Category/categorySlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   partyMaster: partyMasterReducer,
   ui: uiReducer,
   deliveredDesigns: deliveredDesignReducer,
+  categoryes: categoryReducer,
 });
 
 const persistConfig = {
@@ -53,6 +55,7 @@ const persistConfig = {
     "designMaster",
     "partyMaster",
     "deliveredDesigns",
+    "categoryes",
   ],
 };
 
