@@ -1023,6 +1023,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       style={{
                         flexDirection: "row",
                         justifyContent: "space-between",
+                        paddingHorizontal: 10,
                       }}
                     >
                       <Text
@@ -1034,35 +1035,57 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       >
                         Stone Details
                       </Text>
-                      {values.stoneDetails &&
-                        values.stoneDetails.every(
-                          (st: any) =>
-                            st.stoneType &&
-                            st.stoneunit &&
-                            st.stoneuid &&
-                            st.price &&
-                            st.totalOneStone
-                        ) && (
-                          <Pressable
-                            onPress={() =>
-                              push({
-                                stoneType: "",
-                                stoneunit: "",
-                                stoneuid: "",
-                                price: "",
-                                totalOneStone: "",
-                                expecredPrice: "",
-                              })
-                            }
-                          >
-                            <Icon
-                              type="feather"
-                              name="plus"
-                              color="blue"
-                              size={25}
-                            />
-                          </Pressable>
-                        )}
+
+                      <Pressable
+                        disabled={
+                          !(
+                            values.stoneDetails &&
+                            values.stoneDetails.every(
+                              (st: any) =>
+                                st.stoneType &&
+                                st.stoneunit &&
+                                st.stoneuid &&
+                                st.price &&
+                                st.totalOneStone
+                            )
+                          )
+                        }
+                        style={{
+                          backgroundColor:
+                            values.stoneDetails &&
+                            values.stoneDetails.every(
+                              (st: any) =>
+                                st.stoneType &&
+                                st.stoneunit &&
+                                st.stoneuid &&
+                                st.price &&
+                                st.totalOneStone
+                            )
+                              ? "#05E3D5"
+                              : "gray",
+                          borderRadius: 50,
+                          padding: 10,
+                          width: 35,
+                          marginRight: 10,
+                        }}
+                        onPress={() =>
+                          push({
+                            stoneType: "",
+                            stoneunit: "",
+                            stoneuid: "",
+                            price: "",
+                            totalOneStone: "",
+                            expecredPrice: "",
+                          })
+                        }
+                      >
+                        <Icon
+                          type="feather"
+                          name="plus"
+                          color="white"
+                          size={16}
+                        />
+                      </Pressable>
                     </View>
                     <View
                       style={{
@@ -1096,6 +1119,17 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           color: "gray",
                         }}
                       >
+                        Unit
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "20%",
+                          textAlign: "center",
+                          color: "gray",
+                        }}
+                      >
                         Price
                       </Text>
                       <Text
@@ -1109,17 +1143,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       >
                         Exp. Price
                       </Text>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "bold",
-                          width: "20%",
-                          textAlign: "center",
-                          color: "gray",
-                        }}
-                      >
-                        Unit
-                      </Text>
+
                       <Text></Text>
                     </View>
                     {values.stoneDetails?.length > 0 &&
@@ -1127,175 +1151,205 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         <View
                           key={i}
                           style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
                             borderBottomWidth: 1,
                             borderColor: "lightgray",
-                            paddingHorizontal: 2,
                           }}
                         >
                           <View
                             style={{
-                              width: "30%",
-                              alignItems: "center",
-                              justifyContent: "center",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              borderBottomWidth: 1,
+                              borderColor: "lightgray",
+                              paddingHorizontal: 2,
                             }}
                           >
-                            <SelectDropdown
-                              data={[...stoneStock]}
-                              onSelect={(selectedItem) => {
-                                replace(i, {
-                                  ...stone1,
-                                  stoneType: selectedItem.stoneType,
-                                  price: selectedItem.pricePerStone,
-                                  stoneuid: selectedItem.id,
-                                });
-                              }}
-                              buttonTextAfterSelection={(
-                                selectedItem: any,
-                                index: number
-                              ) => {
-                                return `${selectedItem?.stoneType}`;
-                              }}
-                              rowTextForSelection={(
-                                item: any,
-                                index: number
-                              ) => {
-                                return `${item?.stoneType}`;
-                              }}
-                              buttonStyle={{
-                                backgroundColor: "transparent",
-                                width: "100%",
-                                padding: 0,
-                                height: 20,
-                              }}
-                              defaultButtonText={
-                                stone1.stoneType
-                                  ? stone1.stoneType
-                                  : "Select stone Type"
-                              }
-                              buttonTextStyle={{
-                                textAlign: "center",
-                                color: "#000",
-                                fontSize: 14,
-                                padding: 0,
-                              }}
-                              dropdownStyle={{
-                                width: "100%",
-                                padding: 0,
-                              }}
-                              defaultValue={""}
-                            />
-                            {errors.stoneDetails &&
-                              errors.stoneDetails[i] &&
-                              touched.stoneDetails &&
-                              touched.stoneDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.stoneDetails[i].stoneType}
-                                </Text>
-                              )}
-                          </View>
-                          <View style={{ width: "20%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={handleChange(
-                                `stoneDetails[${i}].price`
-                              )}
-                              editable={false}
-                              onBlur={() => {
-                                handleBlur(`stoneDetails[${i}].price`);
-                              }}
-                              value={stone1.price.toString()}
+                            <View
                               style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
+                                width: "30%",
+                                alignItems: "center",
+                                justifyContent: "center",
                               }}
-                              placeholderTextColor="gray"
-                              placeholder="Enter price"
-                            />
-                            {errors.stoneDetails &&
-                              errors.stoneDetails[i] &&
-                              touched.stoneDetails &&
-                              touched.stoneDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.stoneDetails[i].price}
-                                </Text>
-                              )}
-                          </View>
-                          <View style={{ width: "20%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={(text) =>
-                                replace(i, {
-                                  ...stone1,
-                                  expecredPrice: text,
-                                })
-                              }
-                              editable={true}
-                              onBlur={() => {
-                                handleBlur(`stoneDetails[${i}].expecredPrice`);
-                              }}
-                              value={stone1.expecredPrice.toString()}
+                            >
+                              <SelectDropdown
+                                data={[...stoneStock]}
+                                onSelect={(selectedItem) => {
+                                  replace(i, {
+                                    ...stone1,
+                                    stoneType: selectedItem.stoneType,
+                                    price: selectedItem.pricePerStone,
+                                    stoneuid: selectedItem.id,
+                                  });
+                                }}
+                                buttonTextAfterSelection={(
+                                  selectedItem: any,
+                                  index: number
+                                ) => {
+                                  return `${selectedItem?.stoneType}`;
+                                }}
+                                rowTextForSelection={(
+                                  item: any,
+                                  index: number
+                                ) => {
+                                  return `${item?.stoneType}`;
+                                }}
+                                buttonStyle={{
+                                  backgroundColor: "transparent",
+                                  width: "100%",
+                                  padding: 0,
+                                  height: 20,
+                                }}
+                                defaultButtonText={
+                                  stone1.stoneType
+                                    ? stone1.stoneType
+                                    : "Select stone Type"
+                                }
+                                buttonTextStyle={{
+                                  textAlign: "center",
+                                  color: "#000",
+                                  fontSize: 14,
+                                  padding: 0,
+                                }}
+                                dropdownStyle={{
+                                  width: "100%",
+                                  padding: 0,
+                                }}
+                                defaultValue={""}
+                              />
+                              {errors.stoneDetails &&
+                                errors.stoneDetails[i] &&
+                                touched.stoneDetails &&
+                                touched.stoneDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.stoneDetails[i].stoneType}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "20%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={async (text: any) => {
+                                  replace(i, {
+                                    ...stone1,
+                                    stoneunit: text,
+                                    totalOneStone: text * stone1.price,
+                                  });
+                                }}
+                                value={stone1.stoneunit}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                placeholderTextColor="gray"
+                                placeholder="Enter unit"
+                              />
+                              {errors.stoneDetails &&
+                                errors.stoneDetails[i] &&
+                                touched.stoneDetails &&
+                                touched.stoneDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.stoneDetails[i].stoneunit}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "20%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={handleChange(
+                                  `stoneDetails[${i}].price`
+                                )}
+                                editable={false}
+                                onBlur={() => {
+                                  handleBlur(`stoneDetails[${i}].price`);
+                                }}
+                                value={stone1.price.toString()}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                placeholderTextColor="gray"
+                                placeholder="Enter price"
+                              />
+                              {errors.stoneDetails &&
+                                errors.stoneDetails[i] &&
+                                touched.stoneDetails &&
+                                touched.stoneDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.stoneDetails[i].price}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "20%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={(text) =>
+                                  replace(i, {
+                                    ...stone1,
+                                    expecredPrice: text,
+                                  })
+                                }
+                                editable={true}
+                                onBlur={() => {
+                                  handleBlur(
+                                    `stoneDetails[${i}].expecredPrice`
+                                  );
+                                }}
+                                value={stone1.expecredPrice.toString()}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                keyboardType="numeric"
+                                placeholderTextColor="gray"
+                                placeholder="Exp. price"
+                              />
+                            </View>
+
+                            <View
                               style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
+                                margin: 0,
+                                paddingVertical: 0,
+                                alignItems: "center",
+                                justifyContent: "center",
                               }}
-                              keyboardType="numeric"
-                              placeholderTextColor="gray"
-                              placeholder="Exep. price"
-                            />
-                          </View>
-                          <View style={{ width: "20%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={async (text: any) => {
-                                replace(i, {
-                                  ...stone1,
-                                  stoneunit: text,
-                                  totalOneStone: text * stone1.price,
-                                });
-                              }}
-                              value={stone1.stoneunit}
-                              style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
-                              }}
-                              placeholderTextColor="gray"
-                              placeholder="Enter unit"
-                            />
-                            {errors.stoneDetails &&
-                              errors.stoneDetails[i] &&
-                              touched.stoneDetails &&
-                              touched.stoneDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.stoneDetails[i].stoneunit}
-                                </Text>
+                            >
+                              {values.stoneDetails.length > 1 && (
+                                <Pressable
+                                  onPress={() => remove(i)}
+                                  style={{ margin: 0, paddingVertical: 0 }}
+                                >
+                                  <Icon
+                                    type="entypo"
+                                    name="minus"
+                                    color="red"
+                                    size={20}
+                                  />
+                                </Pressable>
                               )}
+                            </View>
                           </View>
                           <View
                             style={{
-                              margin: 0,
-                              paddingVertical: 0,
-                              alignItems: "center",
-                              justifyContent: "center",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              paddingHorizontal: 15,
                             }}
                           >
-                            {values.stoneDetails.length > 1 && (
-                              <Pressable
-                                onPress={() => remove(i)}
-                                style={{ margin: 0, paddingVertical: 0 }}
-                              >
-                                <Icon
-                                  type="entypo"
-                                  name="minus"
-                                  color="red"
-                                  size={20}
-                                />
-                              </Pressable>
-                            )}
+                            <Text style={{ fontSize: 14, color: "gray" }}>
+                              Total
+                            </Text>
+                            <Text style={{ fontSize: 14, color: "gray" }}>
+                              {Number(stone1.totalOneStone).toFixed(2)}₹
+                            </Text>
                           </View>
                         </View>
                       ))}
@@ -1568,6 +1622,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       style={{
                         flexDirection: "row",
                         justifyContent: "space-between",
+                        paddingHorizontal: 10,
                       }}
                     >
                       <Text
@@ -1579,35 +1634,57 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       >
                         Design Details
                       </Text>
-                      {values.designDetails &&
-                        values.designDetails.every(
-                          (dsgn: any) =>
-                            dsgn.measurement &&
-                            dsgn.designunit &&
-                            dsgn.designuid &&
-                            dsgn.price &&
-                            dsgn.totalOneDesign
-                        ) && (
-                          <Pressable
-                            onPress={() =>
-                              push({
-                                measurement: "",
-                                designunit: "",
-                                designuid: "",
-                                price: "",
-                                totalOneDesign: "",
-                                expecredPrice: "",
-                              })
-                            }
-                          >
-                            <Icon
-                              type="feather"
-                              name="plus"
-                              color="blue"
-                              size={25}
-                            />
-                          </Pressable>
-                        )}
+
+                      <Pressable
+                        disabled={
+                          !(
+                            values.designDetails &&
+                            values.designDetails.every(
+                              (dsgn: any) =>
+                                dsgn.measurement &&
+                                dsgn.designunit &&
+                                dsgn.designuid &&
+                                dsgn.price &&
+                                dsgn.totalOneDesign
+                            )
+                          )
+                        }
+                        style={{
+                          backgroundColor:
+                            values.designDetails &&
+                            values.designDetails.every(
+                              (dsgn: any) =>
+                                dsgn.measurement &&
+                                dsgn.designunit &&
+                                dsgn.designuid &&
+                                dsgn.price &&
+                                dsgn.totalOneDesign
+                            )
+                              ? "#05E3D5"
+                              : "gray",
+                          borderRadius: 50,
+                          padding: 10,
+                          width: 35,
+                          marginRight: 10,
+                        }}
+                        onPress={() =>
+                          push({
+                            measurement: "",
+                            designunit: "",
+                            designuid: "",
+                            price: "",
+                            totalOneDesign: "",
+                            expecredPrice: "",
+                          })
+                        }
+                      >
+                        <Icon
+                          type="feather"
+                          name="plus"
+                          color="white"
+                          size={16}
+                        />
+                      </Pressable>
                     </View>
                     <View
                       style={{
@@ -1636,6 +1713,17 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           fontSize: 16,
                           fontWeight: "bold",
+                          width: "30%",
+                          textAlign: "center",
+                          color: "gray",
+                        }}
+                      >
+                        Unit
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
                           width: "20%",
                           textAlign: "center",
                           color: "gray",
@@ -1652,19 +1740,9 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           color: "gray",
                         }}
                       >
-                        Expe. Price
+                        Exp. Price
                       </Text>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "bold",
-                          width: "30%",
-                          textAlign: "center",
-                          color: "gray",
-                        }}
-                      >
-                        Unit
-                      </Text>
+
                       <Text></Text>
                     </View>
                     {values.designDetails?.length > 0 &&
@@ -1672,175 +1750,203 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         <View
                           key={i}
                           style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
                             borderBottomWidth: 1,
-                            borderColor: "lightgray",
-                            paddingHorizontal: 2,
                           }}
                         >
                           <View
                             style={{
-                              width: "30%",
-                              alignItems: "center",
-                              justifyContent: "center",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              borderBottomWidth: 1,
+                              borderColor: "lightgray",
+                              paddingHorizontal: 2,
                             }}
                           >
-                            <SelectDropdown
-                              data={[...designs]}
-                              onSelect={(selectedItem) => {
-                                replace(i, {
-                                  ...design,
-                                  measurement: selectedItem.mesurement,
-                                  price: selectedItem.price,
-                                  designuid: selectedItem.id,
-                                });
-                              }}
-                              buttonTextAfterSelection={(
-                                selectedItem: any,
-                                index: number
-                              ) => {
-                                return `${selectedItem?.mesurement}`;
-                              }}
-                              rowTextForSelection={(
-                                item: any,
-                                index: number
-                              ) => {
-                                return `${item?.mesurement}`;
-                              }}
-                              buttonStyle={{
-                                backgroundColor: "transparent",
-                                width: "100%",
-                                padding: 0,
-                                height: 20,
-                              }}
-                              defaultButtonText={
-                                design.measurement
-                                  ? design.measurement
-                                  : "Select Measurement"
-                              }
-                              buttonTextStyle={{
-                                textAlign: "center",
-                                color: "#000",
-                                fontSize: 14,
-                                padding: 0,
-                              }}
-                              dropdownStyle={{
-                                width: "100%",
-                                padding: 0,
-                              }}
-                              defaultValue={""}
-                            />
-                            {errors.designDetails &&
-                              errors.designDetails[i] &&
-                              touched.designDetails &&
-                              touched.designDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.designDetails[i].measurement}
-                                </Text>
-                              )}
-                          </View>
-                          <View style={{ width: "20%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={handleChange(
-                                `designDetails[${i}].price`
-                              )}
-                              onBlur={() => {
-                                handleBlur(`designDetails[${i}].price`);
-                              }}
-                              value={design.price.toString()}
+                            <View
                               style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
+                                width: "30%",
+                                alignItems: "center",
+                                justifyContent: "center",
                               }}
-                              placeholderTextColor="gray"
-                              placeholder="Enter price"
-                              editable={false}
-                            />
-                            {errors.designDetails &&
-                              errors.designDetails[i] &&
-                              touched.designDetails &&
-                              touched.designDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.designDetails[i].price}
-                                </Text>
-                              )}
-                          </View>
-                          <View style={{ width: "20%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={(text) =>
-                                replace(i, {
-                                  ...design,
-                                  expecredPrice: text,
-                                })
-                              }
-                              editable={true}
-                              onBlur={() => {
-                                handleBlur(`designDetails[${i}].expecredPrice`);
-                              }}
-                              value={design.expecredPrice.toString()}
+                            >
+                              <SelectDropdown
+                                data={[...designs]}
+                                onSelect={(selectedItem) => {
+                                  replace(i, {
+                                    ...design,
+                                    measurement: selectedItem.mesurement,
+                                    price: selectedItem.price,
+                                    designuid: selectedItem.id,
+                                  });
+                                }}
+                                buttonTextAfterSelection={(
+                                  selectedItem: any,
+                                  index: number
+                                ) => {
+                                  return `${selectedItem?.mesurement}`;
+                                }}
+                                rowTextForSelection={(
+                                  item: any,
+                                  index: number
+                                ) => {
+                                  return `${item?.mesurement}`;
+                                }}
+                                buttonStyle={{
+                                  backgroundColor: "transparent",
+                                  width: "100%",
+                                  padding: 0,
+                                  height: 20,
+                                }}
+                                defaultButtonText={
+                                  design.measurement
+                                    ? design.measurement
+                                    : "Select Measurement"
+                                }
+                                buttonTextStyle={{
+                                  textAlign: "center",
+                                  color: "#000",
+                                  fontSize: 14,
+                                  padding: 0,
+                                }}
+                                dropdownStyle={{
+                                  width: "100%",
+                                  padding: 0,
+                                }}
+                                defaultValue={""}
+                              />
+                              {errors.designDetails &&
+                                errors.designDetails[i] &&
+                                touched.designDetails &&
+                                touched.designDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.designDetails[i].measurement}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "20%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={(text: any) => {
+                                  replace(i, {
+                                    ...design,
+                                    designunit: text,
+                                    totalOneDesign: text * design.price,
+                                  });
+                                }}
+                                value={design.designunit}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                placeholderTextColor="gray"
+                                placeholder="Enter unit"
+                              />
+                              {errors.designDetails &&
+                                errors.designDetails[i] &&
+                                touched.designDetails &&
+                                touched.designDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.designDetails[i].designunit}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "20%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={handleChange(
+                                  `designDetails[${i}].price`
+                                )}
+                                onBlur={() => {
+                                  handleBlur(`designDetails[${i}].price`);
+                                }}
+                                value={design.price.toString()}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                placeholderTextColor="gray"
+                                placeholder="Enter price"
+                                editable={false}
+                              />
+                              {errors.designDetails &&
+                                errors.designDetails[i] &&
+                                touched.designDetails &&
+                                touched.designDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.designDetails[i].price}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "20%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={(text) =>
+                                  replace(i, {
+                                    ...design,
+                                    expecredPrice: text,
+                                  })
+                                }
+                                editable={true}
+                                onBlur={() => {
+                                  handleBlur(
+                                    `designDetails[${i}].expecredPrice`
+                                  );
+                                }}
+                                value={design.expecredPrice.toString()}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                keyboardType="numeric"
+                                placeholderTextColor="gray"
+                                placeholder="E. price"
+                              />
+                            </View>
+                            <View
                               style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
+                                margin: 0,
+                                paddingVertical: 0,
+                                alignItems: "center",
+                                justifyContent: "center",
                               }}
-                              keyboardType="numeric"
-                              placeholderTextColor="gray"
-                              placeholder="Exep. price"
-                            />
-                          </View>
-                          <View style={{ width: "20%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={(text: any) => {
-                                replace(i, {
-                                  ...design,
-                                  designunit: text,
-                                  totalOneDesign: text * design.price,
-                                });
-                              }}
-                              value={design.designunit}
-                              style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
-                              }}
-                              placeholderTextColor="gray"
-                              placeholder="Enter unit"
-                            />
-                            {errors.designDetails &&
-                              errors.designDetails[i] &&
-                              touched.designDetails &&
-                              touched.designDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.designDetails[i].designunit}
-                                </Text>
+                            >
+                              {values.designDetails.length > 1 && (
+                                <Pressable
+                                  onPress={() => remove(i)}
+                                  style={{ margin: 0, paddingVertical: 0 }}
+                                >
+                                  <Icon
+                                    type="entypo"
+                                    name="minus"
+                                    color="red"
+                                    size={20}
+                                  />
+                                </Pressable>
                               )}
+                            </View>
                           </View>
                           <View
                             style={{
-                              margin: 0,
-                              paddingVertical: 0,
-                              alignItems: "center",
-                              justifyContent: "center",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              paddingHorizontal: 15,
                             }}
                           >
-                            {values.designDetails.length > 1 && (
-                              <Pressable
-                                onPress={() => remove(i)}
-                                style={{ margin: 0, paddingVertical: 0 }}
-                              >
-                                <Icon
-                                  type="entypo"
-                                  name="minus"
-                                  color="red"
-                                  size={20}
-                                />
-                              </Pressable>
-                            )}
+                            <Text style={{ fontSize: 14, color: "gray" }}>
+                              Total
+                            </Text>
+                            <Text style={{ fontSize: 14, color: "gray" }}>
+                              {Number(design.totalOneDesign).toFixed(2)}₹
+                            </Text>
                           </View>
                         </View>
                       ))}
@@ -2154,6 +2260,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       style={{
                         flexDirection: "row",
                         justifyContent: "space-between",
+                        paddingHorizontal: 10,
                       }}
                     >
                       <Text
@@ -2165,7 +2272,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       >
                         Job Details
                       </Text>
-                      {values.jobworkDetails &&
+                      {/* {values.jobworkDetails &&
                         values.jobworkDetails.every(
                           (jb: any) =>
                             jb.partyName &&
@@ -2174,28 +2281,61 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                             jb.jobuid &&
                             jb.totalOnewJobWork &&
                             jb.price
-                        ) && (
-                          <Pressable
-                            onPress={() =>
-                              push({
-                                partyName: "",
-                                workType: "",
-                                unit: "",
-                                jobuid: "",
-                                price: "",
-                                expecredPrice: "",
-                                totalOnewJobWork: "",
-                              })
-                            }
-                          >
-                            <Icon
-                              type="feather"
-                              name="plus"
-                              color="blue"
-                              size={25}
-                            />
-                          </Pressable>
-                        )}
+                        ) && ( */}
+                      <Pressable
+                        disabled={
+                          !(
+                            values.jobworkDetails &&
+                            values.jobworkDetails.every(
+                              (jb: any) =>
+                                jb.partyName &&
+                                jb.workType &&
+                                jb.unit &&
+                                jb.jobuid &&
+                                jb.totalOnewJobWork &&
+                                jb.price
+                            )
+                          )
+                        }
+                        style={{
+                          backgroundColor:
+                            values.jobworkDetails &&
+                            values.jobworkDetails.every(
+                              (jb: any) =>
+                                jb.partyName &&
+                                jb.workType &&
+                                jb.unit &&
+                                jb.jobuid &&
+                                jb.totalOnewJobWork &&
+                                jb.price
+                            )
+                              ? "#05E3D5"
+                              : "gray",
+                          borderRadius: 50,
+                          padding: 10,
+                          width: 35,
+                          marginRight: 10,
+                        }}
+                        onPress={() =>
+                          push({
+                            partyName: "",
+                            workType: "",
+                            unit: "",
+                            jobuid: "",
+                            price: "",
+                            expecredPrice: "",
+                            totalOnewJobWork: "",
+                          })
+                        }
+                      >
+                        <Icon
+                          type="feather"
+                          name="plus"
+                          color="white"
+                          size={16}
+                        />
+                      </Pressable>
+                      {/* )} */}
                     </View>
                     <View
                       style={{
@@ -2240,6 +2380,17 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           color: "gray",
                         }}
                       >
+                        Unit
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "15%",
+                          textAlign: "center",
+                          color: "gray",
+                        }}
+                      >
                         Price
                       </Text>
                       <Text
@@ -2251,19 +2402,9 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           color: "gray",
                         }}
                       >
-                        Expe. Price
+                        Exp. Price
                       </Text>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "bold",
-                          width: "15%",
-                          textAlign: "center",
-                          color: "gray",
-                        }}
-                      >
-                        Unit
-                      </Text>
+
                       <Text></Text>
                     </View>
                     {values.jobworkDetails?.length > 0 &&
@@ -2271,204 +2412,235 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         <View
                           key={i}
                           style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
                             borderBottomWidth: 1,
-                            borderColor: "lightgray",
-                            paddingHorizontal: 2,
                           }}
                         >
                           <View
                             style={{
-                              width: "25%",
-                              alignItems: "center",
-                              justifyContent: "center",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              borderBottomWidth: 1,
+                              borderColor: "lightgray",
+                              paddingHorizontal: 2,
                             }}
                           >
-                            <SelectDropdown
-                              data={[...jobWorks]}
-                              onSelect={(selectedItem) => {
-                                replace(i, {
-                                  ...job,
-                                  workType: selectedItem.workType,
-                                  price: selectedItem.price,
-                                  jobuid: selectedItem.id,
-                                  partyName: selectedItem.partyName,
-                                });
-                              }}
-                              buttonTextAfterSelection={(
-                                selectedItem: any,
-                                index: number
-                              ) => {
-                                return `${selectedItem?.workType}`;
-                              }}
-                              rowTextForSelection={(
-                                item: any,
-                                index: number
-                              ) => {
-                                return `${item?.workType} - ${item.partyName}`;
-                              }}
-                              buttonStyle={{
-                                backgroundColor: "transparent",
-                                width: "100%",
-                                padding: 0,
-                                height: 20,
-                              }}
-                              defaultButtonText={
-                                job.workType ? job.workType : "Select Work Type"
-                              }
-                              buttonTextStyle={{
-                                textAlign: "center",
-                                color: "#000",
-                                fontSize: 14,
-                                padding: 0,
-                              }}
-                              dropdownStyle={{
-                                width: "100%",
-                                padding: 0,
-                              }}
-                              defaultValue={""}
-                            />
-                            {errors.jobworkDetails &&
-                              errors.jobworkDetails[i] &&
-                              touched.jobworkDetails &&
-                              touched.jobworkDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.jobworkDetails[i].workType}
-                                </Text>
-                              )}
-                          </View>
-                          <View style={{ width: "20%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={handleChange(
-                                `jobworkDetails[${i}].partyName`
-                              )}
-                              onBlur={() => {
-                                handleBlur(`jobworkDetails[${i}].partyName`);
-                              }}
-                              value={job.partyName}
+                            <View
                               style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
+                                width: "25%",
+                                alignItems: "center",
+                                justifyContent: "center",
                               }}
-                              placeholderTextColor="gray"
-                              placeholder="party"
-                              editable={false}
-                            />
-                            {errors.jobworkDetails &&
-                              errors.jobworkDetails[i] &&
-                              touched.jobworkDetails &&
-                              touched.jobworkDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.jobworkDetails[i].partyName}
-                                </Text>
-                              )}
-                          </View>
-                          <View style={{ width: "15%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={handleChange(
-                                `jobworkDetails[${i}].price`
-                              )}
-                              onBlur={() => {
-                                handleBlur(`jobworkDetails[${i}].price`);
-                              }}
-                              value={job.price.toString()}
+                            >
+                              <SelectDropdown
+                                data={[...jobWorks]}
+                                onSelect={(selectedItem) => {
+                                  replace(i, {
+                                    ...job,
+                                    workType: selectedItem.workType,
+                                    price: selectedItem.price,
+                                    jobuid: selectedItem.id,
+                                    partyName: selectedItem.partyName,
+                                  });
+                                }}
+                                buttonTextAfterSelection={(
+                                  selectedItem: any,
+                                  index: number
+                                ) => {
+                                  return `${selectedItem?.workType}`;
+                                }}
+                                rowTextForSelection={(
+                                  item: any,
+                                  index: number
+                                ) => {
+                                  return `${item?.workType} - ${item.partyName}`;
+                                }}
+                                buttonStyle={{
+                                  backgroundColor: "transparent",
+                                  width: "100%",
+                                  padding: 0,
+                                  height: 20,
+                                }}
+                                defaultButtonText={
+                                  job.workType
+                                    ? job.workType
+                                    : "Select Work Type"
+                                }
+                                buttonTextStyle={{
+                                  textAlign: "center",
+                                  color: "#000",
+                                  fontSize: 14,
+                                  padding: 0,
+                                }}
+                                dropdownStyle={{
+                                  width: "100%",
+                                  padding: 0,
+                                }}
+                                defaultValue={""}
+                              />
+                              {errors.jobworkDetails &&
+                                errors.jobworkDetails[i] &&
+                                touched.jobworkDetails &&
+                                touched.jobworkDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.jobworkDetails[i].workType}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "20%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={handleChange(
+                                  `jobworkDetails[${i}].partyName`
+                                )}
+                                onBlur={() => {
+                                  handleBlur(`jobworkDetails[${i}].partyName`);
+                                }}
+                                value={job.partyName}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                placeholderTextColor="gray"
+                                placeholder="party"
+                                editable={false}
+                              />
+                              {errors.jobworkDetails &&
+                                errors.jobworkDetails[i] &&
+                                touched.jobworkDetails &&
+                                touched.jobworkDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.jobworkDetails[i].partyName}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "15%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={(text: any) => {
+                                  replace(i, {
+                                    ...job,
+                                    unit: text,
+                                    totalOnewJobWork: text * Number(job.price),
+                                  });
+                                }}
+                                value={job.unit}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                placeholderTextColor="gray"
+                                placeholder=" unit"
+                              />
+                              {errors.jobworkDetails &&
+                                errors.jobworkDetails[i] &&
+                                touched.jobworkDetails &&
+                                touched.jobworkDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.jobworkDetails[i].unit}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "15%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={handleChange(
+                                  `jobworkDetails[${i}].price`
+                                )}
+                                onBlur={() => {
+                                  handleBlur(`jobworkDetails[${i}].price`);
+                                }}
+                                value={job.price.toString()}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                placeholderTextColor="gray"
+                                placeholder=" price"
+                                editable={false}
+                              />
+                              {errors.jobworkDetails &&
+                                errors.jobworkDetails[i] &&
+                                touched.jobworkDetails &&
+                                touched.jobworkDetails[i] && (
+                                  <Text style={GlobalStyle.errorMsg}>
+                                    {errors.jobworkDetails[i].price}
+                                  </Text>
+                                )}
+                            </View>
+                            <View
+                              style={{ width: "15%", alignItems: "center" }}
+                            >
+                              <TextInput
+                                onChangeText={(text) =>
+                                  replace(i, {
+                                    ...job,
+                                    expecredPrice: text,
+                                  })
+                                }
+                                editable={true}
+                                onBlur={() => {
+                                  handleBlur(
+                                    `jobworkDetails[${i}].expecredPrice`
+                                  );
+                                }}
+                                value={job.expecredPrice.toString()}
+                                style={{
+                                  fontSize: 14,
+                                  color: "#000",
+                                  textAlign: "center",
+                                  padding: 0,
+                                }}
+                                keyboardType="numeric"
+                                placeholderTextColor="gray"
+                                placeholder="E. price"
+                              />
+                            </View>
+
+                            <View
                               style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
+                                margin: 0,
+                                paddingVertical: 0,
+                                alignItems: "center",
+                                justifyContent: "center",
                               }}
-                              placeholderTextColor="gray"
-                              placeholder=" price"
-                              editable={false}
-                            />
-                            {errors.jobworkDetails &&
-                              errors.jobworkDetails[i] &&
-                              touched.jobworkDetails &&
-                              touched.jobworkDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.jobworkDetails[i].price}
-                                </Text>
+                            >
+                              {values.jobworkDetails.length > 1 && (
+                                <Pressable
+                                  onPress={() => remove(i)}
+                                  style={{ margin: 0, paddingVertical: 0 }}
+                                >
+                                  <Icon
+                                    type="entypo"
+                                    name="minus"
+                                    color="red"
+                                    size={20}
+                                  />
+                                </Pressable>
                               )}
-                          </View>
-                          <View style={{ width: "15%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={(text) =>
-                                replace(i, {
-                                  ...job,
-                                  expecredPrice: text,
-                                })
-                              }
-                              editable={true}
-                              onBlur={() => {
-                                handleBlur(
-                                  `jobworkDetails[${i}].expecredPrice`
-                                );
-                              }}
-                              value={job.expecredPrice.toString()}
-                              style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
-                              }}
-                              keyboardType="numeric"
-                              placeholderTextColor="gray"
-                              placeholder="Exep. price"
-                            />
-                          </View>
-                          <View style={{ width: "15%", alignItems: "center" }}>
-                            <TextInput
-                              onChangeText={(text: any) => {
-                                replace(i, {
-                                  ...job,
-                                  unit: text,
-                                  totalOnewJobWork: text * Number(job.price),
-                                });
-                              }}
-                              value={job.unit}
-                              style={{
-                                fontSize: 14,
-                                color: "#000",
-                                textAlign: "center",
-                                padding: 0,
-                              }}
-                              placeholderTextColor="gray"
-                              placeholder=" unit"
-                            />
-                            {errors.jobworkDetails &&
-                              errors.jobworkDetails[i] &&
-                              touched.jobworkDetails &&
-                              touched.jobworkDetails[i] && (
-                                <Text style={GlobalStyle.errorMsg}>
-                                  {errors.jobworkDetails[i].unit}
-                                </Text>
-                              )}
+                            </View>
                           </View>
                           <View
                             style={{
-                              margin: 0,
-                              paddingVertical: 0,
-                              alignItems: "center",
-                              justifyContent: "center",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              paddingHorizontal: 15,
                             }}
                           >
-                            {values.jobworkDetails.length > 1 && (
-                              <Pressable
-                                onPress={() => remove(i)}
-                                style={{ margin: 0, paddingVertical: 0 }}
-                              >
-                                <Icon
-                                  type="entypo"
-                                  name="minus"
-                                  color="red"
-                                  size={20}
-                                />
-                              </Pressable>
-                            )}
+                            <Text style={{ fontSize: 14, color: "gray" }}>
+                              Total
+                            </Text>
+                            <Text style={{ fontSize: 14, color: "gray" }}>
+                              {Number(job.totalOnewJobWork).toFixed(2)}₹
+                            </Text>
                           </View>
                         </View>
                       ))}
@@ -2494,7 +2666,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                     fontWeight: "bold",
                     textAlign: "center",
                     color: "gray",
-                    width: "15%",
+                    width: "25%",
                   }}
                 >
                   Total
@@ -2505,54 +2677,34 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                     fontWeight: "bold",
                     textAlign: "center",
                     color: "gray",
-                    width: "15%",
+                    width: "25%",
                   }}
                 >
-                  Profit%
+                  Profit %
                 </Text>
+
                 <Text
                   style={{
                     fontSize: 13,
                     fontWeight: "bold",
                     textAlign: "center",
                     color: "gray",
-                    width: "15%",
-                  }}
-                >
-                  Profit ₹
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    color: "gray",
-                    width: "15%",
+                    width: "25%",
                   }}
                 >
                   Dis.%
                 </Text>
+
                 <Text
                   style={{
                     fontSize: 13,
                     fontWeight: "bold",
                     textAlign: "center",
                     color: "gray",
-                    width: "15%",
+                    width: "25%",
                   }}
                 >
-                  Dis.₹
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    color: "gray",
-                    width: "15%",
-                  }}
-                >
-                  G.Total
+                  Final Total
                 </Text>
               </View>
               <View
@@ -2564,7 +2716,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                   alignItems: "center",
                 }}
               >
-                <View style={{ padding: 0, width: "15%" }}>
+                <View style={{ padding: 0, width: "25%" }}>
                   <TextInput
                     onChangeText={handleChange("total")}
                     onBlur={() => {
@@ -2582,7 +2734,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                     editable={false}
                   />
                 </View>
-                <View style={{ padding: 0, width: "15%" }}>
+                <View style={{ padding: 0, width: "25%" }}>
                   <TextInput
                     onChangeText={(text) => handleTotalProfile(text)}
                     onBlur={() => {
@@ -2599,26 +2751,12 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                     placeholder="%"
                     keyboardType="numeric"
                   />
+                  <Text style={{ textAlign: "center" }}>
+                    {Number(values.profitRupee).toFixed(2)}₹
+                  </Text>
                 </View>
-                <View style={{ padding: 0, width: "15%" }}>
-                  <TextInput
-                    onChangeText={(text) => handleTotalProfile(text)}
-                    onBlur={() => {
-                      handleBlur("profitRupee");
-                    }}
-                    value={values.profitRupee.toString()}
-                    style={{
-                      flex: 1,
-                      fontSize: 13,
-                      color: "#000",
-                      textAlign: "center",
-                    }}
-                    placeholderTextColor="gray"
-                    placeholder="₹"
-                    editable={false}
-                  />
-                </View>
-                <View style={{ padding: 0, width: "15%" }}>
+
+                <View style={{ padding: 0, width: "25%" }}>
                   <TextInput
                     onChangeText={(text) => handleTotalDiscount(text)}
                     onBlur={() => {
@@ -2635,26 +2773,12 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                     keyboardType="numeric"
                     placeholder="%"
                   />
+                  <Text style={{ textAlign: "center" }}>
+                    {Number(values.discountRupee).toFixed(2)}₹
+                  </Text>
                 </View>
-                <View style={{ padding: 0, width: "15%" }}>
-                  <TextInput
-                    onChangeText={handleChange("discountRupee")}
-                    onBlur={() => {
-                      handleBlur("discountRupee");
-                    }}
-                    value={values.discountRupee.toString()}
-                    style={{
-                      flex: 1,
-                      fontSize: 13,
-                      color: "#000",
-                      textAlign: "center",
-                    }}
-                    placeholderTextColor="gray"
-                    placeholder="₹"
-                    editable={false}
-                  />
-                </View>
-                <View style={{ padding: 0, width: "15%" }}>
+
+                <View style={{ padding: 0, width: "25%" }}>
                   <TextInput
                     onChangeText={handleChange("grandTotal")}
                     onBlur={() => {
@@ -2674,34 +2798,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                 </View>
               </View>
             </View>
-            {/* <View style={{ marginTop: 10 }}>
-              <View style={styles.inputField}>
-                <Text style={styles.inputLabel}>Total</Text>
-                <View style={{ width: "60%" }}>
-                  <TextInput
-                    onChangeText={handleChange("total")}
-                    onBlur={() => {
-                      handleBlur("total");
-                    }}
-                    value={values.total.toString()}
-                    style={{
-                      flex: 1,
-                      fontSize: 16,
-                      color: "#000",
-                      padding: 0,
-                    }}
-                    placeholderTextColor="gray"
-                    placeholder="Enter total"
-                    editable={false}
-                  />
-                </View>
-              </View>
-              {errors.total && touched.total && (
-                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
-                  {errors.total}
-                </Text>
-              )}
-            </View> */}
             <Pressable
               style={GlobalStyle.button}
               onPress={() => handleSubmit()}
