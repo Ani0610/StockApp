@@ -53,6 +53,11 @@ interface InitialFormValues {
   partyUID: undefined;
   availableStocks: string;
   id: undefined;
+  profitPercentage: string;
+  profitRupee: number;
+  discountPercentage: string;
+  discountRupee: number;
+  grandTotal: number;
   date: any;
 }
 const CreateSampleDesign = ({ navigation, route }: any) => {
@@ -78,6 +83,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
           stoneunit: "",
           stoneuid: "",
           totalOneStone: "",
+          expecredPrice: "",
           price: "",
         },
       ],
@@ -87,6 +93,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
           designunit: "",
           designuid: "",
           totalOneDesign: "",
+          expecredPrice: "",
           price: "",
         },
       ],
@@ -97,6 +104,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
           unit: "",
           jobuid: "",
           totalOnewJobWork: "",
+          expecredPrice: "",
           price: "",
         },
       ],
@@ -108,6 +116,11 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       partyName: "",
       partyUID: undefined,
       date: "",
+      profitPercentage: "",
+      profitRupee: 0,
+      discountPercentage: "",
+      discountRupee: 0,
+      grandTotal: 0,
     }
   );
   const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -128,6 +141,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             stoneunit: "",
             stoneuid: "",
             totalOneStone: "",
+            expecredPrice: "",
+
             price: "",
           },
         ],
@@ -137,6 +152,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             designunit: "",
             designuid: "",
             totalOneDesign: "",
+            expecredPrice: "",
+
             price: "",
           },
         ],
@@ -147,6 +164,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             unit: "",
             jobuid: "",
             totalOnewJobWork: "",
+            expecredPrice: "",
+
             price: "",
           },
         ],
@@ -158,6 +177,11 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
         partyName: "",
         partyUID: undefined,
         date: "",
+        profitPercentage: "",
+        profitRupee: 0,
+        discountPercentage: "",
+        discountRupee: 0,
+        grandTotal: 0,
       });
       setUpdate(false);
     }
@@ -260,6 +284,11 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     setFieldValue("availableStocks", route.params.availableStocks);
     setFieldValue("id", route.params.id);
     setFieldValue("date", route.params.date);
+    setFieldValue("profitPercentage", route.params.profitPercentage);
+    setFieldValue("profitRupee", route.params.profitRupee);
+    setFieldValue("discountPercentage", route.params.discountPercentage);
+    setFieldValue("discountRupee", route.params.discountRupee);
+    setFieldValue("grandTotal", route.params.grandTotal);
     dispatch(setLoading(false));
   };
   useEffect(() => {
@@ -282,6 +311,20 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       (values.totalJobWorks ? Number(values.totalJobWorks) : 0) +
       total;
     setFieldValue("total", totalAmount);
+    let profRupee: any = 0;
+    let disRupee: any = 0;
+    if (values.profitPercentage) {
+      profRupee = (values.profitPercentage / 100) * Number(totalAmount);
+      setFieldValue("profitRupee", profRupee);
+    }
+    if (values.discountPercentage) {
+      disRupee = (values.discountPercentage / 100) * Number(totalAmount);
+      setFieldValue("discountRupee", disRupee);
+    }
+    setFieldValue(
+      "grandTotal",
+      Number(totalAmount) + Number(profRupee) + Number(disRupee)
+    );
   };
 
   const totalofDesign = async () => {
@@ -290,11 +333,24 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       0
     );
     setFieldValue("totlDesigns", total);
-    setFieldValue(
-      "total",
+    const totalAmount =
       (values.totalstones ? Number(values.totalstones) : 0) +
-        total +
-        (values.totalJobWorks ? Number(values.totalJobWorks) : 0)
+      total +
+      (values.totalJobWorks ? Number(values.totalJobWorks) : 0);
+    setFieldValue("total", totalAmount);
+    let profRupee: any = 0;
+    let disRupee: any = 0;
+    if (values.profitPercentage) {
+      profRupee = (values.profitPercentage / 100) * Number(totalAmount);
+      setFieldValue("profitRupee", profRupee);
+    }
+    if (values.discountPercentage) {
+      disRupee = (values.discountPercentage / 100) * Number(totalAmount);
+      setFieldValue("discountRupee", disRupee);
+    }
+    setFieldValue(
+      "grandTotal",
+      Number(totalAmount) + Number(profRupee) + Number(disRupee)
     );
   };
 
@@ -304,11 +360,24 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       0
     );
     setFieldValue("totalJobWorks", total);
-    setFieldValue(
-      "total",
+    const totalAmount =
       (values.totalstones ? Number(values.totalstones) : 0) +
-        (values.totlDesigns ? Number(values.totlDesigns) : 0) +
-        total
+      (values.totlDesigns ? Number(values.totlDesigns) : 0) +
+      total;
+    setFieldValue("total", totalAmount);
+    let profRupee: any = 0;
+    let disRupee: any = 0;
+    if (values.profitPercentage) {
+      profRupee = (values.profitPercentage / 100) * Number(totalAmount);
+      setFieldValue("profitRupee", profRupee);
+    }
+    if (values.discountPercentage) {
+      disRupee = (values.discountPercentage / 100) * Number(totalAmount);
+      setFieldValue("discountRupee", disRupee);
+    }
+    setFieldValue(
+      "grandTotal",
+      Number(totalAmount) + Number(profRupee) + Number(disRupee)
     );
   };
 
@@ -357,6 +426,32 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   const handleDateChange = (date: any) => {
     setFieldValue("date", date);
     setDatePickerVisible(false);
+  };
+  const handleTotalProfile = (item: any) => {
+    const totalProfitRupee = (item / 100) * Number(values.total);
+    setFieldValue("profitPercentage", item);
+    setFieldValue("profitRupee", Number(totalProfitRupee).toFixed(2));
+    setFieldValue(
+      "grandTotal",
+      Number(
+        Number(values.total) +
+          Number(totalProfitRupee) +
+          Number(values.discountRupee)
+      ).toFixed(2)
+    );
+  };
+  const handleTotalDiscount = (item: any) => {
+    const totalDiscountRupee = (item / 100) * Number(values.total);
+    setFieldValue("discountPercentage", item);
+    setFieldValue("discountRupee", Number(totalDiscountRupee).toFixed(2));
+    setFieldValue(
+      "grandTotal",
+      Number(
+        Number(values.total) +
+          Number(totalDiscountRupee) +
+          Number(values.profitRupee)
+      ).toFixed(2)
+    );
   };
   return (
     <SafeAreaView style={[GlobalStyle.safeAreaCotainer, { height: "100%" }]}>
@@ -930,7 +1025,13 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          color: "gray",
+                        }}
+                      >
                         Stone Details
                       </Text>
                       {values.stoneDetails &&
@@ -950,6 +1051,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 stoneuid: "",
                                 price: "",
                                 totalOneStone: "",
+                                expecredPrice: "",
                               })
                             }
                           >
@@ -980,6 +1082,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           fontWeight: "bold",
                           width: "30%",
                           textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Stone Type
@@ -988,8 +1091,9 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           fontSize: 16,
                           fontWeight: "bold",
-                          width: "30%",
+                          width: "20%",
                           textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Price
@@ -998,8 +1102,20 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           fontSize: 16,
                           fontWeight: "bold",
-                          width: "30%",
+                          width: "20%",
                           textAlign: "center",
+                          color: "gray",
+                        }}
+                      >
+                        Exp. Price
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "20%",
+                          textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Unit
@@ -1079,7 +1195,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 </Text>
                               )}
                           </View>
-                          <View style={{ width: "30%", alignItems: "center" }}>
+                          <View style={{ width: "20%", alignItems: "center" }}>
                             <TextInput
                               onChangeText={handleChange(
                                 `stoneDetails[${i}].price`
@@ -1107,7 +1223,31 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 </Text>
                               )}
                           </View>
-                          <View style={{ width: "30%", alignItems: "center" }}>
+                          <View style={{ width: "20%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={(text) =>
+                                replace(i, {
+                                  ...stone1,
+                                  expecredPrice: text,
+                                })
+                              }
+                              editable={true}
+                              onBlur={() => {
+                                handleBlur(`stoneDetails[${i}].expecredPrice`);
+                              }}
+                              value={stone1.expecredPrice.toString()}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              keyboardType="numeric"
+                              placeholderTextColor="gray"
+                              placeholder="Exep. price"
+                            />
+                          </View>
+                          <View style={{ width: "20%", alignItems: "center" }}>
                             <TextInput
                               onChangeText={async (text: any) => {
                                 replace(i, {
@@ -1430,7 +1570,13 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          color: "gray",
+                        }}
+                      >
                         Design Details
                       </Text>
                       {values.designDetails &&
@@ -1450,6 +1596,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 designuid: "",
                                 price: "",
                                 totalOneDesign: "",
+                                expecredPrice: "",
                               })
                             }
                           >
@@ -1480,6 +1627,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           fontWeight: "bold",
                           width: "30%",
                           textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Measurement
@@ -1488,8 +1636,9 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           fontSize: 16,
                           fontWeight: "bold",
-                          width: "30%",
+                          width: "20%",
                           textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Price
@@ -1498,8 +1647,20 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           fontSize: 16,
                           fontWeight: "bold",
+                          width: "20%",
+                          textAlign: "center",
+                          color: "gray",
+                        }}
+                      >
+                        Expe. Price
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
                           width: "30%",
                           textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Unit
@@ -1579,7 +1740,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 </Text>
                               )}
                           </View>
-                          <View style={{ width: "30%", alignItems: "center" }}>
+                          <View style={{ width: "20%", alignItems: "center" }}>
                             <TextInput
                               onChangeText={handleChange(
                                 `designDetails[${i}].price`
@@ -1607,7 +1768,31 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 </Text>
                               )}
                           </View>
-                          <View style={{ width: "30%", alignItems: "center" }}>
+                          <View style={{ width: "20%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={(text) =>
+                                replace(i, {
+                                  ...design,
+                                  expecredPrice: text,
+                                })
+                              }
+                              editable={true}
+                              onBlur={() => {
+                                handleBlur(`designDetails[${i}].expecredPrice`);
+                              }}
+                              value={design.expecredPrice.toString()}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              keyboardType="numeric"
+                              placeholderTextColor="gray"
+                              placeholder="Exep. price"
+                            />
+                          </View>
+                          <View style={{ width: "20%", alignItems: "center" }}>
                             <TextInput
                               onChangeText={(text: any) => {
                                 replace(i, {
@@ -1971,7 +2156,13 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          color: "gray",
+                        }}
+                      >
                         Job Details
                       </Text>
                       {values.jobworkDetails &&
@@ -1992,6 +2183,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 unit: "",
                                 jobuid: "",
                                 price: "",
+                                expecredPrice: "",
                                 totalOnewJobWork: "",
                               })
                             }
@@ -2021,8 +2213,9 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           fontSize: 16,
                           fontWeight: "bold",
-                          width: "30%",
+                          width: "25%",
                           textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Work
@@ -2033,6 +2226,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           fontWeight: "bold",
                           width: "20%",
                           textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Party
@@ -2041,8 +2235,9 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           fontSize: 16,
                           fontWeight: "bold",
-                          width: "20%",
+                          width: "15%",
                           textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Price
@@ -2051,8 +2246,20 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           fontSize: 16,
                           fontWeight: "bold",
-                          width: "20%",
+                          width: "15%",
                           textAlign: "center",
+                          color: "gray",
+                        }}
+                      >
+                        Expe. Price
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          width: "15%",
+                          textAlign: "center",
+                          color: "gray",
                         }}
                       >
                         Unit
@@ -2073,7 +2280,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         >
                           <View
                             style={{
-                              width: "30%",
+                              width: "25%",
                               alignItems: "center",
                               justifyContent: "center",
                             }}
@@ -2159,7 +2366,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 </Text>
                               )}
                           </View>
-                          <View style={{ width: "20%", alignItems: "center" }}>
+                          <View style={{ width: "15%", alignItems: "center" }}>
                             <TextInput
                               onChangeText={handleChange(
                                 `jobworkDetails[${i}].price`
@@ -2187,7 +2394,33 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 </Text>
                               )}
                           </View>
-                          <View style={{ width: "20%", alignItems: "center" }}>
+                          <View style={{ width: "15%", alignItems: "center" }}>
+                            <TextInput
+                              onChangeText={(text) =>
+                                replace(i, {
+                                  ...job,
+                                  expecredPrice: text,
+                                })
+                              }
+                              editable={true}
+                              onBlur={() => {
+                                handleBlur(
+                                  `jobworkDetails[${i}].expecredPrice`
+                                );
+                              }}
+                              value={job.expecredPrice.toString()}
+                              style={{
+                                fontSize: 14,
+                                color: "#000",
+                                textAlign: "center",
+                                padding: 0,
+                              }}
+                              keyboardType="numeric"
+                              placeholderTextColor="gray"
+                              placeholder="Exep. price"
+                            />
+                          </View>
+                          <View style={{ width: "15%", alignItems: "center" }}>
                             <TextInput
                               onChangeText={(text: any) => {
                                 replace(i, {
@@ -2243,8 +2476,205 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                 )}
               </FieldArray>
             </View>
-
             <View style={{ marginTop: 10 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  borderWidth: 0.5,
+                  borderColor: "#000",
+                  backgroundColor: "#f5f6f7",
+                  alignItems: "center",
+                  padding: 5,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    color: "gray",
+                    width: "15%",
+                  }}
+                >
+                  Total
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    color: "gray",
+                    width: "15%",
+                  }}
+                >
+                  Profit%
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    color: "gray",
+                    width: "15%",
+                  }}
+                >
+                  Profit ₹
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    color: "gray",
+                    width: "15%",
+                  }}
+                >
+                  Dis.%
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    color: "gray",
+                    width: "15%",
+                  }}
+                >
+                  Dis.₹
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    color: "gray",
+                    width: "15%",
+                  }}
+                >
+                  G.Total
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  borderBottomWidth: 1,
+                  borderColor: "lightgray",
+                  alignItems: "center",
+                }}
+              >
+                <View style={{ padding: 0, width: "15%" }}>
+                  <TextInput
+                    onChangeText={handleChange("total")}
+                    onBlur={() => {
+                      handleBlur("total");
+                    }}
+                    value={values.total.toString()}
+                    style={{
+                      flex: 1,
+                      fontSize: 13,
+                      color: "#000",
+                      textAlign: "center",
+                    }}
+                    placeholderTextColor="gray"
+                    placeholder="Enter total"
+                    editable={false}
+                  />
+                </View>
+                <View style={{ padding: 0, width: "15%" }}>
+                  <TextInput
+                    onChangeText={(text) => handleTotalProfile(text)}
+                    onBlur={() => {
+                      handleBlur("profitPercentage");
+                    }}
+                    value={values.profitPercentage.toString()}
+                    style={{
+                      flex: 1,
+                      fontSize: 13,
+                      color: "#000",
+                      textAlign: "center",
+                    }}
+                    placeholderTextColor="gray"
+                    placeholder="%"
+                    keyboardType="numeric"
+                  />
+                </View>
+                <View style={{ padding: 0, width: "15%" }}>
+                  <TextInput
+                    onChangeText={(text) => handleTotalProfile(text)}
+                    onBlur={() => {
+                      handleBlur("profitRupee");
+                    }}
+                    value={values.profitRupee.toString()}
+                    style={{
+                      flex: 1,
+                      fontSize: 13,
+                      color: "#000",
+                      textAlign: "center",
+                    }}
+                    placeholderTextColor="gray"
+                    placeholder="₹"
+                    editable={false}
+                  />
+                </View>
+                <View style={{ padding: 0, width: "15%" }}>
+                  <TextInput
+                    onChangeText={(text) => handleTotalDiscount(text)}
+                    onBlur={() => {
+                      handleBlur("discountPercentage");
+                    }}
+                    value={values.discountPercentage.toString()}
+                    style={{
+                      flex: 1,
+                      fontSize: 13,
+                      color: "#000",
+                      textAlign: "center",
+                    }}
+                    placeholderTextColor="gray"
+                    keyboardType="numeric"
+                    placeholder="%"
+                  />
+                </View>
+                <View style={{ padding: 0, width: "15%" }}>
+                  <TextInput
+                    onChangeText={handleChange("discountRupee")}
+                    onBlur={() => {
+                      handleBlur("discountRupee");
+                    }}
+                    value={values.discountRupee.toString()}
+                    style={{
+                      flex: 1,
+                      fontSize: 13,
+                      color: "#000",
+                      textAlign: "center",
+                    }}
+                    placeholderTextColor="gray"
+                    placeholder="₹"
+                    editable={false}
+                  />
+                </View>
+                <View style={{ padding: 0, width: "15%" }}>
+                  <TextInput
+                    onChangeText={handleChange("grandTotal")}
+                    onBlur={() => {
+                      handleBlur("grandTotal");
+                    }}
+                    value={values.grandTotal.toString()}
+                    style={{
+                      flex: 1,
+                      fontSize: 13,
+                      color: "#000",
+                      textAlign: "center",
+                    }}
+                    placeholderTextColor="gray"
+                    placeholder="₹"
+                    editable={false}
+                  />
+                </View>
+              </View>
+            </View>
+            {/* <View style={{ marginTop: 10 }}>
               <View style={styles.inputField}>
                 <Text style={styles.inputLabel}>Total</Text>
                 <View style={{ width: "60%" }}>
@@ -2271,7 +2701,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                   {errors.total}
                 </Text>
               )}
-            </View>
+            </View> */}
             <Pressable
               style={GlobalStyle.button}
               onPress={() => handleSubmit()}

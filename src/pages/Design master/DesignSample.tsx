@@ -94,18 +94,33 @@ const DesignSample = ({ navigation }: any) => {
 
   const renderThumbnail = (uri: any, designNo: any, total: any) => {
     return (
-      <ImageBackground source={{ uri: uri }} style={styles.thumbnail}>
-        <View style={styles.textContainer}>
-          <Text style={[styles.designNoText, styles.thumbnailTextbg]}>
-            #{designNo}
-          </Text>
+      <>
+        <View>
+          <Image source={{ uri: uri }} style={styles.thumbnail} />
+          <View>
+            <Text style={[styles.designNoText, styles.thumbnailTextbg]}>
+              Design No: #{designNo}
+            </Text>
+          </View>
+          <View>
+            <Text style={[styles.designNoText, styles.thumbnailTextbg]}>
+              Rate: ₹{total}(1 Unit)
+            </Text>
+          </View>
         </View>
-        <View style={{ position: "absolute", bottom: 5, right: 5 }}>
-          <Text style={[styles.designNoText, styles.thumbnailTextbg]}>
-            ₹{total}
-          </Text>
-        </View>
-      </ImageBackground>
+        {/* <ImageBackground source={{ uri: uri }} style={styles.thumbnail}>
+          <View style={styles.textContainer}>
+            <Text style={[styles.designNoText, styles.thumbnailTextbg]}>
+              #{designNo}
+            </Text>
+          </View>
+          <View style={{ position: "absolute", bottom: 5, right: 5 }}>
+            <Text style={[styles.designNoText, styles.thumbnailTextbg]}>
+              ₹{total}
+            </Text>
+          </View>
+        </ImageBackground> */}
+      </>
     );
   };
   const handleClose = () => {
@@ -543,24 +558,23 @@ const DesignSample = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   thumbnail: {
     width: "100%",
-    height: 200,
+    height: 150,
     resizeMode: "cover",
-    position: "relative",
   },
-  thumbnailTextbg: { backgroundColor: "black", paddingHorizontal: 10 },
+  thumbnailTextbg: { backgroundColor: "white", paddingHorizontal: 10 },
   textContainer: {
     position: "absolute",
     bottom: 5,
     left: 5,
   },
   designNoText: {
-    color: "white",
+    color: "gray",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 13,
   },
   totalText: {
-    color: "white",
-    fontSize: 12,
+    color: "gray",
+    fontSize: 13,
   },
   inputField: {
     backgroundColor: "#F9F9F9",

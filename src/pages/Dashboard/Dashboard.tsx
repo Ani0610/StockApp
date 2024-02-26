@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Dimensions,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -49,6 +50,8 @@ const Dashboard = () => {
   const { deliveredDesigns } = useSelector(
     (state: RootState) => state.deliveredDesigns
   );
+  const screenWidth = Dimensions.get("window").width;
+  const chartWidth = screenWidth - 20;
   const allSamples = [
     {
       date: "25/06/2024",
@@ -205,7 +208,7 @@ const Dashboard = () => {
           <View
             style={{
               backgroundColor: "#f5f6f7",
-              width: "90%",
+              width: chartWidth,
             }}
           >
             <View
@@ -268,7 +271,7 @@ const Dashboard = () => {
           <Text style={styles.title}>Party Wise Stock</Text>
           <BarChart
             data={barChart}
-            width={300}
+            width={chartWidth}
             height={250}
             yAxisLabel=""
             chartConfig={{
