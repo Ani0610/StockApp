@@ -59,6 +59,7 @@ const CreateChallan = ({ navigation, route }: any) => {
   const [selectedImage, setSelectedImage] = useState<any>();
   const { userMaster } = useSelector((state: RootState) => state.userMaster);
   const [carrierPersons, setCarrierPersons] = useState<any>([]);
+  const [designsNumber, setdesignsNumber] = useState<any>([]);
   const { designsMaster } = useSelector(
     (state: RootState) => state.designMaster
   );
@@ -108,27 +109,60 @@ const CreateChallan = ({ navigation, route }: any) => {
     initialValues: initialFormValues,
     validationSchema: challanSchema,
     onSubmit: async (values: any) => {
-      if (update) {
-        dispatch(editChallan({ ...values }));
-      } else {
-        values.id = Math.floor(2360 + Math.random() * 6438);
-        dispatch(addChallan({ ...values }));
-      }
-      if (values.challanType === "Out" && values.status === "Delivered") {
-        const data: any = designsMaster.find(
-          (obj: any) =>
-            obj.partyUID === values.partyUID && obj.designNo == values.designNo
-        );
-        const newData = { ...data, availableStocks: values.piece };
-        const newData1 = {
-          ...data,
-          availableStocks: data.availableStocks - values.piece,
-        };
-        dispatch(addDeliveredDesign({ ...newData }));
-        dispatch(editDesignMaster({ ...newData1 }));
-      }
-      resetForm();
-      navigation.goBack();
+      onSubmit: async (values: any) => {
+        try {
+          if (values.challanType === "Out" && values.status === "Delivered") {
+            const data: any = designsMaster.find(
+              (obj: any) =>
+                obj.partyUID === values.partyUID &&
+                obj.designNo == values.designNo
+            );
+            if (data) {
+              const newData = { ...data, availableStocks: values.piece };
+              const newData1 = {
+                ...data,
+                availableStocks: data.availableStocks - values.piece,
+              };
+              dispatch(addDeliveredDesign({ ...newData }));
+              dispatch(editDesignMaster({ ...newData1 }));
+            }
+          }
+
+          if (values.challanType === "In" && values.status === "Delivered") {
+            const data: any = await designsMaster.find(
+              (obj: any) =>
+                obj.partyUID === values.partyUID &&
+                obj.designNo == values.designNo
+            );
+            console.log("data", data);
+
+            if (data) {
+              const newData1 = {
+                ...data,
+                availableStocks:
+                  Number(data.availableStocks) + Number(values.piece),
+              };
+              console.log(newData1.availableStocks);
+
+              // dispatch(addDeliveredDesign({ ...newData }));
+              dispatch(editDesignMaster({ ...newData1 }));
+            }
+          }
+          if (update) {
+            dispatch(editChallan({ ...values }));
+          } else {
+            values.id = Math.floor(2360 + Math.random() * 6438);
+            dispatch(addChallan({ ...values }));
+          }
+
+          resetForm();
+          navigation.goBack();
+        } catch (error) {
+          // Handle errors here
+          console.error("An error occurred:", error);
+          // Optionally, you can provide feedback to the user about the error
+        }
+      };
     },
   });
   const {
@@ -188,6 +222,14 @@ const CreateChallan = ({ navigation, route }: any) => {
     setFieldValue("challanType", route.params?.challanType);
     setFieldValue("id", route.params?.id);
   };
+  useEffect(() => {
+    if (values.partyUID) {
+      const desgnNumber = designsMaster.filter(
+        (item: any) => item.partyUID === values.partyUID
+      );
+    }
+  }, [values.partyUID]);
+
   const closecamaraModel = () => {
     setIscamaraModalVisible(false);
     setIscamaraModalVisibleMaterial(false);
@@ -338,44 +380,8 @@ const CreateChallan = ({ navigation, route }: any) => {
                 </Text>
               )}
             </View>
-            {user?.userType !== "Carrier" && (
-              <View style={{ marginTop: 15 }}>
-                <View style={styles.inputField}>
-                  <Text style={styles.inputLabel}>Design No</Text>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TextInput
-                      onChangeText={handleChange("designNo")}
-                      onBlur={() => {
-                        handleBlur("designNo");
-                      }}
-                      value={values.designNo}
-                      style={{
-                        flex: 1,
-                        fontSize: 16,
-                        color: "#000",
-                        padding: 0,
-                      }}
-                      placeholderTextColor="gray"
-                      placeholder="Enter Design No"
-                    />
-                  </View>
-                </View>
-                {errors.designNo && touched.designNo && (
-                  <Text
-                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
-                  >
-                    {errors.designNo}
-                  </Text>
-                )}
-              </View>
-            )}
-            <View style={{ marginTop: 15 }}>
+
+            {/* <View style={{ marginTop: 15 }}>
               <View style={styles.inputField}>
                 <Text style={styles.inputLabel}>Select Party Name</Text>
                 <View
@@ -423,7 +429,96 @@ const CreateChallan = ({ navigation, route }: any) => {
                   {errors.partyName}
                 </Text>
               )}
+            </View> */}
+            <View style={{ marginTop: 15 }}>
+              <View style={styles.inputField}>
+                <Text style={styles.inputLabel}>Select Design Number</Text>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <SelectDropdown
+                    data={[...designsMaster]}
+                    onSelect={(selectedItem) => {
+                      setFieldValue("partyUID", selectedItem.partyUID);
+                      setFieldValue("partyName", selectedItem.partyName);
+                      setFieldValue("designNo", selectedItem.designNo);
+                    }}
+                    // search={true}
+                    // searchPlaceHolder={"Search by Design Number"}
+                    buttonTextAfterSelection={(
+                      selectedItem: any,
+                      index: number
+                    ) => {
+                      return `${selectedItem?.designNo}-${selectedItem?.partyName}`;
+                    }}
+                    rowTextForSelection={(item: any, index: number) => {
+                      return `${item?.designNo}-${item?.partyName}`;
+                    }}
+                    buttonStyle={{
+                      backgroundColor: "transparent",
+                      width: "100%",
+                      height: 30,
+                    }}
+                    defaultButtonText="Select Design Number"
+                    buttonTextStyle={{
+                      textAlign: "left",
+                      marginLeft: -6,
+                    }}
+                    dropdownStyle={{ width: "80%", borderRadius: 10 }}
+                    defaultValue={designsMaster.find(
+                      (party: any) => party.partyUID === values.partyUID
+                    )}
+                  />
+                </View>
+              </View>
+              {errors.designNo && touched.designNo && (
+                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                  {errors.designNo}
+                </Text>
+              )}
             </View>
+            {/* {user?.userType !== "Carrier" && (
+              <View style={{ marginTop: 15 }}>
+                <View style={styles.inputField}>
+                  <Text style={styles.inputLabel}>Design No</Text>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextInput
+                      onChangeText={handleChange("designNo")}
+                      onBlur={() => {
+                        handleBlur("designNo");
+                      }}
+                      value={values.designNo}
+                      style={{
+                        flex: 1,
+                        fontSize: 16,
+                        color: "#000",
+                        padding: 0,
+                      }}
+                      placeholderTextColor="gray"
+                      placeholder="Enter Design No"
+                    />
+                  </View>
+                </View>
+                {errors.designNo && touched.designNo && (
+                  <Text
+                    style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}
+                  >
+                    {errors.designNo}
+                  </Text>
+                )}
+              </View>
+            )} */}
             <View style={{ marginTop: 15 }}>
               <View style={styles.inputField}>
                 <Text style={styles.inputLabel}>Item Name</Text>
