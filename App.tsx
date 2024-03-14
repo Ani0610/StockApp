@@ -6,37 +6,25 @@
  */
 
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
 import type { PropsWithChildren } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Platform,
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+  View
 } from "react-native";
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from "react-native/Libraries/NewAppScreen";
-import AuthNavigator from "./src/navigator/AuthNavigator";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useSelector } from "react-redux";
-import { RootState } from "./src/redux/store";
+import AuthNavigator from "./src/navigator/AuthNavigator";
 import SideMenuNavigator from "./src/navigator/SideMenuNavigator";
-import BottomTabNavigator from "./src/navigator/BottomTabNavigator";
-import CreateSampleDesign from "./src/pages/Design master/CreateSampleDesign";
 import CreateChallan from "./src/pages/Carrier Challan/CreateChallan";
-import ViewDesignDetails from "./src/pages/Design master/ViewDesignDetails";
+import CreateSampleDesign from "./src/pages/Design master/CreateSampleDesign";
 import ViewDesignByPartyName from "./src/pages/Design master/ViewDesignByPartyName";
-import { GlobalStyle } from "./globalStyle";
+import ViewDesignDetails from "./src/pages/Design master/ViewDesignDetails";
+import { RootState } from "./src/redux/store";
 
 type SectionProps = PropsWithChildren<{
   title: string;

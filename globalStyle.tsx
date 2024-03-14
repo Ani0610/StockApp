@@ -163,4 +163,15 @@ export const GlobalStyle = StyleSheet.create({
     shadowRadius: 4,
     // elevation: 2, // Android shadow
   },
+  inputField: {
+    display: 'flex',
+    backgroundColor: "#F9F9F9",
+    borderRadius: 15,
+    fontSize: 16,
+    paddingHorizontal: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  inputLabel: { color: "#05E3D5", fontSize: 14 },
 });

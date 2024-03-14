@@ -4,7 +4,7 @@
             "outputFile": "com.stockapp-mergeDebugResources-36:/values-es-rES/values-es-rES.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Lenovo\\.gradle\\caches\\transforms-3\\b18853f37933c4e5e6de7b5c5d7e814d\\transformed\\jetified-react-android-0.73.2-debug\\res\\values-es-rES\\values-es-rES.xml",
+                    "source": "C:\\Users\\aniru\\.gradle\\caches\\transforms-3\\b18853f37933c4e5e6de7b5c5d7e814d\\transformed\\jetified-react-android-0.73.2-debug\\res\\values-es-rES\\values-es-rES.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

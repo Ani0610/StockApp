@@ -4,7 +4,7 @@
             "outputFile": "com.stockapp-mergeDebugResources-36:/values-v22/values-v22.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Lenovo\\.gradle\\caches\\transforms-3\\291739c7e62f0cf7d74cd658d7be977b\\transformed\\appcompat-1.6.1\\res\\values-v22\\values-v22.xml",
+                    "source": "C:\\Users\\aniru\\.gradle\\caches\\transforms-3\\291739c7e62f0cf7d74cd658d7be977b\\transformed\\appcompat-1.6.1\\res\\values-v22\\values-v22.xml",
                     "from": {
                         "startLines": "2,3,4,9",
                         "startColumns": "4,4,4,4",

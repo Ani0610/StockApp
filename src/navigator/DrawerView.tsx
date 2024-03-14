@@ -13,9 +13,9 @@ import { RootState } from "../redux/store";
 
 const DrawerView = ({ navigation, state }: any) => {
   const dispatch = useDispatch();
-  const [dropDown, setdropDown] = useState(false);
-  const [dropDownjob, setdropDownjob] = useState(false);
-  const [masterDropdown, setmasterDropdown] = useState(false);
+  const [dropDown, setdropDown] = useState(null);
+  const [dropDownjob, setdropDownjob] = useState(null);
+  const [masterDropdown, setmasterDropdown] = useState(null);
   const { user }: any = useSelector((state: RootState) => state.user);
 
   const handlePress = (screenName: string) => {
@@ -26,6 +26,104 @@ const DrawerView = ({ navigation, state }: any) => {
     dispatch(setUser(null));
   };
 
+  const adminMenu = [
+    {
+      name: 'Home',
+      label: "Home",
+      isSubmenu: false
+    },
+    {
+      name: 'Master', label: "Masters",
+      isSubmenu: true,
+      item: [{ name: 'Stone Details', label: "Stone" },
+      { name: 'Design Details', label: "Paper" },
+      { name: 'JobWork Details', label: "Jobwork" },
+      { name: 'Users', label: "Users" },
+      { name: 'Party Master', label: "Party" },
+      { name: 'Category', label: "Category" }]
+    },
+    { name: 'Stone Stock', label: "Stone Stock", isSubmenu: false },
+
+    {
+      name: 'Job Work', label: "Job work", isSubmenu: true, item: [
+        { name: 'Job work Report', label: "Report", isSubmenu: false },
+        { name: 'Job work Team', label: "Team", isSubmenu: false },
+        { name: 'Per Day Work by Team', label: "Work By Team", isSubmenu: false },
+      ]
+    },
+    {
+      name: 'GodownReceive', label: "Receive Maal", isSubmenu: false,
+    },
+
+    { name: 'Challan', label: "Challan", isSubmenu: false },
+  ]
+
+  const MenuCopomponent = ({ items }: any) => (
+    <>
+      {console.log(items, 'items=----------')}
+      {items && items.length && items.map((menu: any, i: any) => (
+        <React.Fragment key={i}>
+          {
+            menu.isSubmenu ?
+              <View style={[styles.drawerItem, { paddingVertical: 8 }]}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                  onPress={() => setdropDown(i)}
+                >
+                  <Text style={styles.drawerText}>{menu.label} </Text>
+                  {dropDown == i ? (
+                    <Icon
+                      type="feather"
+                      name="chevron-down"
+                      color="#000"
+                      size={30}
+                    />
+                  ) : (
+                    <Icon
+                      type="feather"
+                      name="chevron-right"
+                      color="#000"
+                      size={30}
+                    />
+                  )}
+                </TouchableOpacity>
+                {dropDown === i &&
+                  menu.item.map((submenu: any, index: any) => (
+                    <TouchableOpacity key={index}
+                      style={[
+                        styles.drawerItem,
+                        masterDropdown === index && styles.activeDrawerItem,
+                      ]}
+                      onPress={() => { setmasterDropdown(index); handlePress(submenu.name) }}
+                    >
+                      <Text style={styles.drawerText}>{submenu.label}</Text>
+                    </TouchableOpacity>
+                  ))
+                }
+              </View>
+              :
+              <TouchableOpacity
+                style={[
+                  styles.drawerItem,
+                  dropDown === i && styles.activeDrawerItem,
+                ]}
+                onPress={() => {
+                  setmasterDropdown(null);
+                  setdropDown(i)
+                  handlePress(menu.name)
+                }}
+              >
+                <Text style={styles.drawerText}>{menu.label}</Text>
+              </TouchableOpacity>
+          }
+        </React.Fragment>
+      ))
+      }
+    </>
+  )
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContainer}>
@@ -33,219 +131,7 @@ const DrawerView = ({ navigation, state }: any) => {
           switch (user?.userType) {
             case "Admin":
               return (
-                <>
-                  <TouchableOpacity
-                    style={[
-                      styles.drawerItem,
-                      state.index === 0 && styles.activeDrawerItem,
-                    ]}
-                    onPress={() => handlePress("Home")}
-                  >
-                    <Text style={styles.drawerText}>Home</Text>
-                  </TouchableOpacity>
-                  <View style={[styles.drawerItem, { paddingVertical: 8 }]}>
-                    <TouchableOpacity
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                      onPress={() => setmasterDropdown(!masterDropdown)}
-                    >
-                      <Text style={styles.drawerText}>Master </Text>
-                      {masterDropdown ? (
-                        <Icon
-                          type="feather"
-                          name="chevron-down"
-                          color="#000"
-                          size={30}
-                        />
-                      ) : (
-                        <Icon
-                          type="feather"
-                          name="chevron-right"
-                          color="#000"
-                          size={30}
-                        />
-                      )}
-                    </TouchableOpacity>
-                    {masterDropdown && (
-                      <>
-                        <View
-                          style={[styles.drawerItem, { paddingVertical: 8 }]}
-                        >
-                          <TouchableOpacity
-                            style={{
-                              flexDirection: "row",
-                              justifyContent: "space-between",
-                            }}
-                            onPress={() => setdropDown(!dropDown)}
-                          >
-                            <Text style={styles.drawerText}>Stone </Text>
-                            {dropDown ? (
-                              <Icon
-                                type="feather"
-                                name="chevron-down"
-                                color="#000"
-                                size={30}
-                              />
-                            ) : (
-                              <Icon
-                                type="feather"
-                                name="chevron-right"
-                                color="#000"
-                                size={30}
-                              />
-                            )}
-                          </TouchableOpacity>
-                          {dropDown && (
-                            <>
-                              <TouchableOpacity
-                                style={[
-                                  styles.drawerItem,
-                                  state.index === 1 && styles.activeDrawerItem,
-                                  { marginHorizontal: 0 },
-                                ]}
-                                onPress={() => handlePress("Stone Details")}
-                              >
-                                <Text style={styles.drawerText}>
-                                  Stone Details
-                                </Text>
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                style={[
-                                  styles.drawerItem,
-                                  state.index === 2 && styles.activeDrawerItem,
-                                  { borderBottomWidth: 0, marginHorizontal: 0 },
-                                ]}
-                                onPress={() => handlePress("Stone Stock")}
-                              >
-                                <Text style={styles.drawerText}>
-                                  Stone Stock
-                                </Text>
-                              </TouchableOpacity>
-                            </>
-                          )}
-                        </View>
-                        <TouchableOpacity
-                          style={[
-                            styles.drawerItem,
-                            state.index === 3 && styles.activeDrawerItem,
-                          ]}
-                          onPress={() => handlePress("Design Details")}
-                        >
-                          <Text style={styles.drawerText}>Design Details</Text>
-                        </TouchableOpacity>
-                        <View
-                          style={[styles.drawerItem, { paddingVertical: 8 }]}
-                        >
-                          <TouchableOpacity
-                            style={{
-                              flexDirection: "row",
-                              justifyContent: "space-between",
-                            }}
-                            onPress={() => setdropDownjob(!dropDownjob)}
-                          >
-                            <Text style={styles.drawerText}>Job </Text>
-                            {dropDownjob ? (
-                              <Icon
-                                type="feather"
-                                name="chevron-down"
-                                color="#000"
-                                size={30}
-                              />
-                            ) : (
-                              <Icon
-                                type="feather"
-                                name="chevron-right"
-                                color="#000"
-                                size={30}
-                              />
-                            )}
-                          </TouchableOpacity>
-                          {dropDownjob && (
-                            <>
-                              <TouchableOpacity
-                                style={[
-                                  styles.drawerItem,
-                                  state.index === 4 && styles.activeDrawerItem,
-                                  { marginHorizontal: 0 },
-                                ]}
-                                onPress={() => handlePress("JobWork Details")}
-                              >
-                                <Text style={styles.drawerText}>
-                                  Job Master
-                                </Text>
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                style={[
-                                  styles.drawerItem,
-                                  state.index === 7 && styles.activeDrawerItem,
-                                  { marginHorizontal: 0 },
-                                ]}
-                                onPress={() => handlePress("Job work Team")}
-                              >
-                                <Text style={styles.drawerText}>
-                                  Job work Team
-                                </Text>
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                style={[
-                                  styles.drawerItem,
-                                  state.index === 8 && styles.activeDrawerItem,
-                                  { borderBottomWidth: 0, marginHorizontal: 0 },
-                                ]}
-                                onPress={() =>
-                                  handlePress("Per Day Work by Team")
-                                }
-                              >
-                                <Text style={styles.drawerText}>
-                                  Work by Team
-                                </Text>
-                              </TouchableOpacity>
-                            </>
-                          )}
-                        </View>
-
-                        <TouchableOpacity
-                          style={[
-                            styles.drawerItem,
-                            state.index === 5 && styles.activeDrawerItem,
-                          ]}
-                          onPress={() => handlePress("Users")}
-                        >
-                          <Text style={styles.drawerText}>Users</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[
-                            styles.drawerItem,
-                            state.index === 6 && styles.activeDrawerItem,
-                          ]}
-                          onPress={() => handlePress("Challan")}
-                        >
-                          <Text style={styles.drawerText}>Challan</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[
-                            styles.drawerItem,
-                            state.index === 9 && styles.activeDrawerItem,
-                          ]}
-                          onPress={() => handlePress("Party Master")}
-                        >
-                          <Text style={styles.drawerText}>Party Master</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[
-                            styles.drawerItem,
-                            state.index === 10 && styles.activeDrawerItem,
-                          ]}
-                          onPress={() => handlePress("Category Master")}
-                        >
-                          <Text style={styles.drawerText}>Category Master</Text>
-                        </TouchableOpacity>
-                      </>
-                    )}
-                  </View>
-                </>
+                <MenuCopomponent items={adminMenu} />
               );
             case "Godown":
               return (
@@ -265,7 +151,7 @@ const DrawerView = ({ navigation, state }: any) => {
                         flexDirection: "row",
                         justifyContent: "space-between",
                       }}
-                      onPress={() => setmasterDropdown(!masterDropdown)}
+                      onPress={() => setmasterDropdown(null)}
                     >
                       <Text style={styles.drawerText}>Master </Text>
                       {masterDropdown ? (
@@ -294,7 +180,7 @@ const DrawerView = ({ navigation, state }: any) => {
                               flexDirection: "row",
                               justifyContent: "space-between",
                             }}
-                            onPress={() => setdropDown(!dropDown)}
+                            onPress={() => setdropDown(null)}
                           >
                             <Text style={styles.drawerText}>Stone </Text>
                             {dropDown ? (
@@ -359,7 +245,7 @@ const DrawerView = ({ navigation, state }: any) => {
                               flexDirection: "row",
                               justifyContent: "space-between",
                             }}
-                            onPress={() => setdropDownjob(!dropDownjob)}
+                            onPress={() => setdropDownjob(null)}
                           >
                             <Text style={styles.drawerText}>Job </Text>
                             {dropDownjob ? (
@@ -492,7 +378,7 @@ const DrawerView = ({ navigation, state }: any) => {
                         flexDirection: "row",
                         justifyContent: "space-between",
                       }}
-                      onPress={() => setmasterDropdown(!masterDropdown)}
+                      onPress={() => setmasterDropdown(null)}
                     >
                       <Text style={styles.drawerText}>Master </Text>
                       {masterDropdown ? (
@@ -521,7 +407,7 @@ const DrawerView = ({ navigation, state }: any) => {
                               flexDirection: "row",
                               justifyContent: "space-between",
                             }}
-                            onPress={() => setdropDown(!dropDown)}
+                            onPress={() => setdropDown(null)}
                           >
                             <Text style={styles.drawerText}>Stone </Text>
                             {dropDown ? (
@@ -586,7 +472,7 @@ const DrawerView = ({ navigation, state }: any) => {
                               flexDirection: "row",
                               justifyContent: "space-between",
                             }}
-                            onPress={() => setdropDownjob(!dropDownjob)}
+                            onPress={() => setdropDownjob(null)}
                           >
                             <Text style={styles.drawerText}>Job </Text>
                             {dropDownjob ? (

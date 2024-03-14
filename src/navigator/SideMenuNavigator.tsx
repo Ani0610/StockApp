@@ -1,25 +1,22 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, Text, TouchableOpacity } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import DrawerView from "./DrawerView";
-import StoneDetails from "../pages/Stone details/StoneDetails";
-import JobWorkDetails from "../pages/Job work details/JobWorkDetails";
-import DesignDetails from "../pages/Design details/DesignDetails";
-import CreateSampleDesign from "../pages/Design master/CreateSampleDesign";
-import BottomTabNavigator from "./BottomTabNavigator";
-import StoneStock from "../pages/Stone Stock/StoneStock";
+import React from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import Challan from "../pages/Carrier Challan/Challan";
+import CategoryMaster from "../pages/Category Master/CategoryMaster";
+import DesignDetails from "../pages/Design details/DesignDetails";
+import JobWorkDetails from "../pages/Job work details/JobWorkDetails";
+import PartyMaster from "../pages/Party Master/PartyMaster";
+import StoneStock from "../pages/Stone Stock/StoneStock";
+import StoneDetails from "../pages/Stone details/StoneDetails";
+import UserMaster from "../pages/Users Master/UserMaster";
 import JobWorkTeam from "../pages/job work module/JobWorkTeam";
 import TeamWorkPerDay from "../pages/job work module/TeamWorkPerDay";
-import UserMaster from "../pages/Users Master/UserMaster";
-import Challan from "../pages/Carrier Challan/Challan";
-import PartyMaster from "../pages/Party Master/PartyMaster";
-import CategoryMaster from "../pages/Category Master/CategoryMaster";
+import { RootState } from "../redux/store";
+import BottomTabNavigator from "./BottomTabNavigator";
+import DrawerView from "./DrawerView";
+import GodownReceiveMaal from "../pages/Godown Receive/GodownReceiveMaal";
+import GodownReceive from "./GodownReceive";
+import JobworkReport from "../pages/Job work details/JobWorkReport";
 const DrawerStack = createDrawerNavigator();
 const SideMenuNavigator = ({ navigation }: any) => {
   const { user }: any = useSelector((state: RootState) => state.user);
@@ -28,7 +25,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
     <DrawerStack.Navigator
       drawerContent={(props) => <DrawerView {...props} />}
       screenOptions={{
-        headerStyle: {
+          headerStyle: {
           backgroundColor: "#f5f5f5", // Set the background color of the header for all screens
         },
       }}
@@ -58,6 +55,10 @@ const SideMenuNavigator = ({ navigation }: any) => {
                 <DrawerStack.Screen name="Users" component={UserMaster} />
                 <DrawerStack.Screen name="Challan" component={Challan} />
                 <DrawerStack.Screen
+                  name="Job work Report"
+                  component={JobworkReport}
+                />
+                <DrawerStack.Screen
                   name="Job work Team"
                   component={JobWorkTeam}
                 />
@@ -70,9 +71,11 @@ const SideMenuNavigator = ({ navigation }: any) => {
                   component={PartyMaster}
                 />
                 <DrawerStack.Screen
-                  name="Category Master"
-                  component={CategoryMaster}
+                  name="GodownReceive"
+                  component={GodownReceive}
+                  options={{ headerShown: false }}
                 />
+
               </>
             );
           case "Godown":
@@ -105,7 +108,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
                   component={TeamWorkPerDay}
                 />
                 <DrawerStack.Screen
-                  name="Category Master"
+                  name="Category"
                   component={CategoryMaster}
                 />
               </>
@@ -113,6 +116,10 @@ const SideMenuNavigator = ({ navigation }: any) => {
           case "Job Work":
             return (
               <>
+               {/* <DrawerStack.Screen
+                  name="Job work Report"
+                  component={JobworkReport}
+                /> */}
                 <DrawerStack.Screen name="Home" component={TeamWorkPerDay} />
                 <DrawerStack.Screen name="Team" component={JobWorkTeam} />
               </>
