@@ -160,7 +160,7 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                             </Text>
                         )}
                     </View>
-                    <View style={styles.inputField}>
+                    <View style={[styles.inputField,{marginTop:15}]}>
                         <Text style={styles.inputLabel}>Select Design Number</Text>
                         <SelectDropdown
                             data={[...designsMaster]}

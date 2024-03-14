@@ -325,7 +325,7 @@ const DrawerView = ({ navigation, state }: any) => {
             case "Job Work":
               return (
                 <>
-                  <TouchableOpacity
+                 <TouchableOpacity
                     style={[
                       styles.drawerItem,
                       state.index === 0 && styles.activeDrawerItem,
@@ -334,11 +334,20 @@ const DrawerView = ({ navigation, state }: any) => {
                   >
                     <Text style={styles.drawerText}>Home</Text>
                   </TouchableOpacity>
-
                   <TouchableOpacity
                     style={[
                       styles.drawerItem,
                       state.index === 1 && styles.activeDrawerItem,
+                    ]}
+                    onPress={() => handlePress("Work By Team")}
+                  >
+                    <Text style={styles.drawerText}>Job by team</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.drawerItem,
+                      state.index === 2 && styles.activeDrawerItem,
                     ]}
                     onPress={() => handlePress("Team")}
                   >

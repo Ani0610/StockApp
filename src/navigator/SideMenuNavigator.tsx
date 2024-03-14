@@ -17,6 +17,8 @@ import DrawerView from "./DrawerView";
 import GodownReceiveMaal from "../pages/Godown Receive/GodownReceiveMaal";
 import GodownReceive from "./GodownReceive";
 import JobworkReport from "../pages/Job work details/JobWorkReport";
+import currentJob from "../pages/job work module/currentJob";
+import CurrentJobWork from "../pages/job work module/currentJob";
 const DrawerStack = createDrawerNavigator();
 const SideMenuNavigator = ({ navigation }: any) => {
   const { user }: any = useSelector((state: RootState) => state.user);
@@ -75,6 +77,10 @@ const SideMenuNavigator = ({ navigation }: any) => {
                   component={GodownReceive}
                   options={{ headerShown: false }}
                 />
+                <DrawerStack.Screen
+                  name="Category"
+                  component={CategoryMaster}
+                />
 
               </>
             );
@@ -116,11 +122,11 @@ const SideMenuNavigator = ({ navigation }: any) => {
           case "Job Work":
             return (
               <>
-               {/* <DrawerStack.Screen
-                  name="Job work Report"
-                  component={JobworkReport}
-                /> */}
-                <DrawerStack.Screen name="Home" component={TeamWorkPerDay} />
+               <DrawerStack.Screen
+                  name="Home"
+                  component={CurrentJobWork}
+                />
+                <DrawerStack.Screen name="Work By Team" component={TeamWorkPerDay} />
                 <DrawerStack.Screen name="Team" component={JobWorkTeam} />
               </>
             );

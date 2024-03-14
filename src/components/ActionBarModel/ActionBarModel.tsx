@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { GlobalStyle } from '../../../globalStyle'
 import Icon from 'react-native-easy-icon'
 
-const ActionBarModel = ({ modalHeight="20%",isVisible, onClose, editAction, deleteAction, isExtraButton = false, extraButton }: any) => {
+const ActionBarModel = ({ modalHeight="20%",isEditable=true,isDeletable=true,isVisible, onClose, editAction, deleteAction, isExtraButton = false, extraButton }: any) => {
     return (
         <View>
             <Modal
@@ -39,6 +39,8 @@ const ActionBarModel = ({ modalHeight="20%",isVisible, onClose, editAction, dele
                             {extraButton}
                         </>
                         }
+                        {isEditable &&
+
                         <TouchableOpacity
                             onPress={() => editAction()}
                             style={[GlobalStyle.btn, { borderRadius: 15 }]}
@@ -55,6 +57,8 @@ const ActionBarModel = ({ modalHeight="20%",isVisible, onClose, editAction, dele
                                 Edit
                             </Text>
                         </TouchableOpacity>
+                        }
+                        {isDeletable &&
                         <TouchableOpacity
                             onPress={() => deleteAction()}
                             style={[GlobalStyle.btn, { borderRadius: 15 }]}
@@ -71,6 +75,7 @@ const ActionBarModel = ({ modalHeight="20%",isVisible, onClose, editAction, dele
                                 Delete
                             </Text>
                         </TouchableOpacity>
+                        }
                         <TouchableOpacity onPress={onClose} style={GlobalStyle.btn}>
                             <Icon type="entypo" name="cross" color="gray" size={25} />
                             <Text
