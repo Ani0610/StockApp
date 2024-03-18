@@ -368,7 +368,7 @@ const UserMaster = () => {
                           handleBlur("fullName");
                         }}
                         value={values.fullName}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter full Name"
                       />
@@ -399,7 +399,7 @@ const UserMaster = () => {
                         }}
                         value={values.mobileNumber}
                         keyboardType={"phone-pad"}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter Mobile Nunber"
                         editable={update ? false : true}
@@ -431,10 +431,10 @@ const UserMaster = () => {
                         }}
                         buttonStyle={{
                           backgroundColor: "transparent",
-                          width: "100%",
+                          width: "90%",
                         }}
                         defaultButtonText="Select User Type"
-                        buttonTextStyle={{ textAlign: "left", marginLeft: -6 }}
+                        buttonTextStyle={{ textAlign: "right" }}
                         dropdownStyle={{ width: "80%", borderRadius: 10 }}
                         defaultValue={values.userType}
                       />
@@ -477,11 +477,11 @@ const UserMaster = () => {
                           }}
                           buttonStyle={{
                             backgroundColor: "transparent",
-                            width: "100%",
+                            width: "90%",
                           }}
                           defaultButtonText="Select Party Name"
                           buttonTextStyle={{
-                            textAlign: "left",
+                            textAlign: "right",
                             marginLeft: -6,
                           }}
                           dropdownStyle={{ width: "80%", borderRadius: 10 }}
@@ -512,10 +512,14 @@ const UserMaster = () => {
 const Style = StyleSheet.create({
   cardContainer: { marginBottom: 0 },
   inputField: {
+    display: 'flex',
     backgroundColor: "#F9F9F9",
     borderRadius: 15,
     fontSize: 16,
-    padding: 10,
+    padding: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   inputLabel: { color: "#05E3D5", fontSize: 14 },
   partyName: {

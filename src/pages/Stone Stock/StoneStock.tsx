@@ -391,10 +391,10 @@ const StoneStock = () => {
                         }}
                         buttonStyle={{
                           backgroundColor: "transparent",
-                          width: "100%",
+                          width: "90%",
                         }}
                         defaultButtonText="Select stone Type"
-                        buttonTextStyle={{ textAlign: "left", marginLeft: -6 }}
+                        buttonTextStyle={{ textAlign: "right" }}
                         dropdownStyle={{ width: "80%", borderRadius: 10 }}
                         defaultValue={stone.find(
                           (st: any) => st.stoneType === values.stoneType
@@ -426,7 +426,7 @@ const StoneStock = () => {
                           handleBlur("totalBags");
                         }}
                         value={values.totalBags}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter total bag"
                       />
@@ -456,7 +456,7 @@ const StoneStock = () => {
                           handleBlur("stonePerBag");
                         }}
                         value={values.stonePerBag}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter stone per bag"
                       />
@@ -489,10 +489,14 @@ const StoneStock = () => {
 const Style = StyleSheet.create({
   cardContainer: { marginBottom: 0 },
   inputField: {
+    display: 'flex',
     backgroundColor: "#F9F9F9",
     borderRadius: 15,
     fontSize: 16,
-    padding: 10,
+    padding: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   inputLabel: { color: "#05E3D5", fontSize: 14 },
   stoneType: {

@@ -360,7 +360,7 @@ const PartyMaster = () => {
                           handleBlur("partyName");
                         }}
                         value={values.partyName}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter Party Name"
                       />
@@ -391,7 +391,7 @@ const PartyMaster = () => {
                         }}
                         keyboardType={"phone-pad"}
                         value={values.contactNumber}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter Contact Number"
                       />
@@ -421,7 +421,7 @@ const PartyMaster = () => {
                           handleBlur("gstNumber");
                         }}
                         value={values.gstNumber}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter gst number"
                       />
@@ -452,7 +452,7 @@ const PartyMaster = () => {
                           handleBlur("address");
                         }}
                         value={values.address}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter address"
                       />
@@ -485,10 +485,14 @@ const PartyMaster = () => {
 const Style = StyleSheet.create({
   cardContainer: { marginBottom: 0 },
   inputField: {
+    display: 'flex',
     backgroundColor: "#F9F9F9",
     borderRadius: 15,
     fontSize: 16,
-    padding: 10,
+    padding: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   inputLabel: { color: "#05E3D5", fontSize: 14 },
   partyName: {
