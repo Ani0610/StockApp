@@ -15,11 +15,11 @@ interface InitialFormValues {
     teamName: string,
     teamPersons: any,
     total: number
-    useruid:any,
-    price:any,
+    useruid: any,
+    price: any,
     id: undefined,
-    partyName:string,
-    workType:string
+    partyName: string,
+    workType: string
 }
 const TeamWorkPerDay = () => {
     const [showModal, setShowModal] = useState(false);
@@ -29,17 +29,17 @@ const TeamWorkPerDay = () => {
     const { user }: any = useSelector((state: RootState) => state.user)
     const { teams }: any = useSelector((state: RootState) => state.teams)
     const { perDayWorks }: any = useSelector((state: RootState) => state.perDayWorks)
-    const [work,setWork]=useState<any>([])
+    const [work, setWork] = useState<any>([])
     const dispatch = useDispatch()
     const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>({
         teamName: '',
         teamPersons: [],
         total: 0,
-        useruid:'',
-        price:'',
+        useruid: '',
+        price: '',
         id: undefined,
-        partyName:'',
-        workType:'',
+        partyName: '',
+        workType: '',
     });
     const teamSchema = yup.object().shape({
         teamName: yup.string().required('Team Name is required'),
@@ -52,13 +52,13 @@ const TeamWorkPerDay = () => {
         ),
     })
     useEffect(() => {
-        if (user.userType ==="Job Work") {
-            const wk:any = perDayWorks.filter((item: any) => item.useruid === user.useruid)
+        if (user.userType === "Job Work") {
+            const wk: any = perDayWorks.filter((item: any) => item.useruid === user.useruid)
             setWork([...wk])
         } else {
-            setWork([...perDayWorks])    
+            setWork([...perDayWorks])
         }
-    }, [user.userType,perDayWorks])
+    }, [user.userType, perDayWorks])
     const formik = useFormik<InitialFormValues>({
         initialValues: initialFormValues,
         validationSchema: teamSchema,
@@ -234,11 +234,11 @@ const TeamWorkPerDay = () => {
                                                         rowTextForSelection={(item: any, index: number) => {
                                                             return `${item?.teamName}`;
                                                         }}
-                                                        buttonStyle={{ backgroundColor: 'transparent',width:'100%' }}
+                                                        buttonStyle={{ backgroundColor: 'transparent', width: '90%' }}
                                                         defaultButtonText={values.teamName ? values.teamName : 'Select Team'}
-                                                        buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
+                                                        buttonTextStyle={{ textAlign: 'right', marginLeft: -6 }}
                                                         dropdownStyle={{ width: '80%', borderRadius: 10 }}
-                                                        defaultValue={teams.find((team:any) => team.teamName === values.teamName)}
+                                                        defaultValue={teams.find((team: any) => team.teamName === values.teamName)}
                                                     />
                                                     {/* <TextInput
                                                     onChangeText={handleChange('teamName')}
@@ -291,7 +291,7 @@ const TeamWorkPerDay = () => {
                                                                                             replace(i, { ...person, personName: text })
                                                                                         }}
                                                                                         value={person.personName}
-                                                                                        style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                                                                        style={{ textAlign: 'right', fontSize: 16, color: '#000' }}
                                                                                         placeholderTextColor='gray'
                                                                                         placeholder='Enter person Name'
                                                                                         editable={false}
@@ -313,7 +313,7 @@ const TeamWorkPerDay = () => {
                                                                                             replace(i, { ...person, unit: text, cost: text * values.price })
                                                                                         }}
                                                                                         value={person.unit.toString()}
-                                                                                        style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                                                                        style={{ textAlign: 'right', fontSize: 16, color: '#000' }}
                                                                                         placeholderTextColor='gray'
                                                                                         placeholder='Enter unit'
                                                                                     />
@@ -334,7 +334,7 @@ const TeamWorkPerDay = () => {
                                                                                             replace(i, { ...person, cost: text })
                                                                                         }}
                                                                                         value={person.cost.toString()}
-                                                                                        style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                                                                        style={{ textAlign: 'right', fontSize: 16, color: '#000' }}
                                                                                         placeholderTextColor='gray'
                                                                                         placeholder='Enter cost person'
                                                                                         editable={false}
@@ -375,8 +375,21 @@ const Style = StyleSheet.create({
         backgroundColor: '#F9F9F9',
         borderRadius: 15,
         fontSize: 16,
-        padding: 10,
+        padding: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
+    // inputField: {
+    //     display: 'flex',
+    //     backgroundColor: "#F9F9F9",
+    //     borderRadius: 15,
+    //     fontSize: 16,
+    //     padding: 5,
+    //     flexDirection: "row",
+    //     justifyContent: "space-between",
+    //     alignItems: "center",
+    //   },
     inputLabel: { color: '#05E3D5', fontSize: 14 },
     partyName: {
         fontSize: heightY * 0.018,

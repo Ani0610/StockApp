@@ -109,60 +109,60 @@ const CreateChallan = ({ navigation, route }: any) => {
     initialValues: initialFormValues,
     validationSchema: challanSchema,
     onSubmit: async (values: any) => {
-        try {
-          if (values.challanType === "Out" && values.status === "Delivered") {
-            const data: any = designsMaster.find(
-              (obj: any) =>
-                obj.partyUID === values.partyUID 
-                // &&
-                // obj.designNo == values.designNo
-            );
-            if (data) {
-              const newData = { ...data, availableStocks: values.piece };
-              const newData1 = {
-                ...data,
-                availableStocks: data.availableStocks - values.piece,
-              };
-              dispatch(addDeliveredDesign({ ...newData }));
-              dispatch(editDesignMaster({ ...newData1 }));
-            }
+      try {
+        if (values.challanType === "Out" && values.status === "Delivered") {
+          const data: any = designsMaster.find(
+            (obj: any) =>
+              obj.partyUID === values.partyUID
+            // &&
+            // obj.designNo == values.designNo
+          );
+          if (data) {
+            const newData = { ...data, availableStocks: values.piece };
+            const newData1 = {
+              ...data,
+              availableStocks: data.availableStocks - values.piece,
+            };
+            dispatch(addDeliveredDesign({ ...newData }));
+            dispatch(editDesignMaster({ ...newData1 }));
           }
-
-          if (values.challanType === "In" && values.status === "Delivered") {
-            const data: any = await designsMaster.find(
-              (obj: any) =>
-                obj.partyUID === values.partyUID 
-                // &&
-                // obj.designNo == values.designNo
-            );
-            console.log("data", data);
-
-            if (data) {
-              const newData1 = {
-                ...data,
-                availableStocks:
-                  Number(data.availableStocks) + Number(values.piece),
-              };
-              console.log(newData1.availableStocks);
-
-              // dispatch(addDeliveredDesign({ ...newData }));
-              dispatch(editDesignMaster({ ...newData1 }));
-            }
-          }
-          if (update) {
-            dispatch(editChallan({ ...values }));
-          } else {
-            values.id = Math.floor(2360 + Math.random() * 6438);
-            dispatch(addChallan({ ...values }));
-          }
-
-          resetForm();
-          navigation.goBack();
-        } catch (error) {
-          // Handle errors here
-          console.error("An error occurred:", error);
-          // Optionally, you can provide feedback to the user about the error
         }
+
+        if (values.challanType === "In" && values.status === "Delivered") {
+          const data: any = await designsMaster.find(
+            (obj: any) =>
+              obj.partyUID === values.partyUID
+            // &&
+            // obj.designNo == values.designNo
+          );
+          console.log("data", data);
+
+          if (data) {
+            const newData1 = {
+              ...data,
+              availableStocks:
+                Number(data.availableStocks) + Number(values.piece),
+            };
+            console.log(newData1.availableStocks);
+
+            // dispatch(addDeliveredDesign({ ...newData }));
+            dispatch(editDesignMaster({ ...newData1 }));
+          }
+        }
+        if (update) {
+          dispatch(editChallan({ ...values }));
+        } else {
+          values.id = Math.floor(2360 + Math.random() * 6438);
+          dispatch(addChallan({ ...values }));
+        }
+
+        resetForm();
+        navigation.goBack();
+      } catch (error) {
+        // Handle errors here
+        console.error("An error occurred:", error);
+        // Optionally, you can provide feedback to the user about the error
+      }
     },
   });
   const {
@@ -312,7 +312,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                 <View
                   style={{
                     alignItems: "center",
-                    justifyContent:"center",
+                    justifyContent: "center",
                   }}
                 >
                   <Text
@@ -344,24 +344,24 @@ const CreateChallan = ({ navigation, route }: any) => {
             <View style={{ marginTop: 10 }}>
               <View style={styles.inputField}>
                 <Text style={styles.inputLabel}>Select Challan Type</Text>
-                  <SelectDropdown
-                    data={["In", "Out"]}
-                    onSelect={(selectedItem) => {
-                      setFieldValue("challanType", selectedItem);
-                    }}
-                    buttonStyle={{
-                      backgroundColor: "transparent",
-                      width: "80%",
-                      height: 30,
-                    }}
-                    buttonTextStyle={{
-                      // textAlign: "right",
-                      marginRight:0
-                    }}
-                    defaultButtonText="Select Challan Type"
-                    dropdownStyle={{ borderRadius: 10,width:'60%' }}
-                    defaultValue={values.challanType}
-                  />
+                <SelectDropdown
+                  data={["In", "Out"]}
+                  onSelect={(selectedItem) => {
+                    setFieldValue("challanType", selectedItem);
+                  }}
+                  buttonStyle={{
+                    backgroundColor: "transparent",
+                    width: "60%",
+                    height: 30,
+                  }}
+                  buttonTextStyle={{
+                    textAlign: "right",
+                    marginRight: 0
+                  }}
+                  defaultButtonText="Select Challan Type"
+                  dropdownStyle={{ borderRadius: 10, width: '60%' }}
+                  defaultValue={values.challanType}
+                />
               </View>
               {errors.challanType && touched.challanType && (
                 <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
@@ -373,36 +373,37 @@ const CreateChallan = ({ navigation, route }: any) => {
               <View style={styles.inputField}>
                 <Text style={styles.inputLabel}>Select Party Name</Text>
 
-                  <SelectDropdown
-                    data={[...partyMaster]}
-                    onSelect={(selectedItem) => {
-                      setFieldValue("partyUID", selectedItem.id);
-                      setFieldValue("partyName", selectedItem.partyName);
-                    }}
-                    buttonTextAfterSelection={(
-                      selectedItem: any,
-                      index: number
-                    ) => {
-                      return `${selectedItem?.partyName}`;
-                    }}
-                    rowTextForSelection={(item: any, index: number) => {
-                      return `${item.partyName}`;
-                    }}
-                    buttonStyle={{
-                      backgroundColor: "transparent",
-                      width: "80%",
-                      height: 30,
-                    }}
-                    defaultButtonText="Select Party Name"
-                    buttonTextStyle={{
-                      // textAlign: "right",
-                      marginRight:0
-                    }}
-                    dropdownStyle={{ width: "60%", borderRadius: 10 }}
-                    defaultValue={partyMaster.find(
-                      (party: any) => party.id === values.partyUID
-                    )}
-                  />
+                <SelectDropdown
+                  data={[...partyMaster]}
+                  onSelect={(selectedItem) => {
+                    setFieldValue("partyUID", selectedItem.id);
+                    setFieldValue("partyName", selectedItem.partyName);
+                  }}
+                  buttonTextAfterSelection={(
+                    selectedItem: any,
+                    index: number
+                  ) => {
+                    return `${selectedItem?.partyName}`;
+                  }}
+                  rowTextForSelection={(item: any, index: number) => {
+                    return `${item.partyName}`;
+                  }}
+                  buttonStyle={{
+                    backgroundColor: "transparent",
+                    width: "60%",
+                    height: 30,
+
+                  }}
+                  defaultButtonText="Select Party Name"
+                  buttonTextStyle={{
+                    textAlign: "right",
+                    marginRight: 0,
+                  }}
+                  dropdownStyle={{ width: "60%", borderRadius: 10 }}
+                  defaultValue={partyMaster.find(
+                    (party: any) => party.id === values.partyUID
+                  )}
+                />
               </View>
               {errors.partyName && touched.partyName && (
                 <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
@@ -494,7 +495,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                 <Text style={styles.inputLabel}>Item Name</Text>
                 <View
                   style={{
-                    
+
                     alignItems: "center",
                   }}
                 >
@@ -504,9 +505,10 @@ const CreateChallan = ({ navigation, route }: any) => {
                       handleBlur("itemName");
                     }}
                     value={values.itemName}
-                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0 }}
+                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0, textAlign: 'right' }}
                     placeholderTextColor="gray"
                     placeholder="Enter Item Name"
+
                   />
                 </View>
               </View>
@@ -521,7 +523,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                 <Text style={styles.inputLabel}>Piece /Meter</Text>
                 <View
                   style={{
-                    
+
                     alignItems: "center",
                   }}
                 >
@@ -531,7 +533,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                       handleBlur("piece");
                     }}
                     value={values.piece}
-                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0 }}
+                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0, textAlign: 'right' }}
                     placeholderTextColor="gray"
                     placeholder="Enter Number of piece"
                   />
@@ -546,9 +548,11 @@ const CreateChallan = ({ navigation, route }: any) => {
             <View style={{ marginTop: 15 }}>
               <View
                 style={[
-                  { backgroundColor: "#F9F9F9",
-                  borderRadius: 15,
-                  padding: 10},
+                  {
+                    backgroundColor: "#F9F9F9",
+                    borderRadius: 15,
+                    padding: 10
+                  },
                   { width: "100%", height: values.maalImg ? 110 : "auto" },
                 ]}
               >
@@ -566,7 +570,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                         flexDirection: "row",
                         alignItems: "center",
                       }}
-                  >
+                    >
                       <Pressable
                         onPress={() => setIscamaraModalVisibleMaterial(true)}
                       >
@@ -643,9 +647,11 @@ const CreateChallan = ({ navigation, route }: any) => {
             <View style={{ marginTop: 15 }}>
               <View
                 style={[
-                  { backgroundColor: "#F9F9F9",
-                  borderRadius: 15,
-                  padding: 10},
+                  {
+                    backgroundColor: "#F9F9F9",
+                    borderRadius: 15,
+                    padding: 10
+                  },
                   { width: "100%", height: values.challanImg ? 110 : "auto" },
                 ]}
               >
@@ -742,21 +748,21 @@ const CreateChallan = ({ navigation, route }: any) => {
             <View style={{ marginTop: 15 }}>
               <View style={styles.inputField}>
                 <Text style={styles.inputLabel}>Status</Text>
-                  <SelectDropdown
-                    data={["Dispatch", "In Transit", "Shipped", "Delivered"]}
-                    onSelect={(selectedItem) => {
-                      setFieldValue("status", selectedItem);
-                    }}
-                    buttonStyle={{
-                      backgroundColor: "transparent",
-                      // width: "100%",
-                      height: 30,
-                    }}
-                    defaultButtonText="Select Status"
-                    buttonTextStyle={{  marginRight:-30}}
-                    dropdownStyle={{ width: "60%", borderRadius: 10 }}
-                    defaultValue={values.status}
-                  />
+                <SelectDropdown
+                  data={["Dispatch", "In Transit", "Shipped", "Delivered"]}
+                  onSelect={(selectedItem) => {
+                    setFieldValue("status", selectedItem);
+                  }}
+                  buttonStyle={{
+                    backgroundColor: "transparent",
+                    // width: "100%",
+                    height: 30,
+                  }}
+                  defaultButtonText="Select Status"
+                  buttonTextStyle={{ textAlign: 'right' }}
+                  dropdownStyle={{ width: "60%", borderRadius: 10, }}
+                  defaultValue={values.status}
+                />
               </View>
               {errors.status && touched.status && (
                 <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
@@ -768,42 +774,42 @@ const CreateChallan = ({ navigation, route }: any) => {
               <View style={{ marginTop: 15 }}>
                 <View style={styles.inputField}>
                   <Text style={styles.inputLabel}>Carrier Person</Text>
-                 
-                    <SelectDropdown
-                      data={[...carrierPersons]}
-                      onSelect={(selectedItem) => {
-                        setFieldValue(
-                          "carrierPersonName",
-                          selectedItem.fullName
-                        );
-                        setFieldValue("carrierPersonUid", selectedItem.useruid);
-                        setFieldValue(
-                          "carrierPersonMobNo",
-                          selectedItem.mobileNumber
-                        );
-                      }}
-                      buttonTextAfterSelection={(
-                        selectedItem: any,
-                        index: number
-                      ) => {
-                        return `${selectedItem?.fullName}`;
-                      }}
-                      rowTextForSelection={(item: any, index: number) => {
-                        return `${item.fullName}`;
-                      }}
-                      buttonStyle={{
-                        backgroundColor: "transparent",
-                        width: "100%",
-                        height: 30,
-                      }}
-                      defaultButtonText="Select Carrier Person"
-                      buttonTextStyle={{  marginRight: 10 }}
-                      dropdownStyle={{ width: "80%", borderRadius: 10 }}
-                      defaultValue={carrierPersons.find(
-                        (person: any) =>
-                          person.useruid === values.carrierPersonUid
-                      )}
-                    />
+
+                  <SelectDropdown
+                    data={[...carrierPersons]}
+                    onSelect={(selectedItem) => {
+                      setFieldValue(
+                        "carrierPersonName",
+                        selectedItem.fullName
+                      );
+                      setFieldValue("carrierPersonUid", selectedItem.useruid);
+                      setFieldValue(
+                        "carrierPersonMobNo",
+                        selectedItem.mobileNumber
+                      );
+                    }}
+                    buttonTextAfterSelection={(
+                      selectedItem: any,
+                      index: number
+                    ) => {
+                      return `${selectedItem?.fullName}`;
+                    }}
+                    rowTextForSelection={(item: any, index: number) => {
+                      return `${item.fullName}`;
+                    }}
+                    buttonStyle={{
+                      backgroundColor: "transparent",
+                      width: "100%",
+                      height: 30,
+                    }}
+                    defaultButtonText="Select Carrier Person"
+                    buttonTextStyle={{ textAlign: 'right', paddingHorizontal: 100 }}
+                    dropdownStyle={{ width: "80%", borderRadius: 10 }}
+                    defaultValue={carrierPersons.find(
+                      (person: any) =>
+                        person.useruid === values.carrierPersonUid
+                    )}
+                  />
                 </View>
                 {errors.carrierPersonName && touched.carrierPersonName && (
                   <Text
@@ -876,7 +882,7 @@ const CreateChallan = ({ navigation, route }: any) => {
 };
 const styles = StyleSheet.create({
   inputField: {
-    display:'flex',
+    display: 'flex',
     backgroundColor: "#F9F9F9",
     borderRadius: 15,
     fontSize: 16,
@@ -885,6 +891,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  inputLabel: { color: "#05E3D5", fontSize: 14 },
+  inputLabel: { color: "#05E3D5", fontSize: 14, },
 });
 export default CreateChallan;

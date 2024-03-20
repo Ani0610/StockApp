@@ -357,9 +357,10 @@ const StoneDetails = () => {
                           handleBlur("stoneType");
                         }}
                         value={values.stoneType}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter Stone Type"
+
                       />
                     </View>
                   </View>
@@ -387,7 +388,7 @@ const StoneDetails = () => {
                           handleBlur("price");
                         }}
                         value={values.price}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter price per bag"
                       />
@@ -417,7 +418,7 @@ const StoneDetails = () => {
                           handleBlur("stonePerBag");
                         }}
                         value={values.stonePerBag}
-                        style={{ flex: 1, fontSize: 16, color: "#000" }}
+                        style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter stone per bag"
                       />
@@ -450,10 +451,14 @@ const StoneDetails = () => {
 const Style = StyleSheet.create({
   cardContainer: { marginBottom: 0 },
   inputField: {
+    display: 'flex',
     backgroundColor: "#F9F9F9",
     borderRadius: 15,
     fontSize: 16,
-    padding: 10,
+    padding: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   inputLabel: { color: "#05E3D5", fontSize: 14 },
   stoneType: {

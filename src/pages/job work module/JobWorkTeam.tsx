@@ -15,8 +15,8 @@ interface InitialFormValues {
     workType: string,
     teamName: string,
     teamPersonName: any,
-    useruid:'',
-    price:'',
+    useruid: '',
+    price: '',
     id: undefined,
 }
 const JobWorkTeam = () => {
@@ -27,15 +27,15 @@ const JobWorkTeam = () => {
     const { user }: any = useSelector((state: RootState) => state.user)
     const { teams }: any = useSelector((state: RootState) => state.teams)
     const { jobWorks } = useSelector((state: RootState) => state.jobWorks)
-const [team,setTeam]=useState<any>([])
+    const [team, setTeam] = useState<any>([])
     const dispatch = useDispatch()
     const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>({
-        partyName: user.userType ==="Job Work"?user.partyName:'',
-        workType: user.userType ==="Job Work"?user.workType:'',
+        partyName: user.userType === "Job Work" ? user.partyName : '',
+        workType: user.userType === "Job Work" ? user.workType : '',
         teamName: '',
         teamPersonName: [{ personName: '' }],
-        useruid:user.userType ==="Job Work"?user.useruid:'',
-        price:user.userType ==="Job Work"?user.price:'',
+        useruid: user.userType === "Job Work" ? user.useruid : '',
+        price: user.userType === "Job Work" ? user.price : '',
         id: undefined
     });
     const teamSchema = yup.object().shape({
@@ -71,14 +71,14 @@ const [team,setTeam]=useState<any>([])
         resetForm()
     }
     useEffect(() => {
-        if (user.userType ==="Job Work") {
-            const tm:any = teams.filter((item: any) => item.useruid === user.useruid)
+        if (user.userType === "Job Work") {
+            const tm: any = teams.filter((item: any) => item.useruid === user.useruid)
             setTeam([...tm])
         } else {
-            setTeam([...teams])    
+            setTeam([...teams])
         }
-    }, [user.userType,teams])
-    
+    }, [user.userType, teams])
+
     const selectCard = (item: number) => {
         setisVisible(true)
         setdata(item);
@@ -184,182 +184,182 @@ const [team,setTeam]=useState<any>([])
             {showModal &&
                 <Modal visible={showModal} transparent={false} animationType="slide">
                     <ScrollView>
-                    <FormikProvider value={formik}>
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10, marginVertical: Platform.OS === "ios" ? 30 : 0, zIndex: 0 }}>
-                            <View style={{
-                                margin: 20,
-                                flex: 1,
-                                width: '100%'
-                            }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={{ color: 'black', fontSize: 20 }}>Add Team Details</Text>
-                                    <Pressable onPress={() => handleClose()} >
-                                        <Icon type="entypo" name="cross" color="black" size={35} />
-                                    </Pressable>
-                                </View>
-                                
+                        <FormikProvider value={formik}>
+                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10, marginVertical: Platform.OS === "ios" ? 30 : 0, zIndex: 0 }}>
                                 <View style={{
-                                    padding: 10
+                                    margin: 20,
+                                    flex: 1,
+                                    width: '100%'
                                 }}>
-                                    {user.userType ==="Job Work" ?
-                                    <View style={{ marginTop: 10 }}>
-                                        <View
-                                            style={Style.inputField}>
-                                            <Text style={Style.inputLabel}>Party Name</Text>
-                                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                <TextInput
-                                                    onChangeText={handleChange('partyName')}
-                                                    onBlur={() => { handleBlur('partyName') }}
-                                                    value={values.partyName}
-                                                    style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                    placeholderTextColor='gray'
-                                                    placeholder='Enter Party Name'
-                                                    editable={false}
-                                                />
-
-                                            </View>
-                                        </View>
-                                        {errors.partyName && touched.partyName &&
-                                            <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.partyName}</Text>
-                                        }
-                                    </View>:
-                                    <View style={{ marginTop: 10 }}>
-                                    <View
-                                        style={Style.inputField}>
-                                        <Text style={Style.inputLabel}>Select Party</Text>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <SelectDropdown
-                                                data={[...jobWorks]}
-                                                onSelect={(selectedItem) => {
-                                                    console.log(selectedItem, 'selecteditem');
-                                                    setFieldValue('useruid', selectedItem.id)
-                                                    setFieldValue('partyName', selectedItem.partyName)
-                                                    setFieldValue('workType', selectedItem.workType)
-                                                    setFieldValue('price', selectedItem.price)
-                                                }}
-                                                buttonTextAfterSelection={(selectedItem: any, index: number) => {
-                                                    return `${selectedItem?.partyName} `
-                                                }}
-                                                rowTextForSelection={(item: any, index: number) => {
-                                                    return `${item.partyName}- ${item?.workType}`;
-                                                }}
-                                                buttonStyle={{ backgroundColor: 'transparent' ,width:'100%'}}
-                                                defaultButtonText='Select Party Name'
-                                                buttonTextStyle={{ textAlign: 'left', marginLeft: -6 }}
-                                                dropdownStyle={{ width: '80%', borderRadius: 10 }}
-                                                defaultValue={jobWorks.find((job:any) => job.id === values.useruid)}
-                                            />
-
-                                        </View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <Text style={{ color: 'black', fontSize: 20 }}>Add Team Details</Text>
+                                        <Pressable onPress={() => handleClose()} >
+                                            <Icon type="entypo" name="cross" color="black" size={35} />
+                                        </Pressable>
                                     </View>
 
-                                </View>}
-                                    <View style={{ marginTop: 15 }}>
-                                        <View
-                                            style={Style.inputField}>
-                                            <Text style={Style.inputLabel}>Work Type</Text>
-                                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                <TextInput
-                                                    onChangeText={handleChange('workType')}
-                                                    onBlur={() => { handleBlur('workType') }}
-                                                    value={values.workType}
-                                                    style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                    placeholderTextColor='gray'
-                                                    placeholder='Enter work Type'
-                                                    editable={false}
-                                                />
+                                    <View style={{
+                                        padding: 10
+                                    }}>
+                                        {user.userType === "Job Work" ?
+                                            <View style={{ marginTop: 10 }}>
+                                                <View
+                                                    style={Style.inputField}>
+                                                    <Text style={Style.inputLabel}>Party Name</Text>
+                                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                                        <TextInput
+                                                            onChangeText={handleChange('partyName')}
+                                                            onBlur={() => { handleBlur('partyName') }}
+                                                            value={values.partyName}
+                                                            style={{ flex: 1, fontSize: 16, color: '#000' }}
+                                                            placeholderTextColor='gray'
+                                                            placeholder='Enter Party Name'
+                                                            editable={false}
+                                                        />
 
-                                            </View>
-                                        </View>
-                                        {errors.workType && touched.workType &&
-                                            <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.workType}</Text>
-                                        }
-                                    </View>
-                                    <View style={{ marginTop: 15 }}>
-                                        <View
-                                            style={Style.inputField}>
-                                            <Text style={Style.inputLabel}>Team Name</Text>
-                                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                <TextInput
-                                                    onChangeText={handleChange('teamName')}
-                                                    onBlur={() => { handleBlur('teamName') }}
-                                                    value={values.teamName}
-                                                    style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                    placeholderTextColor='gray'
-                                                    placeholder='Enter team name'
-                                                />
-
-                                            </View>
-                                        </View>
-                                        {errors.teamName && touched.teamName &&
-                                            <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.teamName}</Text>
-                                        }
-                                    </View>
-                                    <View style={{ marginTop: 10 }}>
-                                        <FieldArray name="teamPersonName">
-                                            {({ replace, remove, push }) => (
-                                                <View>
-                                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                                        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Team Person Name</Text>
-                                                        <Pressable onPress={() => push({
-                                                            personName: ''
-                                                        })}>
-                                                            <Icon type="feather" name="plus" color="blue" size={25} />
-                                                        </Pressable>
                                                     </View>
-                                                    {values.teamPersonName?.length > 0 &&
-                                                        values.teamPersonName.map((person: any, i: any) => (
-                                                            <View key={i} style={[{
-                                                                borderRadius: 10,
-                                                                width: '100%',
-                                                                // marginVertical: 10,
-                                                            }, { borderWidth: 0.5, borderColor: 'lightgray', padding: 5, marginVertical: 5 }]}>
-                                                                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                                                                    <Pressable onPress={() => remove(i)} >
-                                                                        <Icon type="entypo" name="cross" color="black" size={25} />
-                                                                    </Pressable>
-                                                                </View>
-                                                                <View>
+                                                </View>
+                                                {errors.partyName && touched.partyName &&
+                                                    <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.partyName}</Text>
+                                                }
+                                            </View> :
+                                            <View style={{ marginTop: 10 }}>
+                                                <View
+                                                    style={Style.inputField}>
+                                                    <Text style={Style.inputLabel}>Select Party</Text>
+                                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                                        <SelectDropdown
+                                                            data={[...jobWorks]}
+                                                            onSelect={(selectedItem) => {
+                                                                console.log(selectedItem, 'selecteditem');
+                                                                setFieldValue('useruid', selectedItem.id)
+                                                                setFieldValue('partyName', selectedItem.partyName)
+                                                                setFieldValue('workType', selectedItem.workType)
+                                                                setFieldValue('price', selectedItem.price)
+                                                            }}
+                                                            buttonTextAfterSelection={(selectedItem: any, index: number) => {
+                                                                return `${selectedItem?.partyName} `
+                                                            }}
+                                                            rowTextForSelection={(item: any, index: number) => {
+                                                                return `${item.partyName}- ${item?.workType}`;
+                                                            }}
+                                                            buttonStyle={{ backgroundColor: 'transparent', width: '90%' }}
+                                                            defaultButtonText='Select Party Name'
+                                                            buttonTextStyle={{ textAlign: 'right', marginLeft: -6 }}
+                                                            dropdownStyle={{ width: '80%', borderRadius: 10 }}
+                                                            defaultValue={jobWorks.find((job: any) => job.id === values.useruid)}
+                                                        />
 
-                                                                    <View style={{ marginTop: 15 }}>
-                                                                        <View
-                                                                            style={Style.inputField}>
-                                                                            <Text style={Style.inputLabel}>Person Name</Text>
-                                                                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                                                <TextInput
-                                                                                    onChangeText={(text) => {
-                                                                                        replace(i, { ...person, personName: text })
-                                                                                    }}
-                                                                                    value={person.personName}
-                                                                                    style={{ flex: 1, fontSize: 16, color: '#000' }}
-                                                                                    placeholderTextColor='gray'
-                                                                                    placeholder='Enter person Name'
-                                                                                />
+                                                    </View>
+                                                </View>
 
-                                                                            </View>
-                                                                        </View>
-                                                                        {errors.teamPersonName && errors.teamPersonName[i] && touched.teamPersonName && touched.teamPersonName[i] &&
-                                                                            <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.teamPersonName[i].personName}</Text>
-                                                                        }
-                                                                    </View>
-
-
-                                                                </View>
-                                                            </View>
-                                                        ))
-                                                    }
+                                            </View>}
+                                        <View style={{ marginTop: 15 }}>
+                                            <View
+                                                style={Style.inputField}>
+                                                <Text style={Style.inputLabel}>Work Type</Text>
+                                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                                    <TextInput
+                                                        onChangeText={handleChange('workType')}
+                                                        onBlur={() => { handleBlur('workType') }}
+                                                        value={values.workType}
+                                                        style={{ textAlign: 'right', fontSize: 16, color: '#000' }}
+                                                        placeholderTextColor='gray'
+                                                        placeholder='Enter work Type'
+                                                        editable={false}
+                                                    />
 
                                                 </View>
-                                            )}
-                                        </FieldArray>
+                                            </View>
+                                            {errors.workType && touched.workType &&
+                                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.workType}</Text>
+                                            }
+                                        </View>
+                                        <View style={{ marginTop: 15 }}>
+                                            <View
+                                                style={Style.inputField}>
+                                                <Text style={Style.inputLabel}>Team Name</Text>
+                                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                                    <TextInput
+                                                        onChangeText={handleChange('teamName')}
+                                                        onBlur={() => { handleBlur('teamName') }}
+                                                        value={values.teamName}
+                                                        style={{ textAlign: 'right', fontSize: 16, color: '#000' }}
+                                                        placeholderTextColor='gray'
+                                                        placeholder='Enter team name'
+                                                    />
+
+                                                </View>
+                                            </View>
+                                            {errors.teamName && touched.teamName &&
+                                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.teamName}</Text>
+                                            }
+                                        </View>
+                                        <View style={{ marginTop: 10 }}>
+                                            <FieldArray name="teamPersonName">
+                                                {({ replace, remove, push }) => (
+                                                    <View>
+                                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Team Person Name</Text>
+                                                            <Pressable onPress={() => push({
+                                                                personName: ''
+                                                            })}>
+                                                                <Icon type="feather" name="plus" color="blue" size={25} />
+                                                            </Pressable>
+                                                        </View>
+                                                        {values.teamPersonName?.length > 0 &&
+                                                            values.teamPersonName.map((person: any, i: any) => (
+                                                                <View key={i} style={[{
+                                                                    borderRadius: 10,
+                                                                    width: '100%',
+                                                                    // marginVertical: 10,
+                                                                }, { borderWidth: 0.5, borderColor: 'lightgray', padding: 5, marginVertical: 5 }]}>
+                                                                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                                        <Pressable onPress={() => remove(i)} >
+                                                                            <Icon type="entypo" name="cross" color="black" size={25} />
+                                                                        </Pressable>
+                                                                    </View>
+                                                                    <View>
+
+                                                                        <View style={{ marginTop: 15 }}>
+                                                                            <View
+                                                                                style={Style.inputField}>
+                                                                                <Text style={Style.inputLabel}>Person Name</Text>
+                                                                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                                                                    <TextInput
+                                                                                        onChangeText={(text) => {
+                                                                                            replace(i, { ...person, personName: text })
+                                                                                        }}
+                                                                                        value={person.personName}
+                                                                                        style={{ textAlign: 'right', fontSize: 16, color: '#000' }}
+                                                                                        placeholderTextColor='gray'
+                                                                                        placeholder='Enter person Name'
+                                                                                    />
+
+                                                                                </View>
+                                                                            </View>
+                                                                            {errors.teamPersonName && errors.teamPersonName[i] && touched.teamPersonName && touched.teamPersonName[i] &&
+                                                                                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>{errors.teamPersonName[i].personName}</Text>
+                                                                            }
+                                                                        </View>
+
+
+                                                                    </View>
+                                                                </View>
+                                                            ))
+                                                        }
+
+                                                    </View>
+                                                )}
+                                            </FieldArray>
+                                        </View>
+                                        <Pressable style={GlobalStyle.button} onPress={() => handleSubmit()}>
+                                            <Text style={GlobalStyle.btntext}>{update ? 'Update' : 'Submit'}</Text>
+                                        </Pressable>
                                     </View>
-                                    <Pressable style={GlobalStyle.button} onPress={() => handleSubmit()}>
-                                        <Text style={GlobalStyle.btntext}>{update ? 'Update' : 'Submit'}</Text>
-                                    </Pressable>
                                 </View>
                             </View>
-                        </View>
-                    </FormikProvider>
+                        </FormikProvider>
                     </ScrollView>
                 </Modal>}
         </>
@@ -368,10 +368,14 @@ const [team,setTeam]=useState<any>([])
 const Style = StyleSheet.create({
     cardContainer: { marginBottom: 0 },
     inputField: {
-        backgroundColor: '#F9F9F9',
+        display: 'flex',
+        backgroundColor: "#F9F9F9",
         borderRadius: 15,
         fontSize: 16,
-        padding: 10,
+        padding: 5,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
     inputLabel: { color: '#05E3D5', fontSize: 14 },
     partyName: {

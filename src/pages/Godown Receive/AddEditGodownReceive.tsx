@@ -10,7 +10,9 @@ import { RootState } from '../../redux/store';
 import Icon from 'react-native-easy-icon';
 import fs, { touch } from "react-native-fs";
 
+
 import ImageUploadScreen from '../../components/imageUpload/ImageUploadScreen';
+import DatePicker from 'react-native-date-picker';
 
 interface InitialFormValues {
     challanNo: string
@@ -36,6 +38,7 @@ const AddEditGodownReceive = ({ navigation }: any) => {
     const [carrierPersons, setCarrierPersons] = useState<any>([]);
     const [selectedImage, setSelectedImage] = useState<any>();
     const [iscamaraModalVisibleMaterial, setIscamaraModalVisibleMaterial] = useState(false);
+    const [datePickerVisible, setDatePickerVisible] = useState(false);
 
     const closeImage = () => {
         setSelectedImage(null);
@@ -53,6 +56,10 @@ const AddEditGodownReceive = ({ navigation }: any) => {
         fs.readFile(selectedImage.uri, "base64").then((imgRes) => {
             setFieldValue("cardImg", `data:image/jpeg;base64,${imgRes}`);
         });
+    };
+    const handleDateChange = (date: any) => {
+        setFieldValue("date", date);
+        setDatePickerVisible(false);
     };
     const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
         {
@@ -143,12 +150,12 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                                 }}
                                 buttonStyle={{
                                     backgroundColor: "transparent",
-                                    width: "85%",
+                                    width: "60%",
                                     height: 30,
                                 }}
                                 defaultButtonText="Select Challan Number"
                                 buttonTextStyle={{
-                                    marginRight: 0
+                                    textAlign: 'right'
                                 }}
                                 dropdownStyle={{ width: "60%", borderRadius: 10 }}
                             // defaultValue={null}
@@ -160,7 +167,7 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                             </Text>
                         )}
                     </View>
-                    <View style={[styles.inputField,{marginTop:15}]}>
+                    <View style={[styles.inputField, { marginTop: 15 }]}>
                         <Text style={styles.inputLabel}>Select Design Number</Text>
                         <SelectDropdown
                             data={[...designsMaster]}
@@ -182,12 +189,12 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                             }}
                             buttonStyle={{
                                 backgroundColor: "transparent",
-                                width: "70%",
+                                width: "60%",
                                 height: 30,
                             }}
                             defaultButtonText="Select Design Number"
                             buttonTextStyle={{
-                                marginRight: 10,
+                                textAlign: 'right'
                             }}
                             dropdownStyle={{ width: "60%", borderRadius: 10 }}
                             defaultValue={designsMaster.find(
@@ -207,23 +214,23 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                             >
                                 <Text
                                     style={{ width: "100%", fontSize: 14, color: "black" }}
-                                // onPress={() => openDatePicker()}
+                                    onPress={() => setDatePickerVisible(true)}
                                 >
                                     {values.date ? formatDate(values.date) : "Select Date"}
                                 </Text>
                             </View>
-                            {/* <DatePicker
-                  modal
-                  open={datePickerVisible}
-                  date={values.date || new Date()}
-                  mode="date"
-                  onConfirm={(date) => {
-                    handleDateChange(date);
-                  }}
-                  onCancel={() => {
-                    setDatePickerVisible(false);
-                  }}
-                /> */}
+                            <DatePicker
+                                modal
+                                open={datePickerVisible}
+                                date={values.date || new Date()}
+                                mode="date"
+                                onConfirm={(date) => {
+                                    handleDateChange(date);
+                                }}
+                                onCancel={() => {
+                                    setDatePickerVisible(false);
+                                }}
+                            />
                         </View>
                         {errors.date && touched.date && (
                             <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
@@ -241,12 +248,12 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                                 }}
                                 buttonStyle={{
                                     backgroundColor: "transparent",
-                                    width: "80%",
+                                    width: "70%",
                                     height: 30,
                                 }}
                                 buttonTextStyle={{
-                                    // textAlign: "right",
-                                    marginRight: 0
+                                    textAlign: "right",
+
                                 }}
                                 defaultButtonText="Select Challan Type"
                                 dropdownStyle={{ borderRadius: 10, width: '60%' }}
@@ -280,13 +287,13 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                                 }}
                                 buttonStyle={{
                                     backgroundColor: "transparent",
-                                    width: "85%",
+                                    width: "70%",
                                     height: 30,
                                 }}
                                 defaultButtonText="Select Party Name"
                                 buttonTextStyle={{
-                                    // textAlign: "right",
-                                    marginRight: 0
+                                    textAlign: "right",
+                                    // marginRight: 0
                                 }}
                                 dropdownStyle={{ width: "60%", borderRadius: 10 }}
                                 defaultValue={partyMaster.find(
@@ -300,8 +307,8 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                             </Text>
                         )}
                     </View>
-              
-                    <View style={{ marginTop: 10}}>
+
+                    <View style={{ marginTop: 10 }}>
                         <View style={styles.inputField}>
                             <Text style={styles.inputLabel}>Item Name</Text>
                             <View
@@ -316,7 +323,7 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                                         handleBlur("itemName");
                                     }}
                                     value={values.itemName}
-                                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0 }}
+                                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0, textAlign: 'right' }}
                                     placeholderTextColor="gray"
                                     placeholder="Enter Item Name"
                                 />
@@ -343,7 +350,7 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                                         handleBlur("piece");
                                     }}
                                     value={values.piece}
-                                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0 }}
+                                    style={{ flex: 1, fontSize: 16, color: "#000", padding: 0, textAlign: 'right' }}
                                     placeholderTextColor="gray"
                                     placeholder="Enter Number of piece"
                                 />
@@ -384,11 +391,11 @@ const AddEditGodownReceive = ({ navigation }: any) => {
                                     }}
                                     buttonStyle={{
                                         backgroundColor: "transparent",
-                                        width: "100%",
+                                        width: "70%",
                                         height: 30,
                                     }}
                                     defaultButtonText="Select Carrier Person"
-                                    buttonTextStyle={{ marginRight: 10 }}
+                                    buttonTextStyle={{ textAlign: 'right' }}
                                     dropdownStyle={{ width: "80%", borderRadius: 10 }}
                                     defaultValue={carrierPersons.find(
                                         (person: any) =>
