@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../redux/action/User/userSlice";
@@ -23,7 +24,15 @@ const DrawerView = ({ navigation, state }: any) => {
   };
 
   const handleLogout = () => {
-    dispatch(setUser(null));
+    Alert.alert("Are you sure!", "Do you want to logout?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "Logout", onPress: () => dispatch(setUser(null)) },
+    ]);
+
   };
 
   const adminMenu = [
@@ -325,7 +334,7 @@ const DrawerView = ({ navigation, state }: any) => {
             case "jobwork":
               return (
                 <>
-                 <TouchableOpacity
+                  <TouchableOpacity
                     style={[
                       styles.drawerItem,
                       state.index === 0 && styles.activeDrawerItem,

@@ -30,15 +30,26 @@ const Login = ({ navigation }: any) => {
     })
     const onLogin = async (values: any) => {
         dispatch(setLoading(true));
-        signInWithPhoneNumber(values.phone).then((res: any) => {
-            setOtpSend(true)
-            setMobile(values.phone)
-            setConfirm(res)
+        const existingUser: any = await checkMobileNumberExists(values.phone);
+        if (existingUser) {
+            signInWithPhoneNumber(values.phone).then((res: any) => {
+                dispatch(setLoading(false))
+                if (res) {
+                    setOtpSend(true)
+                    setMobile(values.phone)
+                    setConfirm(res)
+                }
+                else
+                    dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+            }).catch((error) => {
+                console.error(error);
+                dispatch(setLoading(false))
+            })
+        }
+        else {
             dispatch(setLoading(false))
-        }).catch((error) => {
-            console.error(error);
-            dispatch(setLoading(false))
-        })
+            dispatch(setToast({ message: 'User does not exist, please contact admin!', isVisible: true, type: 'danger' }))
+        }
     }
     const onSubmit = async (values: any) => {
         try {
