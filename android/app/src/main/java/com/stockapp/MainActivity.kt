@@ -1,4 +1,4 @@
-package com.stockapp
+package com.stock.app
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

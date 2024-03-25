@@ -17,7 +17,7 @@ import {
 } from "react-native";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AuthNavigator from "./src/navigator/AuthNavigator";
 import SideMenuNavigator from "./src/navigator/SideMenuNavigator";
 import CreateChallan from "./src/pages/Carrier Challan/CreateChallan";
@@ -25,31 +25,46 @@ import CreateSampleDesign from "./src/pages/Design master/CreateSampleDesign";
 import ViewDesignByPartyName from "./src/pages/Design master/ViewDesignByPartyName";
 import ViewDesignDetails from "./src/pages/Design master/ViewDesignDetails";
 import { RootState } from "./src/redux/store";
+import Toast from "./src/components/Toast/toast";
+import { setToast } from "./src/redux/action/Ui/Uislice";
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
 function App(): React.JSX.Element {
+  const dispatch = useDispatch();
+
   const Stack = createNativeStackNavigator();
-  const user = useSelector((state: RootState) => state.user);
-  const { isLoading } = useSelector((state: RootState) => state.ui);
+  const {user} = useSelector((state: RootState) => state.user);
+  const { isLoading, toast } = useSelector((state: RootState) => state.ui);
   const [isLoggedIn, setIsLogged] = useState(false);
   useEffect(() => {
-    if (user?.user) {
+    console.log('user', user);
+    if (user) {
       setIsLogged(true);
     } else {
       setIsLogged(false);
     }
   }, [user]);
+  useEffect(() => {
+    dispatch(setToast({ message: 'Welcome Back', isVisible: true, type: 'success' }))
+  }, [])
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      {
+        toast?.isVisible &&
+        <Toast
+          message={toast.message}
+          visible={toast.isVisible}
+          type={toast.type}
+        />}
       {isLoading && (
         <View style={[styles.container, styles.horizontal]}>
           <ActivityIndicator size={"large"} />
         </View>
       )}
-      <View style={{ height: "100%", backgroundColor: "#fff" }}>
+      {/* <View style={{ height: "100%", backgroundColor: "#fff" }}> */}
         <NavigationContainer theme={DefaultTheme}>
           {isLoggedIn ? (
             // <SideMenuNavigator />
@@ -100,7 +115,7 @@ function App(): React.JSX.Element {
             </Stack.Navigator>
           )}
         </NavigationContainer>
-      </View>
+      {/* </View> */}
     </SafeAreaView>
   );
 }

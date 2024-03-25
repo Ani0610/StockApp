@@ -20,7 +20,6 @@ const userMasterSlice = createSlice({
         deleteUsers: (state: any, action) => {
             state.userMaster = state.userMaster.filter((item: any) => item.useruid !== action.payload.useruid)
         },
-
     }
 })
 export const { setUsers, addUsers, editUsers, deleteUsers } = userMasterSlice.actions;

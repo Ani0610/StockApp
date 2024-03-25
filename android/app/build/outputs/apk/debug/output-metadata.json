@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.stockapp",
+  "applicationId": "com.stock.app",
   "variantName": "debug",
   "elements": [
     {

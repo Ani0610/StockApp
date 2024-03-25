@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.stockapp-mergeDebugResources-36:/values-nn/values-nn.xml",
+            "outputFile": "com.stock.app-mergeDebugResources-42:/values-nn/values-nn.xml",
             "map": [
                 {
                     "source": "D:\\Skyban work\\Projects\\React-Native\\StockApp\\node_modules\\react-native-date-picker\\android\\build\\intermediates\\packaged_res\\debug\\values-nn\\values-nn.xml",

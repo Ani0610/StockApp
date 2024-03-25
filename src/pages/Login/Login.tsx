@@ -7,11 +7,15 @@ import Icon from 'react-native-easy-icon'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import { setUser } from '../../redux/action/User/userSlice'
+import { checkMobileNumberExists, signInWithPhoneNumber } from '../../services/auth/auth.service'
+import { setLoading, setToast } from '../../redux/action/Ui/Uislice'
 
 
 const Login = ({ navigation }: any) => {
     const [isOtpsent, setOtpSend] = useState(false);
     const [mobile, setMobile] = useState("");
+    const [confirm, setConfirm]: any = useState();
+
     const { userMaster } = useSelector((state: RootState) => state.userMaster)
     const { jobWorks } = useSelector((state: RootState) => state.jobWorks)
     const dispatch = useDispatch()
@@ -25,22 +29,35 @@ const Login = ({ navigation }: any) => {
             .matches(/^\d{6}$/, 'OTP code must be six digits')
     })
     const onLogin = async (values: any) => {
-        setOtpSend(true)
-        setMobile(values.phone)
+        dispatch(setLoading(true));
+        signInWithPhoneNumber(values.phone).then((res: any) => {
+            setOtpSend(true)
+            setMobile(values.phone)
+            setConfirm(res)
+            dispatch(setLoading(false))
+        }).catch((error) => {
+            console.error(error);
+            dispatch(setLoading(false))
+        })
     }
     const onSubmit = async (values: any) => {
-        const existingUser: any = userMaster.find((user: any) => user.mobileNumber === mobile);
-        if (existingUser) {
-            if (existingUser.userType === "Job Work") {
-                const jobWork: any = jobWorks.find((job: any) => job.id === existingUser.useruid)
-                dispatch(setUser({ ...existingUser, partyName: jobWork.partyName, workType: jobWork.workType, price: jobWork.price }))
-
+        try {
+            await dispatch(setLoading(true));
+            await confirm.confirm(values.code);
+            const existingUser: any = await checkMobileNumberExists(mobile);
+            if (existingUser) {
+                console.log(existingUser, 'existingUser');
+                dispatch(setUser(existingUser[0]))
+                dispatch(setLoading(false))
+                dispatch(setToast({ message: 'Login Sucessful', isVisible: true, type: 'success' }))
             } else {
-                dispatch(setUser({ ...existingUser }))
-
+                dispatch(setLoading(false))
+                dispatch(setToast({ message: 'Login Sucessful', isVisible: true, type: 'success' }))
+                navigation.navigate('Register', { mobileNumber: mobile })
             }
-        } else {
-            navigation.navigate('Register', { mobileNumber: mobile })
+        } catch (error) {
+            dispatch(setLoading(false))
+            console.log('Invalid code.');
         }
         setOtpSend(false)
 

@@ -23,6 +23,8 @@ const DrawerStack = createDrawerNavigator();
 const SideMenuNavigator = ({ navigation }: any) => {
   const { user }: any = useSelector((state: RootState) => state.user);
 
+  console.log('user-------------',user?.userType);
+  
   return (
     <DrawerStack.Navigator
       drawerContent={(props) => <DrawerView {...props} />}
@@ -34,7 +36,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
     >
       {(() => {
         switch (user?.userType) {
-          case "Admin":
+          case "admin":
             return (
               <>
                 <DrawerStack.Screen
@@ -84,7 +86,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
 
               </>
             );
-          case "Godown":
+          case "godown":
             return (
               <>
                 <DrawerStack.Screen
@@ -119,7 +121,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
                 />
               </>
             );
-          case "Job Work":
+          case "jobwork":
             return (
               <>
                <DrawerStack.Screen
@@ -130,7 +132,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
                 <DrawerStack.Screen name="Team" component={JobWorkTeam} />
               </>
             );
-          case "Carrier":
+          case "carrier":
             return (
               <>
                 <DrawerStack.Screen name="Challan" component={Challan} />

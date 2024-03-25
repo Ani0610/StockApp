@@ -129,11 +129,11 @@ const DrawerView = ({ navigation, state }: any) => {
       <ScrollView style={styles.scrollContainer}>
         {(() => {
           switch (user?.userType) {
-            case "Admin":
+            case "admin":
               return (
                 <MenuCopomponent items={adminMenu} />
               );
-            case "Godown":
+            case "godown":
               return (
                 <>
                   <TouchableOpacity
@@ -322,7 +322,7 @@ const DrawerView = ({ navigation, state }: any) => {
                   </View>
                 </>
               );
-            case "Job Work":
+            case "jobwork":
               return (
                 <>
                  <TouchableOpacity
@@ -355,7 +355,7 @@ const DrawerView = ({ navigation, state }: any) => {
                   </TouchableOpacity>
                 </>
               );
-            case "Carrier":
+            case "carrier":
               return (
                 <>
                   <TouchableOpacity

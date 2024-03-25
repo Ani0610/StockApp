@@ -5,15 +5,19 @@ import { KeyboardAvoidingView, Platform, Pressable, SafeAreaView, ScrollView, St
 import * as yup from "yup"
 import { GlobalStyle } from '../../../globalStyle'
 import Icon from 'react-native-easy-icon'
-import SelectDropdown from 'react-native-select-dropdown';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../redux/action/User/userSlice';
+import { registerUser } from '../../services/auth/auth.service';
+import { setLoading, setToast } from '../../redux/action/Ui/Uislice';
+import Toast from '../../components/Toast/toast';
+import { RootState } from '../../redux/store';
 
 
 const Register = () => {
     const route = useRoute();
+
     const { mobileNumber } = route.params as { mobileNumber: string };
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const registerSchema = yup.object().shape({
         fullName: yup.string().required('First Name is required')
             .min(2, 'First name must be at least 2 characters long')
@@ -27,16 +31,23 @@ const Register = () => {
     })
     const onRegister = (values: any) => {
         console.log('values', { ...values, mobileNumber: mobileNumber });
-        if (values.userType === "Job Work") {
-            dispatch(setUser({ ...values, mobileNumber: mobileNumber, partyName: 'Aakash', workType: 'Stiching', price: 20 }))
-        } else {
-            dispatch(setUser({ ...values, mobileNumber: mobileNumber }))
-        }
+        dispatch(setLoading(true))
+        registerUser({ ...values, mobileNumber: mobileNumber }).then((res: any) => {
+            dispatch(setLoading(false))
+            if (res) {
+                dispatch(setUser(res))
+                dispatch(setToast({ message: 'User Register Successfully', isVisible: true, type: 'success' }))
+            }
+            else {
+                dispatch(setToast({ message: 'User already exist', isVisible: true, type: 'danger' }))
+            }
+        }).catch(err => console.error(err));
 
     }
     return (
         <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "height" : undefined}>
             <SafeAreaView style={GlobalStyle.safeAreaCotainer}>
+               
                 <StatusBar
                     backgroundColor="#fff"
                     barStyle="dark-content" // Here is where you change the font-color
@@ -51,7 +62,7 @@ const Register = () => {
                                 initialValues={{
                                     fullName: '',
                                     email: '',
-                                    userType: ''
+                                    userType: 'admin'
                                 }}
                                 validationSchema={registerSchema}
                                 onSubmit={values => onRegister(values)}
@@ -96,7 +107,7 @@ const Register = () => {
                                                 <Text style={GlobalStyle.errorMsg}>{errors.email}</Text>
                                             }
                                         </View>
-                                        <View style={[GlobalStyle.fieldwithIcon]}>
+                                        {/* <View style={[GlobalStyle.fieldwithIcon]}>
                                             <View style={{ marginRight: 10 }}>
                                                 <Icon type="feather" name="lock" color="gray" size={20} />
                                             </View>
@@ -112,12 +123,12 @@ const Register = () => {
                                                 dropdownStyle={{ width: '70%', borderRadius: 10 }}
                                                 defaultValue={''}
                                             />
-                                        </View>
-                                        <View style={{ marginBottom: 10 }}>
+                                        </View> */}
+                                        {/* <View style={{ marginBottom: 10 }}>
                                             {errors.userType && touched.userType &&
                                                 <Text style={GlobalStyle.errorMsg}>{errors.userType}</Text>
                                             }
-                                        </View>
+                                        </View> */}
                                         <Pressable style={GlobalStyle.button} onPress={() => handleSubmit()}>
                                             <Text style={GlobalStyle.btntext}>Create Account</Text>
                                         </Pressable>

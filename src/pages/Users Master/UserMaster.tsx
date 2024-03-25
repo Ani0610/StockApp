@@ -25,14 +25,18 @@ import {
   addUsers,
   deleteUsers,
   editUsers,
+  setUsers,
 } from "../../redux/action/User Master/userMasterSlice";
 import SearchableComponent from "../../components/Search/SearchComponent";
+import { checkMobileNumberExists, registerUser } from "../../services/auth/auth.service";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import { deleteExistingUsers, getUsers, updateUsers } from "../../services/user/user.service";
 var heightY = Dimensions.get("window").height;
 interface InitialFormValues {
   fullName: string;
   userType: string;
   mobileNumber: string;
-  useruid: undefined;
+  uid: string;
   partyName: string;
 }
 const UserMaster = () => {
@@ -42,10 +46,12 @@ const UserMaster = () => {
   const [isVisible, setisVisible] = useState(false);
   const { jobWorks } = useSelector((state: RootState) => state.jobWorks);
   const { userMaster } = useSelector((state: RootState) => state.userMaster);
+  const { user }: any = useSelector((state: RootState) => state.user);
+
   const [allUsers, setAllUsers] = useState<any>([]);
   const dispatch = useDispatch();
   const userMasterSchema = yup.object().shape({
-    fullName: yup.string().required("full Name is required"),
+    fullName: yup.string().required("Name is required"),
     userType: yup.string().required("User Type is required"),
     mobileNumber: yup
       .string()
@@ -58,11 +64,24 @@ const UserMaster = () => {
       fullName: "",
       userType: "",
       mobileNumber: "",
-      useruid: undefined,
+      uid: "",
       partyName: "",
     }
   );
+
   useEffect(() => {
+    dispatch(setLoading(true))
+    getUsers().then((res) => {
+      dispatch(setLoading(false))
+      if (res) {
+        let userLists = res.filter((data) => data.mobileNumber !== user?.mobileNumber)
+        dispatch(setUsers(userLists))
+      }
+    })
+  }, []);
+  useEffect(() => {
+    console.log('userMaster', userMaster);
+
     setAllUsers([...userMaster]);
   }, [userMaster]);
 
@@ -70,13 +89,19 @@ const UserMaster = () => {
     initialValues: initialFormValues,
     validationSchema: userMasterSchema,
     onSubmit: async (values: any) => {
-      const mobileExists = userMaster.some(
-        (user: any) => user.mobileNumber === values.mobileNumber
-      );
+      dispatch(setLoading(true))
       if (update) {
-        dispatch(editUsers({ ...values }));
+        updateUsers(values).then((res) => {
+          dispatch(setLoading(false))
+          if (res)
+            dispatch(editUsers({ ...values }));
+          else
+            dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+        })
       } else {
-        if (mobileExists) {
+        let isMobileExist = await checkMobileNumberExists(values.mobileNumber)
+        if (isMobileExist) {
+          dispatch(setLoading(false))
           Alert.alert("Error", "Mobile number already exists", [
             {
               text: "Cancel",
@@ -87,12 +112,15 @@ const UserMaster = () => {
           ]);
           return; // Do not submit the form
         }
-        if (values.useruid) {
-          dispatch(addUsers({ ...values }));
-        } else {
-          values.useruid = Math.floor(2000 + Math.random() * 6438);
-          dispatch(addUsers({ ...values }));
+
+        else {
+          let finalValues: any = { ...values, email: "" }
+          registerUser(finalValues).then((res) => {
+            if (res)
+              dispatch(addUsers({ ...res }));
+          })
         }
+        await dispatch(setLoading(false))
       }
       setShowModal(false);
       setUpdate(false);
@@ -127,14 +155,21 @@ const UserMaster = () => {
     setFieldValue("userType", data.userType);
     setFieldValue("fullName", data.fullName);
     setFieldValue("mobileNumber", data.mobileNumber);
-    setFieldValue("useruid", data.useruid);
+    setFieldValue("uid", data.uid);
     setUpdate(true);
     setisVisible(false);
     setShowModal(true);
   };
   const deleteUser = () => {
-    dispatch(deleteUsers(data));
-    setisVisible(false);
+    dispatch(setLoading(true))
+    deleteExistingUsers(data).then((res) => {
+      dispatch(setLoading(false))
+      if (res)
+        dispatch(deleteUsers(data));
+      else
+        dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+      setisVisible(false);
+    })
   };
   const handleFilter = (filteredData: any) => {
     console.log("Filtered Data:", filteredData);
@@ -425,7 +460,7 @@ const UserMaster = () => {
                       }}
                     >
                       <SelectDropdown
-                        data={["Carrier", "Job Work", "Godown"]}
+                        data={["carrier", "jobwork", "godown"]}
                         onSelect={(selectedItem) => {
                           setFieldValue("userType", selectedItem);
                         }}
@@ -448,7 +483,7 @@ const UserMaster = () => {
                     </Text>
                   )}
                 </View>
-                {values.userType === "Job Work" && (
+                {values.userType === "jobwork" && jobWorks?.length && (
                   <View style={{ marginTop: 15 }}>
                     <View style={Style.inputField}>
                       <Text style={Style.inputLabel}>Select Party</Text>
@@ -463,7 +498,7 @@ const UserMaster = () => {
                           data={[...jobWorks]}
                           onSelect={(selectedItem) => {
                             console.log(selectedItem, "selecteditem");
-                            setFieldValue("useruid", selectedItem.id);
+                            setFieldValue("uid", selectedItem.id);
                             setFieldValue("partyName", selectedItem.partyName);
                           }}
                           buttonTextAfterSelection={(
@@ -486,7 +521,7 @@ const UserMaster = () => {
                           }}
                           dropdownStyle={{ width: "80%", borderRadius: 10 }}
                           defaultValue={jobWorks.find(
-                            (job: any) => job.id === values.useruid
+                            (job: any) => job.id === values.uid
                           )}
                         />
                       </View>
