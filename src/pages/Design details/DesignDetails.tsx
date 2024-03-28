@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   Modal,
   Platform,
@@ -23,14 +24,17 @@ import {
   addDesign,
   deleteDesign,
   editDesign,
+  setDesign,
 } from "../../redux/action/DesignDetails/designSlice";
 import SearchableComponent from "../../components/Search/SearchComponent";
+import { addPapers, deletePaperByID, getPapers, updatePaper } from "../../services/master/master.service";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
 var heightY = Dimensions.get("window").height;
 
 interface InitialFormValues {
   mesurement: string;
   price: string;
-  id: undefined;
+  id: string;
 }
 
 const DesignDetails = () => {
@@ -49,7 +53,7 @@ const DesignDetails = () => {
     {
       mesurement: "",
       price: "",
-      id: undefined,
+      id: "",
     }
   );
   const formik = useFormik<InitialFormValues>({
@@ -57,10 +61,23 @@ const DesignDetails = () => {
     validationSchema: designSchema,
     onSubmit: async (values: any) => {
       if (update) {
-        dispatch(editDesign({ ...values }));
+        dispatch(setLoading(true))
+        updatePaper(values).then((res) => {
+          dispatch(setLoading(false))
+          if (res)
+            dispatch(editDesign({ ...values }));
+          else
+            dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+        })
       } else {
-        values.id = Math.floor(2000 + Math.random() * 9000);
-        dispatch(addDesign({ ...values }));
+        dispatch(setLoading(true));
+        addPapers(values).then((res) => {
+          dispatch(setLoading(false))
+          if (res)
+            dispatch(addDesign(res));
+          else
+            dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+        })
       }
       setShowModal(false);
       setUpdate(false);
@@ -85,6 +102,18 @@ const DesignDetails = () => {
   useEffect(() => {
     setAllDesign([...designs]);
   }, [designs]);
+  useEffect(() => {
+    dispatch(setLoading(true))
+    getPapers().then((res) => {
+      dispatch(setLoading(false))
+      if (res) {
+        dispatch(setDesign(res))
+      }
+      else {
+        dispatch(setToast({ message: 'No data Found', isVisible: true, type: 'danger' }))
+      }
+    })
+  }, []);
 
   const onClose = () => {
     setisVisible(false);
@@ -98,9 +127,29 @@ const DesignDetails = () => {
     setShowModal(true);
   };
   const deleteDesignDetails = () => {
-    dispatch(deleteDesign(data));
+    Alert.alert("Are you sure?", "You want to delete this?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "Yes", onPress: () => deletePaper(data)
+      },
+    ]);
     setisVisible(false);
   };
+  const deletePaper = (data: any) => {
+    dispatch(setLoading(true))
+    deletePaperByID(data).then((res) => {
+      dispatch(setLoading(false))
+      if (res)
+        dispatch(deleteDesign(data));
+      else
+        dispatch(setToast({ message: 'No data Found', isVisible: true, type: 'danger' }))
+
+    })
+  }
   const handleClose = () => {
     setShowModal(false);
     setUpdate(false);
@@ -303,7 +352,7 @@ const DesignDetails = () => {
                 }}
               >
                 <Text style={{ color: "black", fontSize: 20 }}>
-                  Add Design Details
+                  Add Paper Details
                 </Text>
                 <Pressable onPress={() => handleClose()}>
                   <Icon type="entypo" name="cross" color="black" size={35} />
@@ -364,6 +413,7 @@ const DesignDetails = () => {
                         style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter price per meter"
+                        keyboardType="numeric"
                       />
                     </View>
                   </View>

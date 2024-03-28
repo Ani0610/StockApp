@@ -38,7 +38,7 @@ const rootReducer = combineReducers({
   partyMaster: partyMasterReducer,
   ui: uiReducer,
   deliveredDesigns: deliveredDesignReducer,
-  categoryes: categoryReducer,
+  categories: categoryReducer,
 });
 
 const persistConfig = {
@@ -55,7 +55,7 @@ const persistConfig = {
     "designMaster",
     "partyMaster",
     "deliveredDesigns",
-    "categoryes",
+    "categories",
   ],
 };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   Modal,
   Platform,
@@ -24,12 +25,16 @@ import {
   addCategory,
   deleteCategory,
   editCategory,
+  setCategory,
 } from "../../redux/action/Category/categorySlice";
+import { addCategories, deleteCategoryByID, getCategories, updateCategory } from "../../services/master/master.service";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import { readFileAssets } from "react-native-fs";
 var heightY = Dimensions.get("window").height;
 
 interface InitialFormValues {
   category: string;
-  id: undefined;
+  id: string;
 }
 
 const CategoryMaster = () => {
@@ -38,15 +43,15 @@ const CategoryMaster = () => {
   const [data, setdata] = useState<any | null>(null); // Track the selected card's ID
   const [isVisible, setisVisible] = useState(false);
   const categorySchema = yup.object().shape({
-    category: yup.string().required("category is required"),
+    category: yup.string().required("Category is required"),
   });
-  const { categoryes } = useSelector((state: RootState) => state.categoryes);
+  const { categories } = useSelector((state: RootState) => state.categories);
   const [allcategorys, setAllcategorys] = useState<any>([]);
   const dispatch = useDispatch();
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
       category: "",
-      id: undefined,
+      id: "",
     }
   );
   const formik = useFormik<InitialFormValues>({
@@ -54,10 +59,24 @@ const CategoryMaster = () => {
     validationSchema: categorySchema,
     onSubmit: async (values: any) => {
       if (update) {
-        dispatch(editCategory({ ...values }));
+        dispatch(setLoading(true));
+        updateCategory(values).then((res) => {
+          dispatch(setLoading(false))
+          if (res)
+            dispatch(editCategory({ ...values }));
+          else
+            dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+        })
       } else {
-        values.id = Math.floor(2000 + Math.random() * 9000);
-        dispatch(addCategory({ ...values }));
+        dispatch(setLoading(true))
+        addCategories(values).then((res) => {
+          console.log('res categories-------------------', res);
+          dispatch(setLoading(false))
+          if (res)
+            dispatch(addCategory({ ...res }));
+          else
+            dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+        })
       }
       setShowModal(false);
       setUpdate(false);
@@ -80,13 +99,27 @@ const CategoryMaster = () => {
     setdata(item);
   };
   useEffect(() => {
-    setAllcategorys([...categoryes]);
-  }, [categoryes]);
+    setAllcategorys([...categories]);
+  }, [categories]);
+
+  useEffect(() => {
+    dispatch(setLoading(true))
+    getCategories().then((res) => {
+      dispatch(setLoading(false))
+      if (res) {
+        dispatch(setCategory(res))
+      } else {
+        dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+      }
+    })
+  }, [])
 
   const onClose = () => {
     setisVisible(false);
   };
   const editCategoryMaster = () => {
+    console.log('edit categoris', data);
+
     setFieldValue("category", data.category);
     setFieldValue("id", data.id);
     setUpdate(true);
@@ -94,8 +127,31 @@ const CategoryMaster = () => {
     setShowModal(true);
   };
   const deleteCategoryMaster = () => {
-    dispatch(deleteCategory(data));
-    setisVisible(false);
+    Alert.alert("Are you sure?", "You want to delete this?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "Yes", onPress: (() => {
+          setisVisible(false);
+          dispatch(setLoading(true))
+          deleteCategoryByID(data).then((res) => {
+            dispatch(setLoading(false))
+            setisVisible(false);
+            if (res) {
+              dispatch(deleteCategory(data));
+            }
+            else {
+              dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+
+            }
+          })
+        }
+        )
+      }
+    ]);
   };
   const handleClose = () => {
     setShowModal(false);
@@ -115,7 +171,7 @@ const CategoryMaster = () => {
         />
         <View style={{ paddingHorizontal: 15 }}>
           <SearchableComponent
-            data={categoryes}
+            data={categories}
             searchKey="category"
             placeholder={"category"}
             onFilter={handleFilter}

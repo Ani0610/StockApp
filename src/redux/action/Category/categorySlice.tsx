@@ -1,26 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  categoryes: [],
+  categories: [],
 };
 const categorySlice = createSlice({
   name: "SET_CATEGORY",
   initialState,
   reducers: {
     setCategory: (state: any, action) => {
-      state.categoryes = action.payload;
+      state.categories = action.payload;
     },
     addCategory: (state: any, action) => {
-      state.categoryes = [...state.categoryes, action.payload];
+      state.categories = [...state.categories, action.payload];
     },
     editCategory: (state: any, action) => {
-      const findIndex = state.categoryes.findIndex(
+      const findIndex = state.categories.findIndex(
         (item: any) => item.id === action.payload.id
       );
-      state.categoryes[findIndex] = action.payload;
+      state.categories[findIndex] = action.payload;
     },
     deleteCategory: (state: any, action) => {
-      state.categoryes = state.categoryes.filter(
+      state.categories = state.categories.filter(
         (item: any) => item.id !== action.payload.id
       );
     },

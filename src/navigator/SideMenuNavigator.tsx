@@ -51,6 +51,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
                 <DrawerStack.Screen
                   name="Design Details"
                   component={DesignDetails}
+                  options={{ title: 'Paper Master' }}
                 />
                 <DrawerStack.Screen
                   name="JobWork Details"

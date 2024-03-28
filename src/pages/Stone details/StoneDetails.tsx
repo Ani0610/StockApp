@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   Modal,
   Platform,
@@ -23,8 +24,11 @@ import {
   addStone,
   deleteStone,
   editStone,
+  setStone,
 } from "../../redux/action/StoneDetails/stoneSlice";
 import SearchableComponent from "../../components/Search/SearchComponent";
+import { addStones, deleteStoneByID, getStones, updateStone } from "../../services/master/master.service";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
 var heightY = Dimensions.get("window").height;
 
 interface InitialFormValues {
@@ -32,7 +36,7 @@ interface InitialFormValues {
   price: string;
   stonePerBag: string;
   pricePerStone: number;
-  id: undefined;
+  id: "";
 }
 const StoneDetails = () => {
   const [showModal, setShowModal] = useState(false);
@@ -53,25 +57,50 @@ const StoneDetails = () => {
       price: "",
       stonePerBag: "",
       pricePerStone: 0,
-      id: undefined,
+      id: "",
     }
   );
   useEffect(() => {
     setAllStone([...stone]);
   }, [stone]);
+  useEffect(() => {
+    dispatch(setLoading(true))
+    getStones().then((res) => {
+      dispatch(setLoading(false))
+      if (res) {
+        dispatch(setStone(res))
+      }
+      else {
+        dispatch(setToast({ message: 'No Data Found', isVisible: true, type: 'danger' }))
+      }
+    })
+  }, []);
 
   const formik = useFormik<InitialFormValues>({
     initialValues: initialFormValues,
     validationSchema: stoneSchema,
     onSubmit: async (values: any) => {
-      values.pricePerStone = Number(values.price / values.stonePerBag).toFixed(
-        2
-      );
+      values.pricePerStone = Number(values.price / values.stonePerBag).toFixed(2);
       if (update) {
+        updateStone(values).then((res) => {
+          dispatch(setLoading(false))
+          if (res) {
+            dispatch(editStone(values));
+          } else {
+            dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+          }
+        })
         dispatch(editStone({ ...values }));
       } else {
-        values.id = Math.floor(2000 + Math.random() * 9000);
-        dispatch(addStone({ ...values }));
+        dispatch(setLoading(true));
+        addStones(values).then((res) => {
+          dispatch(setLoading(false))
+          if (res) {
+            dispatch(addStone(res));
+          } else {
+            dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+          }
+        })
       }
       setShowModal(false);
       setUpdate(false);
@@ -107,9 +136,30 @@ const StoneDetails = () => {
     setShowModal(true);
   };
   const deleteStoneDetails = () => {
-    dispatch(deleteStone(data));
+    Alert.alert("Are you sure?", "You want to delete this?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "Yes", onPress: () => deleteStones(data)
+      },
+    ]);
     setisVisible(false);
   };
+  const deleteStones = (data: any) => {
+    dispatch(setLoading(true));
+    deleteStoneByID(data).then((res) => {
+      dispatch(setLoading(false))
+      if (res) {
+        dispatch(deleteStone(data));
+      }
+      else {
+        dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+      }
+    })
+  }
   const handleClose = () => {
     setShowModal(false);
     setUpdate(false);
