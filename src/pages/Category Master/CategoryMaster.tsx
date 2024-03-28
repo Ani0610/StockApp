@@ -118,7 +118,7 @@ const CategoryMaster = () => {
     setisVisible(false);
   };
   const editCategoryMaster = () => {
-    console.log('edit categoris', data);
+    console.log('edit categories', data);
 
     setFieldValue("category", data.category);
     setFieldValue("id", data.id);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   Modal,
   Platform,
@@ -30,13 +31,15 @@ import {
   editJobWork,
 } from "../../redux/action/Job Work details/jobDetailsSlice";
 import SearchableComponent from "../../components/Search/SearchComponent";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import { addJobWorks, deleteJobWorkById, updateJobWork } from "../../services/master/master.service";
 var heightY = Dimensions.get("window").height;
 interface InitialFormValues {
   partyName: string;
   workType: string;
   price: string;
   itemName: string;
-  id: undefined;
+  id: string;
 }
 const JobWorkDetails = () => {
   const [showModal, setShowModal] = useState(false);
@@ -57,7 +60,7 @@ const JobWorkDetails = () => {
       workType: "",
       price: "",
       itemName: "",
-      id: undefined,
+      id: "",
     }
   );
   useEffect(() => {
@@ -69,10 +72,32 @@ const JobWorkDetails = () => {
     validationSchema: jobWorksSchema,
     onSubmit: async (values: any) => {
       if (update) {
-        dispatch(editJobWork({ ...values }));
+        dispatch(setLoading(true));
+        updateJobWork(values).then((res) => {
+          dispatch(setLoading(false))
+
+          if (res)
+            dispatch(editJobWork({ ...values }));
+          else
+            dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+        })
+
+
       } else {
-        values.id = Math.floor(2000 + Math.random() * 9000);
-        dispatch(addJobWork({ ...values }));
+        dispatch(setLoading(true))
+        addJobWorks(values).then((res) => {
+          console.log('res jobwork-------------------', res);
+          dispatch(setLoading(false))
+          if (res)
+            dispatch(addJobWork({ ...res }));
+          else
+            dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+        })
+
+        setShowModal(false);
+        setUpdate(false);
+        resetForm();
+
       }
       setShowModal(false);
       setUpdate(false);
@@ -108,9 +133,33 @@ const JobWorkDetails = () => {
     setShowModal(true);
   };
   const deleteJobWorkDetails = () => {
-    dispatch(deleteJobWork(data));
-    setisVisible(false);
+    Alert.alert("Are you sure?", "You want to delete this?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "Yes", onPress: (() => {
+          setisVisible(false);
+          dispatch(setLoading(true))
+          deleteJobWorkById(data).then((res) => {
+            dispatch(setLoading(false))
+            setisVisible(false);
+            if (res) {
+              dispatch(deleteJobWork(data));
+            }
+            else {
+              dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+            }
+          })
+        })
+      }
+    ]);
   };
+
+
+
   const handleClose = () => {
     setShowModal(false);
     setUpdate(false);
@@ -465,6 +514,7 @@ const JobWorkDetails = () => {
                         style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
                         placeholder="Enter price per unit"
+                        keyboardType="number-pad"
                       />
                     </View>
                   </View>

@@ -35,7 +35,7 @@ interface InitialFormValues {
   address: string;
   contactNumber: string;
   gstNumber: string;
-  id: undefined;
+  id: string;
 }
 const PartyMaster = () => {
   const [showModal, setShowModal] = useState(false);
@@ -60,7 +60,7 @@ const PartyMaster = () => {
       address: "",
       contactNumber: "",
       gstNumber: "",
-      id: undefined,
+      id: "",
     }
   );
   useEffect(() => {
