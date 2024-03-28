@@ -26,6 +26,5 @@ package-lock.json
 
 #gradle
 /android/.gradle
-android/*
 /.gradle
 
