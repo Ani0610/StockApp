@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   Modal,
   Platform,
@@ -27,8 +28,11 @@ import {
 import SearchableComponent from "../../components/Search/SearchComponent";
 import {
   addPartyMaster,
+  deletePartyMasters,
   editpartyMaster,
 } from "../../redux/action/party master/PartymasterSlice";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import { addPartys, deletePaperByID, deletePartyById, updateParty } from "../../services/master/master.service";
 var heightY = Dimensions.get("window").height;
 interface InitialFormValues {
   partyName: string;
@@ -72,10 +76,32 @@ const PartyMaster = () => {
     validationSchema: partyMasterSchema,
     onSubmit: async (values: any) => {
       if (update) {
-        dispatch(editpartyMaster({ ...values }));
+        dispatch(setLoading(true));
+        updateParty(values).then((res) => {
+          dispatch(setLoading(false))
+
+          if (res)
+            dispatch(editpartyMaster({ ...values }));
+          else
+            dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+        })
+
+
       } else {
-        values.id = Math.floor(2000 + Math.random() * 9000);
-        dispatch(addPartyMaster({ ...values }));
+        dispatch(setLoading(true))
+        addPartys(values).then((res) => {
+          console.log('res party-------------------', res);
+          dispatch(setLoading(false))
+          if (res)
+            dispatch(addPartyMaster({ ...res }));
+          else
+            dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+        })
+
+        setShowModal(false);
+        setUpdate(false);
+        resetForm();
+
       }
       setShowModal(false);
       setUpdate(false);
@@ -111,9 +137,33 @@ const PartyMaster = () => {
     setShowModal(true);
   };
   const deletePartyMaster = () => {
-    dispatch(deleteJobWork(data));
-    setisVisible(false);
+    Alert.alert("Are you sure?", "You want to delete this?", [
+      {
+        text: 'Cancel',
+        onPress: () => console.log("Cancel Pressed"),
+        style: 'cancel',
+
+      },
+      {
+        text: "Yes",
+        onPress: (() => {
+          setisVisible(false);
+          dispatch(setLoading(true))
+          deletePartyById(data).then((res) => {
+            dispatch(setLoading(false))
+            setisVisible(false);
+            if (res) {
+              dispatch(deletePartyMasters(data));
+            }
+            else {
+              dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+            }
+          })
+        })
+      }
+    ])
   };
+
   const handleClose = () => {
     setShowModal(false);
     setUpdate(false);
@@ -507,3 +557,7 @@ const Style = StyleSheet.create({
   },
 });
 export default PartyMaster;
+function deleteParty(data: any): any {
+  throw new Error("Function not implemented.");
+}
+

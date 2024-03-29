@@ -19,7 +19,7 @@ const partyMasterSlice = createSlice({
       );
       state.partyMaster[findIndex] = action.payload;
     },
-    deletePartyMaster: (state: any, action) => {
+    deletePartyMasters: (state: any, action) => {
       state.partyMaster = state.partyMaster.filter(
         (item: any) => item.id !== action.payload.id
       );
@@ -30,7 +30,7 @@ export const {
   setPartyMaster,
   addPartyMaster,
   editpartyMaster,
-  deletePartyMaster,
+  deletePartyMasters,
 } = partyMasterSlice.actions;
 
 const partyMasterReducer = partyMasterSlice.reducer;
