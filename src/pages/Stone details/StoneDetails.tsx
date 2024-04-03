@@ -206,9 +206,9 @@ const StoneDetails = () => {
                 >
                   <View style={GlobalStyle.leftSide}>
                     <Text style={GlobalStyle.label}>Stone Type</Text>
-                    <Text style={GlobalStyle.label}>Stones Per Bag</Text>
-                    <Text style={GlobalStyle.label}>Price Per Bag</Text>
-                    <Text style={GlobalStyle.label}>Price Per Stone</Text>
+                    <Text style={GlobalStyle.label}>Stones/Bag</Text>
+                    <Text style={GlobalStyle.label}>Price/Bag</Text>
+                    <Text style={GlobalStyle.label}>Price/Stone</Text>
                   </View>
                   <View style={GlobalStyle.middleSide}>
                     <Text

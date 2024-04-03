@@ -183,10 +183,10 @@ const StoneStock = () => {
                 >
                   <View style={GlobalStyle.leftSide}>
                     <Text style={GlobalStyle.label}>Stone Type</Text>
-                    <Text style={GlobalStyle.label}>Stone Per Bag</Text>
-                    <Text style={GlobalStyle.label}>Price Per Bag</Text>
-                    <Text style={GlobalStyle.label}>Price Per Stone</Text>
-                    <Text style={GlobalStyle.label}>Stone Stock</Text>
+                    <Text style={GlobalStyle.label}>Stone/Bag</Text>
+                    <Text style={GlobalStyle.label}>Price/Bag</Text>
+                    <Text style={GlobalStyle.label}>Price/Stone</Text>
+                    <Text style={GlobalStyle.label}>Available Stock</Text>
                   </View>
                   <View style={GlobalStyle.middleSide}>
                     <Text
