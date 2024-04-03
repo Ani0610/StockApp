@@ -24,8 +24,11 @@ import SelectDropdown from "react-native-select-dropdown";
 import {
   addStonestock,
   editstoneStock,
+  setStoneStock,
 } from "../../redux/action/Stone Stock/stoneStock";
 import SearchableComponent from "../../components/Search/SearchComponent";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import { getStones, updateStone } from "../../services/master/master.service";
 var heightY = Dimensions.get("window").height;
 
 interface InitialFormValues {
@@ -33,9 +36,9 @@ interface InitialFormValues {
   price: string;
   stonePerBag: string;
   pricePerStone: number;
-  avilablestone: number;
+  availableStock: number;
   totalBags: string;
-  id: undefined;
+  id: string;
 }
 const StoneStock = () => {
   const [showModal, setShowModal] = useState(false);
@@ -53,33 +56,53 @@ const StoneStock = () => {
   const dispatch = useDispatch();
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
+      id: "",
       stoneType: "",
       price: "",
       stonePerBag: "",
       pricePerStone: 0,
-      avilablestone: 0,
+      availableStock: 0,
       totalBags: "",
-      id: undefined,
     }
   );
   useEffect(() => {
     setAllstoneStock([...stoneStock]);
   }, [stoneStock]);
 
+  useEffect(() => {
+    dispatch(setLoading(true))
+    getStones().then((res) => {
+      dispatch(setLoading(false))
+      if (res) {
+        dispatch(setStoneStock(res))
+      }
+      else {
+        dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+      }
+    })
+  }, [stone])
+
   const formik = useFormik<InitialFormValues>({
     initialValues: initialFormValues,
     validationSchema: stoneSchema,
     onSubmit: async (values: any) => {
-      values.avilablestone = Number(values.stonePerBag * values.totalBags);
-      if (update) {
-        dispatch(editstoneStock({ ...values }));
-      } else {
-        values.id = Math.floor(2000 + Math.random() * 9000);
-        dispatch(addStonestock({ ...values }));
-      }
-      setShowModal(false);
-      setUpdate(false);
-      resetForm();
+      values.availableStock = (values.availableStock ? values.availableStock : 0) + Number(values.stonePerBag * values.totalBags);
+      console.log('values---------------', values.availableStock);
+      dispatch(setLoading(true))
+      updateStone(values).then((res) => {
+        if (res) {
+          dispatch(editstoneStock({ ...values }));
+        }
+        else {
+          dispatch(dispatch(setToast({ message: 'No Data Found', isVisible: true, type: 'danger' }))
+          )
+        }
+      }).finally(() => {
+        setShowModal(false);
+        setUpdate(false);
+        resetForm();
+        dispatch(setLoading(false))
+      })
     },
   });
   const {
@@ -104,7 +127,7 @@ const StoneStock = () => {
     setFieldValue("stoneType", data.stoneType);
     setFieldValue("stonePerBag", data.stonePerBag);
     setFieldValue("pricePerStone", data.pricePerStone);
-    setFieldValue("avilablestone", data.avilablestone);
+    setFieldValue("availableStock", data.availableStock);
     setFieldValue("totalBags", data.totalBags);
     setFieldValue("price", data.price);
     setFieldValue("id", data.id);
@@ -199,7 +222,7 @@ const StoneStock = () => {
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.avilablestone}
+                      {item.availableStock}
                     </Text>
                   </View>
                   <View style={GlobalStyle.rightSide}>
@@ -366,10 +389,11 @@ const StoneStock = () => {
                       }}
                     >
                       <SelectDropdown
-                        data={[...stone]}
+                        data={[...stoneStock]}
                         onSelect={(selectedItem) => {
-                          console.log(selectedItem, "selected item");
                           setFieldValue("stoneType", selectedItem.stoneType);
+                          setFieldValue("id", selectedItem.id);
+                          setFieldValue("availableStock", selectedItem.availableStock)
                           setFieldValue(
                             "stonePerBag",
                             selectedItem.stonePerBag
@@ -396,7 +420,7 @@ const StoneStock = () => {
                         defaultButtonText="Select stone Type"
                         buttonTextStyle={{ textAlign: "right" }}
                         dropdownStyle={{ width: "80%", borderRadius: 10 }}
-                        defaultValue={stone.find(
+                        defaultValue={stoneStock.find(
                           (st: any) => st.stoneType === values.stoneType
                         )}
                       />
@@ -455,6 +479,7 @@ const StoneStock = () => {
                         onBlur={() => {
                           handleBlur("stonePerBag");
                         }}
+                        editable={false}
                         value={values.stonePerBag}
                         style={{ textAlign: 'right', fontSize: 16, color: "#000" }}
                         placeholderTextColor="gray"
