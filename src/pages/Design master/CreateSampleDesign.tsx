@@ -69,7 +69,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   const [sampleimg, setSampleimg] = useState<any>();
   const [selectedImage, setSelectedImage] = useState<any>(false);
   const { partyMaster } = useSelector((state: RootState) => state.partyMaster);
-  const { categoryes } = useSelector((state: RootState) => state.categoryes);
+  const { categories } = useSelector((state: RootState) => state.categories);
 
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
@@ -438,8 +438,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       "grandTotal",
       Number(
         Number(values.total) +
-          Number(totalProfitRupee) +
-          Number(values.discountRupee)
+        Number(totalProfitRupee) +
+        Number(values.discountRupee)
       ).toFixed(2)
     );
   };
@@ -451,8 +451,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       "grandTotal",
       Number(
         Number(values.total) +
-          Number(totalDiscountRupee) +
-          Number(values.profitRupee)
+        Number(totalDiscountRupee) +
+        Number(values.profitRupee)
       ).toFixed(2)
     );
   };
@@ -575,7 +575,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                   }}
                 >
                   <SelectDropdown
-                    data={[...categoryes]}
+                    data={[...categories]}
                     onSelect={(selectedItem) => {
                       setFieldValue("category", selectedItem.category);
                     }}
@@ -603,7 +603,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                       borderRadius: 10,
                       marginRight: 50,
                     }}
-                    defaultValue={categoryes.find(
+                    defaultValue={categories.find(
                       (cate: any) => cate.category === values.category
                     )}
                   />
@@ -802,14 +802,14 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           backgroundColor:
                             values.stoneDetails &&
-                            values.stoneDetails.every(
-                              (st: any) =>
-                                st.stoneType &&
-                                st.stoneunit &&
-                                st.stoneuid &&
-                                st.price &&
-                                st.totalOneStone
-                            )
+                              values.stoneDetails.every(
+                                (st: any) =>
+                                  st.stoneType &&
+                                  st.stoneunit &&
+                                  st.stoneuid &&
+                                  st.price &&
+                                  st.totalOneStone
+                              )
                               ? "#05E3D5"
                               : "gray",
                           borderRadius: 50,
@@ -1133,14 +1133,14 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           backgroundColor:
                             values.designDetails &&
-                            values.designDetails.every(
-                              (dsgn: any) =>
-                                dsgn.measurement &&
-                                dsgn.designunit &&
-                                dsgn.designuid &&
-                                dsgn.price &&
-                                dsgn.totalOneDesign
-                            )
+                              values.designDetails.every(
+                                (dsgn: any) =>
+                                  dsgn.measurement &&
+                                  dsgn.designunit &&
+                                  dsgn.designuid &&
+                                  dsgn.price &&
+                                  dsgn.totalOneDesign
+                              )
                               ? "#05E3D5"
                               : "gray",
                           borderRadius: 50,
@@ -1464,15 +1464,15 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           backgroundColor:
                             values.jobworkDetails &&
-                            values.jobworkDetails.every(
-                              (jb: any) =>
-                                jb.partyName &&
-                                jb.workType &&
-                                jb.unit &&
-                                jb.jobuid &&
-                                jb.totalOnewJobWork &&
-                                jb.price
-                            )
+                              values.jobworkDetails.every(
+                                (jb: any) =>
+                                  jb.partyName &&
+                                  jb.workType &&
+                                  jb.unit &&
+                                  jb.jobuid &&
+                                  jb.totalOnewJobWork &&
+                                  jb.price
+                              )
                               ? "#05E3D5"
                               : "gray",
                           borderRadius: 50,
