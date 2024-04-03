@@ -160,9 +160,9 @@ const StoneStock = () => {
                 >
                   <View style={GlobalStyle.leftSide}>
                     <Text style={GlobalStyle.label}>Stone Type</Text>
-                    <Text style={GlobalStyle.label}>Stones</Text>
-                    <Text style={GlobalStyle.label}>Price</Text>
-                    <Text style={GlobalStyle.label}>Stone Price</Text>
+                    <Text style={GlobalStyle.label}>Stone Per Bag</Text>
+                    <Text style={GlobalStyle.label}>Price Per Bag</Text>
+                    <Text style={GlobalStyle.label}>Price Per Stone</Text>
                     <Text style={GlobalStyle.label}>Stone Stock</Text>
                   </View>
                   <View style={GlobalStyle.middleSide}>
@@ -178,21 +178,21 @@ const StoneStock = () => {
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.stonePerBag}(1 Bag)
+                      {item.stonePerBag}
                     </Text>
                     <Text
                       style={GlobalStyle.textcolor}
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.price}₹(1 Bag)
+                      {item.price}₹
                     </Text>
                     <Text
                       style={GlobalStyle.textcolor}
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.pricePerStone}₹(1 Stone)
+                      {item.pricePerStone}₹
                     </Text>
                     <Text
                       style={GlobalStyle.textcolor}
