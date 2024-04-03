@@ -88,7 +88,7 @@ export const GlobalStyle = StyleSheet.create({
     marginVertical: 10,
   },
   leftSide: {
-    flex: 3,
+    flex: 4,
     marginRight: 10,
     borderRightWidth: 1,
     borderColor: "black",
