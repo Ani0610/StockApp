@@ -21,65 +21,67 @@ import { RootState } from "../../redux/store";
 import SearchableComponent from "../../components/Search/SearchComponent";
 import Accordion from "react-native-collapsible/Accordion";
 import { formatDate } from "../../services/dateFormate";
-import { setLoading } from "../../redux/action/Ui/Uislice";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import NoDataFound from "../../components/UI/NoData";
+import { getDesignDetails } from "../../services/Design/Design.Service";
+import { setDesignMaster } from "../../redux/action/DesignsMaster/designMasterSlice";
 
 const DesignSample = ({ navigation }: any) => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState<any>();
-  const allSamples = [
-    {
-      date: "25/06/2024",
-      partyName: "Ramu inter",
-      designNo: "1",
-      availableStocks: 135,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/close-up-indian-saree-design-banarasi-indain-wedding-party-traditional-red-silk-sari-yellow-gold-border-great-130471986.jpg?w=768",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 1300,
-    },
-    {
-      date: "15/01/2024",
-      partyName: "Sharda inter",
-      designNo: "2",
-      availableStocks: 100,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/indian-traditional-silk-saree-beautiful-latest-design-130345708.jpg?w=768",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 700,
-    },
-    {
-      date: "06/02/2024",
-      partyName: "Sharda inter",
-      designNo: "3",
-      availableStocks: 600,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/black-saree-8535408.jpg?w=768",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 1500,
-    },
-    {
-      date: "15/02/2024",
-      partyName: "Anamika inter",
-      designNo: "4",
-      availableStocks: 754,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/seamless-colorful-border-traditional-asian-design-elements-seamless-colorful-border-traditional-asian-design-elements-165011556.jpg?w=992",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 950,
-    },
-  ];
+  // {
+  //   date: "25/06/2024",
+  //   partyName: "Ramu inter",
+  //   designNo: "1",
+  //   availableStocks: 135,
+  //   sampleImg: [
+  //     "https://thumbs.dreamstime.com/b/close-up-indian-saree-design-banarasi-indain-wedding-party-traditional-red-silk-sari-yellow-gold-border-great-130471986.jpg?w=768",
+  //   ],
+  //   stoneDeails: [],
+  //   designDetails: [],
+  //   jobWorkDetails: [],
+  //   total: 1300,
+  // },
+  // {
+  //   date: "15/01/2024",
+  //   partyName: "Sharda inter",
+  //   designNo: "2",
+  //   availableStocks: 100,
+  //   sampleImg: [
+  //     "https://thumbs.dreamstime.com/b/indian-traditional-silk-saree-beautiful-latest-design-130345708.jpg?w=768",
+  //   ],
+  //   stoneDeails: [],
+  //   designDetails: [],
+  //   jobWorkDetails: [],
+  //   total: 700,
+  // },
+  // {
+  //   date: "06/02/2024",
+  //   partyName: "Sharda inter",
+  //   designNo: "3",
+  //   availableStocks: 600,
+  //   sampleImg: [
+  //     "https://thumbs.dreamstime.com/b/black-saree-8535408.jpg?w=768",
+  //   ],
+  //   stoneDeails: [],
+  //   designDetails: [],
+  //   jobWorkDetails: [],
+  //   total: 1500,
+  // },
+  // {
+  //   date: "15/02/2024",
+  //   partyName: "Anamika inter",
+  //   designNo: "4",
+  //   availableStocks: 754,
+  //   sampleImg: [
+  //     "https://thumbs.dreamstime.com/b/seamless-colorful-border-traditional-asian-design-elements-seamless-colorful-border-traditional-asian-design-elements-165011556.jpg?w=992",
+  //   ],
+  //   stoneDeails: [],
+  //   designDetails: [],
+  //   jobWorkDetails: [],
+  //   total: 950,
+  // },
+  // ];
   const { designsMaster } = useSelector(
     (state: RootState) => state.designMaster
   );
@@ -88,9 +90,22 @@ const DesignSample = ({ navigation }: any) => {
   const [allsampleData, setallsampledata] = useState<any>([]);
   const [allsamplePartyName, setallsamplePartyName] = useState<any>([]);
   useEffect(() => {
-    setallsample([...allSamples, ...designsMaster]);
-    setallsampledata([...allSamples, ...designsMaster]);
+    setallsample([...designsMaster]);
+    setallsampledata([...designsMaster]);
   }, [designsMaster]);
+
+  useEffect(()=>{
+    dispatch(setLoading(true))
+    getDesignDetails().then((res) => {
+      dispatch(setLoading(false))
+      if (res) {
+        dispatch(setDesignMaster(res))
+      }
+      else {
+        dispatch(setToast({ message: 'No Data Found', isVisible: true, type: 'danger' }))
+      }
+    })
+  },[])
 
   const renderThumbnail = (uri: any, designNo: any, total: any) => {
     return (
@@ -410,71 +425,49 @@ const DesignSample = ({ navigation }: any) => {
                 ))}
               </View>
             </> */}
-
-            <View
-              style={{
-                display: "flex",
-                width: "100%",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-              }}
-            >
-              {allsample.map((sample: any, i: any) => (
-                <TouchableOpacity
-                  key={i}
-                  onPress={() => onSelectCard(sample)}
-                  style={{ width: "48%", marginBottom: 10 }} // Adjust the width as needed
-                >
-                  <View
-                    style={[
-                      GlobalStyle.card,
-                      GlobalStyle.shadowProp,
-                      {
-                        paddingVertical: 8,
-                        paddingHorizontal: 8,
-                        height: "auto",
-                        width: "100%", // Set width to 100% to occupy the parent's width
-                      },
-                    ]}
-                  >
-                    {renderThumbnail(
-                      sample.sampleImg[0],
-                      sample.designNo,
-                      sample.total
-                    )}
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-
-            {allSamples?.length === 0 && (
-              <>
+            <>{
+              allsample.length > 0 ?
                 <View
-                  style={[
-                    GlobalStyle.card,
-                    GlobalStyle.shadowProp,
-                    {
-                      paddingVertical: 8,
-                      paddingHorizontal: 8,
-                      height: "auto",
-                      width: "48%",
-                    },
-                  ]}
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                  }}
                 >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: "#000",
-                      textAlign: "center",
-                      marginTop: 50,
-                    }}
-                  >
-                    No Data Found
-                  </Text>
-                </View>
-              </>
-            )}
+                  {allsample.map((sample: any, i: any) => (
+                    <TouchableOpacity
+                      key={i}
+                      onPress={() => onSelectCard(sample)}
+                      style={{ width: "48%", marginBottom: 10 }} // Adjust the width as needed
+                    >
+                      <View
+                        style={[
+                          GlobalStyle.card,
+                          GlobalStyle.shadowProp,
+                          {
+                            paddingVertical: 8,
+                            paddingHorizontal: 8,
+                            height: "auto",
+                            width: "100%", // Set width to 100% to occupy the parent's width
+                          },
+                        ]}
+                      >
+                        {renderThumbnail(
+                          sample.sampleImg[0],
+                          sample.designNo,
+                          sample.total
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View> :
+                <NoDataFound />
+            }
+            </>
+
+
           </View>
         </ScrollView>
         <Pressable

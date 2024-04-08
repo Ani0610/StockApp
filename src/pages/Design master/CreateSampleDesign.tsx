@@ -29,14 +29,15 @@ import {
   editDesignMaster,
   deleteDesignMaster,
   setDesignMaster,
-  addMaster,
 } from "../../redux/action/DesignsMaster/designMasterSlice";
 import { editstoneStock } from "../../redux/action/Stone Stock/stoneStock";
 import HorizontalSlider from "../../components/HorizontalSlider/HorizontalSlider";
 import MultipleImageUploadScreen from "../../components/imageUpload/MultipleImageUpload";
 import { formatDate } from "../../services/dateFormate";
 import DatePicker from "react-native-date-picker";
-import { setLoading } from "../../redux/action/Ui/Uislice";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import { addDesignDetails } from "../../services/Design/Design.Service";
+import { uploadMultiImages } from "../../services/file/file.service";
 
 interface InitialFormValues {
   designNo: string;
@@ -46,7 +47,7 @@ interface InitialFormValues {
   designDetails: any;
   jobworkDetails: any;
   totalstones: string;
-  totlDesigns: string;
+  totalDesigns: string;
   totalJobWorks: string;
   total: string;
   partyName: string;
@@ -61,7 +62,7 @@ interface InitialFormValues {
   date: any;
 }
 const CreateSampleDesign = ({ navigation, route }: any) => {
-  const { stoneStock } = useSelector((state: RootState) => state.stoneStock);
+  const { stoneStock } = useSelector((state: RootState): any => state.stoneStock);
   const { designs } = useSelector((state: RootState) => state.designs);
   const { jobWorks } = useSelector((state: RootState) => state.jobWorks);
   const [iscamaraModalVisible, setIscamaraModalVisible] = useState(false);
@@ -83,7 +84,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
           stoneunit: "",
           stoneuid: "",
           totalOneStone: "",
-          expecredPrice: "",
+          expectedPrice: "",
           price: "",
         },
       ],
@@ -93,7 +94,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
           designunit: "",
           designuid: "",
           totalOneDesign: "",
-          expecredPrice: "",
+          expectedPrice: "",
           price: "",
         },
       ],
@@ -104,21 +105,21 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
           unit: "",
           jobuid: "",
           totalOnewJobWork: "",
-          expecredPrice: "",
+          expectedPrice: "",
           price: "",
         },
       ],
       totalstones: "",
-      totlDesigns: "",
+      totalDesigns: "",
       totalJobWorks: "",
       total: "",
       id: undefined,
       partyName: "",
       partyUID: undefined,
       date: "",
-      profitPercentage: "",
+      profitPercentage: "0",
       profitRupee: 0,
-      discountPercentage: "",
+      discountPercentage: "0",
       discountRupee: 0,
       grandTotal: 0,
     }
@@ -141,7 +142,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             stoneunit: "",
             stoneuid: "",
             totalOneStone: "",
-            expecredPrice: "",
+            expectedPrice: "",
 
             price: "",
           },
@@ -152,7 +153,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             designunit: "",
             designuid: "",
             totalOneDesign: "",
-            expecredPrice: "",
+            expectedPrice: "",
 
             price: "",
           },
@@ -164,20 +165,20 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             unit: "",
             jobuid: "",
             totalOnewJobWork: "",
-            expecredPrice: "",
+            expectedPrice: "",
 
             price: "",
           },
         ],
         totalstones: "",
-        totlDesigns: "",
+        totalDesigns: "",
         totalJobWorks: "",
         total: "",
         id: undefined,
         partyName: "",
         partyUID: undefined,
         date: "",
-        profitPercentage: "",
+        profitPercentage: "0",
         profitRupee: 0,
         discountPercentage: "",
         discountRupee: 0,
@@ -223,7 +224,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       })
     ),
     totalstones: Yup.number().required("Total Stones is required"),
-    totlDesigns: Yup.number().required("Total Designs is required"),
+    totalDesigns: Yup.number().required("Total Designs is required"),
     totalJobWorks: Yup.number().required("Total Job Works is required"),
     total: Yup.number().required("Total is required"),
     id: Yup.number(),
@@ -233,13 +234,23 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     validationSchema: sampleSchema,
     onSubmit: async (values: any) => {
       values.stoneDetails.map((stone: any) => updateStock(stone));
+      values.total = Number(values.total).toFixed(2);
+
       if (update) {
-        values.total = Number(values.total).toFixed(2);
         dispatch(editDesignMaster({ ...values }));
       } else {
-        values.id = Math.floor(2000 + Math.random() * 9000);
+        // values.id = Math.floor(2000 + Math.random() * 9000);
         values.total = Number(values.total).toFixed(2);
-        dispatch(addDesignMaster({ ...values }));
+        dispatch(setLoading(true));
+        addDesignDetails(values).then((res) => {
+          if (res) {
+            dispatch(addDesignMaster(res));
+          }
+          else {
+            dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+          }
+        }).catch((err) => console.error(err)).
+          finally(() => dispatch(setLoading(false)))
       }
       resetForm();
       navigation.goBack();
@@ -255,7 +266,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     touched,
     setFieldValue,
     resetForm,
-  } = formik;
+  }: any = formik;
   const updateStock = async (item: any) => {
     const findIndex = await stoneStock.findIndex(
       (item1: any) => item1.id === item.stoneuid
@@ -275,7 +286,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     setFieldValue("designDetails", route.params.designDetails);
     setFieldValue("jobworkDetails", route.params.jobworkDetails);
     setFieldValue("totalstones", route.params.totalstones);
-    setFieldValue("totlDesigns", route.params.totlDesigns);
+    setFieldValue("totalDesigns", route.params.totalDesigns);
     setFieldValue("totalJobWorks", route.params.totalJobWorks);
     setFieldValue("category", route.params.category);
     setFieldValue("total", route.params.total);
@@ -307,7 +318,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     );
     setFieldValue("totalstones", total);
     const totalAmount =
-      (values.totlDesigns ? Number(values.totlDesigns) : 0) +
+      (values.totalDesigns ? Number(values.totalDesigns) : 0) +
       (values.totalJobWorks ? Number(values.totalJobWorks) : 0) +
       total;
     setFieldValue("total", totalAmount);
@@ -333,7 +344,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       (design: any, item: any) => design + item.totalOneDesign,
       0
     );
-    setFieldValue("totlDesigns", total);
+    setFieldValue("totalDesigns", total);
     const totalAmount =
       (values.totalstones ? Number(values.totalstones) : 0) +
       total +
@@ -364,7 +375,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     setFieldValue("totalJobWorks", total);
     const totalAmount =
       (values.totalstones ? Number(values.totalstones) : 0) +
-      (values.totlDesigns ? Number(values.totlDesigns) : 0) +
+      (values.totalDesigns ? Number(values.totalDesigns) : 0) +
       total;
     setFieldValue("total", totalAmount);
     let profRupee: any = 0;
@@ -389,19 +400,14 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   };
   const uploadProfileImage = async (selectedImage: any) => {
     console.log("uploaded image", selectedImage);
-    const images: any[] = [];
+    var images: any[] = [];
 
     try {
-      await Promise.all(
-        selectedImage.map(async (img: any) => {
-          const imgRes = await fs.readFile(img.uri, "base64");
-          images.push(`data:image/jpeg;base64,${imgRes}`);
-        })
-      );
-
-      console.log("length", images.length);
-      setFieldValue("sampleImg", [...values.sampleImg, ...images]);
-      // Do whatever you need with the images array here
+      dispatch(setLoading(true))
+      uploadMultiImages(selectedImage).then((res: any) => {
+        dispatch(setLoading(false))
+        setFieldValue("sampleImg", res);
+      }).catch(err => dispatch(setLoading(false)))
     } catch (error) {
       console.error("Error uploading images:", error);
     }
@@ -824,7 +830,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                             stoneuid: "",
                             price: "",
                             totalOneStone: "",
-                            expecredPrice: "",
+                            expectedPrice: "",
                           })
                         }
                       >
@@ -970,6 +976,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           </View>
                           <View style={{ width: "20%", alignItems: "center" }}>
                             <TextInput
+                              keyboardType="numeric"
                               onChangeText={async (text: any) => {
                                 replace(i, {
                                   ...stone1,
@@ -1029,14 +1036,14 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                               onChangeText={(text) =>
                                 replace(i, {
                                   ...stone1,
-                                  expecredPrice: text,
+                                  expectedPrice: text,
                                 })
                               }
                               editable={true}
                               onBlur={() => {
-                                handleBlur(`stoneDetails[${i}].expecredPrice`);
+                                handleBlur(`stoneDetails[${i}].expectedPrice`);
                               }}
-                              value={stone1.expecredPrice.toString()}
+                              value={stone1.expectedPrice.toString()}
                               style={{
                                 fontSize: 14,
                                 color: "#000",
@@ -1155,7 +1162,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                             designuid: "",
                             price: "",
                             totalOneDesign: "",
-                            expecredPrice: "",
+                            expectedPrice: "",
                           })
                         }
                       >
@@ -1301,6 +1308,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           </View>
                           <View style={{ width: "20%", alignItems: "center" }}>
                             <TextInput
+                              keyboardType="numeric"
                               onChangeText={(text: any) => {
                                 replace(i, {
                                   ...design,
@@ -1360,14 +1368,14 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                               onChangeText={(text) =>
                                 replace(i, {
                                   ...design,
-                                  expecredPrice: text,
+                                  expectedPrice: text,
                                 })
                               }
                               editable={true}
                               onBlur={() => {
-                                handleBlur(`designDetails[${i}].expecredPrice`);
+                                handleBlur(`designDetails[${i}].expectedPrice`);
                               }}
-                              value={design.expecredPrice.toString()}
+                              value={design.expectedPrice.toString()}
                               style={{
                                 fontSize: 14,
                                 color: "#000",
@@ -1416,7 +1424,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         Total
                       </Text>
                       <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
-                        {Number(values.totlDesigns).toFixed(2)}₹
+                        {Number(values.totalDesigns).toFixed(2)}₹
                       </Text>
                     </View>
                   </View>
@@ -1487,7 +1495,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                             unit: "",
                             jobuid: "",
                             price: "",
-                            expecredPrice: "",
+                            expectedPrice: "",
                             totalOnewJobWork: "",
                           })
                         }
@@ -1673,6 +1681,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           </View>
                           <View style={{ width: "15%", alignItems: "center" }}>
                             <TextInput
+                              keyboardType="numeric"
                               onChangeText={(text: any) => {
                                 replace(i, {
                                   ...job,
@@ -1732,16 +1741,16 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                               onChangeText={(text) =>
                                 replace(i, {
                                   ...job,
-                                  expecredPrice: text,
+                                  expectedPrice: text,
                                 })
                               }
                               editable={true}
                               onBlur={() => {
                                 handleBlur(
-                                  `jobworkDetails[${i}].expecredPrice`
+                                  `jobworkDetails[${i}].expectedPrice`
                                 );
                               }}
-                              value={job.expecredPrice.toString()}
+                              value={job.expectedPrice.toString()}
                               style={{
                                 fontSize: 14,
                                 color: "#000",

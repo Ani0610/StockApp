@@ -282,7 +282,7 @@ const StoneStock = () => {
           >
             <View
               style={{
-                height: "20%",
+                height: "15%",
                 width: "100%",
                 marginTop: "auto",
                 backgroundColor: "white",
@@ -307,7 +307,7 @@ const StoneStock = () => {
                   Edit
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => deleteStoneStock()}
                 style={[GlobalStyle.btn, { borderRadius: 15 }]}
               >
@@ -322,7 +322,7 @@ const StoneStock = () => {
                 >
                   Delete
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity onPress={onClose} style={GlobalStyle.btn}>
                 <Icon type="entypo" name="cross" color="gray" size={25} />
                 <Text

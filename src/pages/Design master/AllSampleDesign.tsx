@@ -21,65 +21,16 @@ import { RootState } from "../../redux/store";
 import SearchableComponent from "../../components/Search/SearchComponent";
 import Accordion from "react-native-collapsible/Accordion";
 import { formatDate } from "../../services/dateFormate";
-import { setLoading } from "../../redux/action/Ui/Uislice";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import NoDataFound from "../../components/UI/NoData";
+import { getDesignDetails } from "../../services/Design/Design.Service";
+import { setDesignMaster } from "../../redux/action/DesignsMaster/designMasterSlice";
 
 const AllSampleDesign = ({ navigation }: any) => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState<any>();
-  const allSamples = [
-    {
-      date: "25/06/2024",
-      partyName: "Ramu inter",
-      designNo: "1",
-      availableStocks: 135,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/close-up-indian-saree-design-banarasi-indain-wedding-party-traditional-red-silk-sari-yellow-gold-border-great-130471986.jpg?w=768",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 1300,
-    },
-    {
-      date: "15/01/2024",
-      partyName: "Sharda inter",
-      designNo: "2",
-      availableStocks: 100,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/indian-traditional-silk-saree-beautiful-latest-design-130345708.jpg?w=768",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 700,
-    },
-    {
-      date: "06/02/2024",
-      partyName: "Sharda inter",
-      designNo: "3",
-      availableStocks: 600,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/black-saree-8535408.jpg?w=768",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 1500,
-    },
-    {
-      date: "15/02/2024",
-      partyName: "Anamika inter",
-      designNo: "4",
-      availableStocks: 754,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/seamless-colorful-border-traditional-asian-design-elements-seamless-colorful-border-traditional-asian-design-elements-165011556.jpg?w=992",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 950,
-    },
-  ];
+  // const allSamples = []
+
   const { designsMaster } = useSelector(
     (state: RootState) => state.designMaster
   );
@@ -88,11 +39,23 @@ const AllSampleDesign = ({ navigation }: any) => {
   const [allsampleData, setallsampledata] = useState<any>([]);
   const [allsamplePartyName, setallsamplePartyName] = useState<any>([]);
   useEffect(() => {
-    setallsample([...allSamples, ...designsMaster]);
-    setallsampledata([...allSamples, ...designsMaster]);
+    setallsample([...designsMaster]);
+    setallsampledata([...designsMaster]);
   }, [designsMaster]);
+  useEffect(()=>{
+    dispatch(setLoading(true))
+    getDesignDetails().then((res) => {
+      dispatch(setLoading(false))
+      if (res) {
+        dispatch(setDesignMaster(res))
+      }
+      else {
+        dispatch(setToast({ message: 'No Data Found', isVisible: true, type: 'danger' }))
+      }
+    })
+  },[])
   useEffect(() => {
-    const all: any = [...allSamples, ...designsMaster];
+    const all: any = [...designsMaster];
     const groupedByPartyName: any = Object.values(
       all.reduce((acc: any, obj: any) => {
         const { partyName }: any = obj;
@@ -246,7 +209,7 @@ const AllSampleDesign = ({ navigation }: any) => {
             </> */}
             <>
               <View>
-                {allsamplePartyName.map((partyName: any, i: any) => (
+                {allsamplePartyName?.length ? allsamplePartyName.map((partyName: any, i: any) => (
                   <View key={i}>
                     <View
                       style={{
@@ -407,7 +370,9 @@ const AllSampleDesign = ({ navigation }: any) => {
                       </View>
                     ))}
                   </View>
-                ))}
+                )) :
+                  <NoDataFound />
+                }
               </View>
             </>
 

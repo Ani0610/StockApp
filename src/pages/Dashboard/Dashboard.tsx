@@ -35,7 +35,7 @@ const Dashboard = () => {
     },
   ]);
   const sliceColor = ["rgba(131, 167, 234, 1)", "green"];
-  const [pieData, setPieData] = useState<any>([1, 1]);
+  const [pieData, setPieData] = useState<any>([1, 0]);
   const [barChart, setBarChart] = useState<any>({
     labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [
@@ -52,60 +52,59 @@ const Dashboard = () => {
   );
   const screenWidth = Dimensions.get("window").width;
   const chartWidth = screenWidth - 20;
-  const allSamples = [
-    {
-      date: "25/06/2024",
-      partyName: "Ramu inter",
-      designNo: "1",
-      availableStocks: 135,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/close-up-indian-saree-design-banarasi-indain-wedding-party-traditional-red-silk-sari-yellow-gold-border-great-130471986.jpg?w=768",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 1300,
-    },
-    {
-      date: "15/01/2024",
-      partyName: "Sharda inter",
-      designNo: "2",
-      availableStocks: 100,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/indian-traditional-silk-saree-beautiful-latest-design-130345708.jpg?w=768",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 700,
-    },
-    {
-      date: "06/02/2024",
-      partyName: "Sharda inter",
-      designNo: "3",
-      availableStocks: 600,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/black-saree-8535408.jpg?w=768",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 1500,
-    },
-    {
-      date: "15/02/2024",
-      partyName: "Anamika inter",
-      designNo: "4",
-      availableStocks: 754,
-      sampleImg: [
-        "https://thumbs.dreamstime.com/b/seamless-colorful-border-traditional-asian-design-elements-seamless-colorful-border-traditional-asian-design-elements-165011556.jpg?w=992",
-      ],
-      stoneDeails: [],
-      designDetails: [],
-      jobWorkDetails: [],
-      total: 950,
-    },
-  ];
+  //   {
+  //     date: "25/06/2024",
+  //     partyName: "Ramu inter",
+  //     designNo: "1",
+  //     availableStocks: 135,
+  //     sampleImg: [
+  //       "https://thumbs.dreamstime.com/b/close-up-indian-saree-design-banarasi-indain-wedding-party-traditional-red-silk-sari-yellow-gold-border-great-130471986.jpg?w=768",
+  //     ],
+  //     stoneDeails: [],
+  //     designDetails: [],
+  //     jobWorkDetails: [],
+  //     total: 1300,
+  //   },
+  //   {
+  //     date: "15/01/2024",
+  //     partyName: "Sharda inter",
+  //     designNo: "2",
+  //     availableStocks: 100,
+  //     sampleImg: [
+  //       "https://thumbs.dreamstime.com/b/indian-traditional-silk-saree-beautiful-latest-design-130345708.jpg?w=768",
+  //     ],
+  //     stoneDeails: [],
+  //     designDetails: [],
+  //     jobWorkDetails: [],
+  //     total: 700,
+  //   },
+  //   {
+  //     date: "06/02/2024",
+  //     partyName: "Sharda inter",
+  //     designNo: "3",
+  //     availableStocks: 600,
+  //     sampleImg: [
+  //       "https://thumbs.dreamstime.com/b/black-saree-8535408.jpg?w=768",
+  //     ],
+  //     stoneDeails: [],
+  //     designDetails: [],
+  //     jobWorkDetails: [],
+  //     total: 1500,
+  //   },
+  //   {
+  //     date: "15/02/2024",
+  //     partyName: "Anamika inter",
+  //     designNo: "4",
+  //     availableStocks: 754,
+  //     sampleImg: [
+  //       "https://thumbs.dreamstime.com/b/seamless-colorful-border-traditional-asian-design-elements-seamless-colorful-border-traditional-asian-design-elements-165011556.jpg?w=992",
+  //     ],
+  //     stoneDeails: [],
+  //     designDetails: [],
+  //     jobWorkDetails: [],
+  //     total: 950,
+  //   },
+  // ];
   const data = {
     labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [
@@ -131,63 +130,68 @@ const Dashboard = () => {
     },
   ];
   useEffect(() => {
-    const all: any = [...allSamples, ...designsMaster];
-    const groupedByPartyName: any = Object.values(
-      all.reduce((acc: any, obj: any) => {
-        const { partyName }: any = obj;
-        if (!acc[partyName]) {
-          acc[partyName] = { partyName, data: [] };
-        }
-        acc[partyName].data.push(obj);
-        return acc;
-      }, {})
-    );
-    setBarChart({
-      labels: groupedByPartyName.map((party: any) => party.partyName),
-      datasets: [
-        {
-          data: groupedByPartyName.map((party: any) =>
-            party.data.reduce(
-              (total: any, sample: any) => total + sample.availableStocks,
-              0
-            )
-          ),
-        },
-      ],
-    });
+    if (designsMaster && designsMaster.length) {
+      const all: any = [...designsMaster];
+      const groupedByPartyName: any = all.length && Object.values(
+        all.reduce((acc: any, obj: any) => {
+          const { partyName }: any = obj;
+          if (!acc[partyName]) {
+            acc[partyName] = { partyName, data: [] };
+          }
+          acc[partyName].data.push(obj);
+          return acc;
+        }, {})
+      );
+      setBarChart({
+        labels: groupedByPartyName.map((party: any) => party.partyName),
+        datasets: [
+          {
+            data: groupedByPartyName.map((party: any) =>
+              party.data.reduce(
+                (total: any, sample: any) => total + sample.availableStocks,
+                0
+              )
+            ),
+          },
+        ],
+      });
+    }
   }, [designsMaster]);
   useEffect(() => {
     dispatch(setLoading(true));
-    const all: any = [...allSamples, ...deliveredDesigns];
-    const allPending: any = [...allSamples, ...designsMaster];
-    const totalAvailableStocks = all.reduce(
-      (total: any, sample: any) => total + sample.availableStocks,
-      0
-    );
-    const totalAvailableStocksPending = allPending.reduce(
-      (total: any, sample: any) => total + sample.availableStocks,
-      0
-    );
-    setPieData([
-      Number(totalAvailableStocksPending),
-      Number(totalAvailableStocks),
-    ]);
-    setPieChart([
-      {
-        name: "Pending",
-        population: totalAvailableStocksPending,
-        color: "rgba(131, 167, 234, 1)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15,
-      },
-      {
-        name: "Delivered",
-        population: totalAvailableStocks,
-        color: "green",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15,
-      },
-    ]);
+
+    if (deliveredDesigns && designsMaster && deliveredDesigns.length && designsMaster.length) {
+      const all: any = [...deliveredDesigns];
+      const allPending: any = [...designsMaster];
+      const totalAvailableStocks = all.reduce(
+        (total: any, sample: any) => total + sample.availableStocks,
+        0
+      );
+      const totalAvailableStocksPending = allPending.reduce(
+        (total: any, sample: any) => total + sample.availableStocks,
+        0
+      );
+      setPieData([
+        Number(totalAvailableStocksPending),
+        Number(totalAvailableStocks),
+      ]);
+      setPieChart([
+        {
+          name: "Pending",
+          population: totalAvailableStocksPending,
+          color: "rgba(131, 167, 234, 1)",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15,
+        },
+        {
+          name: "Delivered",
+          population: totalAvailableStocks,
+          color: "green",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15,
+        },
+      ]);
+    }
     dispatch(setLoading(false));
   }, [deliveredDesigns, designsMaster]);
 
