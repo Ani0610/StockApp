@@ -36,7 +36,7 @@ import MultipleImageUploadScreen from "../../components/imageUpload/MultipleImag
 import { formatDate } from "../../services/dateFormate";
 import DatePicker from "react-native-date-picker";
 import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
-import { addDesignDetails } from "../../services/Design/Design.Service";
+import { addDesignDetails, updateDesignDetails } from "../../services/Design/Design.Service";
 import { uploadMultiImages } from "../../services/file/file.service";
 
 interface InitialFormValues {
@@ -53,7 +53,7 @@ interface InitialFormValues {
   partyName: string;
   partyUID: undefined;
   availableStocks: number;
-  id: undefined;
+  id: string;
   profitPercentage: string;
   profitRupee: number;
   discountPercentage: string;
@@ -113,7 +113,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       totalDesigns: "",
       totalJobWorks: "",
       total: "",
-      id: undefined,
+      id: "",
       partyName: "",
       partyUID: undefined,
       date: "",
@@ -154,7 +154,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             designuid: "",
             totalOneDesign: "",
             expectedPrice: "",
-
             price: "",
           },
         ],
@@ -174,7 +173,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
         totalDesigns: "",
         totalJobWorks: "",
         total: "",
-        id: undefined,
+        id: "",
         partyName: "",
         partyUID: undefined,
         date: "",
@@ -227,20 +226,29 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     totalDesigns: Yup.number().required("Total Designs is required"),
     totalJobWorks: Yup.number().required("Total Job Works is required"),
     total: Yup.number().required("Total is required"),
-    id: Yup.number(),
+    id: Yup.string(),
   });
   const formik = useFormik<InitialFormValues>({
     initialValues: initialFormValues,
     validationSchema: sampleSchema,
     onSubmit: async (values: any) => {
-      values.stoneDetails.map((stone: any) => updateStock(stone));
+      // values.stoneDetails.map((stone: any) => updateStock(stone));
       values.total = Number(values.total).toFixed(2);
 
       if (update) {
-        dispatch(editDesignMaster({ ...values }));
+        dispatch(setLoading(true));
+        updateDesignDetails(values).then((res) => {
+          if (res) {
+            dispatch(editDesignMaster({ ...values }));
+          }
+          else {
+            dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+          }
+        }).catch((err) => console.error(err)).
+          finally(() => dispatch(setLoading(false)))
       } else {
         // values.id = Math.floor(2000 + Math.random() * 9000);
-        values.total = Number(values.total).toFixed(2);
+        // values.total = Number(values.total).toFixed(2);
         dispatch(setLoading(true));
         addDesignDetails(values).then((res) => {
           if (res) {
@@ -300,6 +308,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     setFieldValue("discountPercentage", route.params.discountPercentage);
     setFieldValue("discountRupee", route.params.discountRupee);
     setFieldValue("grandTotal", route.params.grandTotal);
+
     dispatch(setLoading(false));
   };
   useEffect(() => {
@@ -399,9 +408,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     setIscamaraModalVisible(false);
   };
   const uploadProfileImage = async (selectedImage: any) => {
-    console.log("uploaded image", selectedImage);
-    var images: any[] = [];
-
     try {
       dispatch(setLoading(true))
       uploadMultiImages(selectedImage).then((res: any) => {
@@ -413,8 +419,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     }
   };
   const closeImage = (i: any) => {
-    console.log("selected index", i);
-
     // Create a copy of the sampleImg array
     const updatedSampleImg = [...values.sampleImg];
 

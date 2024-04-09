@@ -6,9 +6,6 @@ const designCollection = db.collection('design_details')
 
 export async function addDesignDetails(values: any) {
     try {
-
-
-        console.log('values', JSON.stringify(values))
         const res = await designCollection.add(JSON.parse(JSON.stringify(values)))
         await res.update({
             id: res.id,
@@ -36,8 +33,7 @@ export const getDesignDetails = async () => {
 }
 export const updateDesignDetails = async (values: any) => {
     try {
-        const res = await designCollection.doc(values.id).update(values)
-
+        const res = await designCollection.doc(values.id).update(JSON.parse(JSON.stringify(values)))
         return true;
     } catch (error) {
         console.error('error', error)
