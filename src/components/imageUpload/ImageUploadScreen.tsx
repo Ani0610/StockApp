@@ -60,7 +60,7 @@ const ImageUploadScreen = ({ isVisible, onClose, uploadFunction }: UploadPhotosP
                 presentationStyle: 'fullScreen',
                 maxHeight: 1080,
                 maxWidth: 1080,
-                quality: 0.7,
+                quality: 0.5,
             }
             launchCamera(cameraOption, async (res: any) => {
                 if (res.didCancel) {
@@ -120,7 +120,7 @@ const ImageUploadScreen = ({ isVisible, onClose, uploadFunction }: UploadPhotosP
     const selectImage = () => {
         const options: ImageLibraryOptions = {
             mediaType: 'photo',
-            quality: 0.7,
+            quality: 0.5,
             includeBase64: false,
             maxHeight: 1080,
             maxWidth: 1080,

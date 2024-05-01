@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import {
+  Alert,
+  ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
-  StyleSheet,
-  Alert,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../redux/action/User/userSlice";
 import Icon from "react-native-easy-icon";
+import { useDispatch, useSelector } from "react-redux";
+import { setToast } from "../redux/action/Ui/Uislice";
+import { logOut, setUser } from "../redux/action/User/userSlice";
 import { RootState } from "../redux/store";
+
 
 const DrawerView = ({ navigation, state }: any) => {
   const dispatch = useDispatch();
@@ -30,7 +32,13 @@ const DrawerView = ({ navigation, state }: any) => {
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "Logout", onPress: () => dispatch(setUser(null)) },
+      {
+        text: "Logout", onPress: () => {
+          dispatch(logOut())
+          dispatch(setUser(null));
+          dispatch(setToast({ message: 'Logout Successfully!!', isVisible: true, type: 'success' }))
+        }
+      },
     ]);
 
   };
@@ -56,8 +64,8 @@ const DrawerView = ({ navigation, state }: any) => {
     {
       name: 'Job Work', label: "Job work", isSubmenu: true, item: [
         { name: 'Job work Report', label: "Report", isSubmenu: false },
-        { name: 'Job work Team', label: "Team", isSubmenu: false },
-        { name: 'Per Day Work by Team', label: "Work By Team", isSubmenu: false },
+        // { name: 'Job work Team', label: "Team", isSubmenu: false },
+        // { name: 'Per Day Work by Team', label: "Work By Team", isSubmenu: false },
       ]
     },
     {
@@ -69,7 +77,7 @@ const DrawerView = ({ navigation, state }: any) => {
 
   const MenuCopomponent = ({ items }: any) => (
     <>
-      {console.log(items, 'items=----------')}
+      {/* {console.log(items, 'items=----------')} */}
       {items && items.length && items.map((menu: any, i: any) => (
         <React.Fragment key={i}>
           {

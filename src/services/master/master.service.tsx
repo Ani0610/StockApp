@@ -37,8 +37,7 @@ export const getStones = async () => {
 }
 export const updateStone = async (values: any) => {
     try {
-        const res = await collectionStone.doc(values.id).update(values)
-
+        const res = await collectionStone.doc(values.id).update({ ...values, ...{ updateAt: firestore.FieldValue.serverTimestamp() } })
         return true;
     } catch (error) {
         console.error('error', error)
@@ -50,6 +49,21 @@ export const deleteStoneByID = async (values: any) => {
     try {
         await collectionStone.doc(values.id).delete();
         return true;
+    } catch (error) {
+        console.error('error', error)
+        return error;
+    }
+}
+
+export const getStonesByID = async (id: any) => {
+    try {
+        let doc = await collectionStone.doc(id).get();
+
+        const data = doc.data()
+
+        return data;
+
+
     } catch (error) {
         console.error('error', error)
         return error;

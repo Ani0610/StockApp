@@ -1,10 +1,9 @@
-import { View, Text, Modal } from 'react-native'
+import { View, Text, Modal, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { GlobalStyle } from '../../../globalStyle'
 import Icon from 'react-native-easy-icon'
 
-const ActionBarModel = ({ modalHeight="20%",isEditable=true,isDeletable=true,isVisible, onClose, editAction, deleteAction, isExtraButton = false, extraButton }: any) => {
+const ActionBarModel = ({ modalHeight = "20%", isVisible, onClose, editAction, deleteAction, isExtraButton = false, extraButton, isEditable = true, isDeletable = true }: any) => {
     return (
         <View>
             <Modal
@@ -25,7 +24,7 @@ const ActionBarModel = ({ modalHeight="20%",isEditable=true,isDeletable=true,isV
                 >
                     <View
                         style={{
-                            height: {modalHeight},
+                            height: { modalHeight },
                             width: "100%",
                             marginTop: "auto",
                             backgroundColor: "white",
@@ -34,47 +33,46 @@ const ActionBarModel = ({ modalHeight="20%",isEditable=true,isDeletable=true,isV
                             borderTopRightRadius: 15,
                         }}
                     >
-                        {isExtraButton && 
-                        <>
-                            {extraButton}
-                        </>
+                        {isExtraButton &&
+                            <>
+                                {extraButton}
+                            </>
                         }
                         {isEditable &&
-
-                        <TouchableOpacity
-                            onPress={() => editAction()}
-                            style={[GlobalStyle.btn, { borderRadius: 15 }]}
-                        >
-                            <Icon type="feather" name="edit" color="gray" size={25} />
-                            <Text
-                                style={{
-                                    color: "gray",
-                                    marginLeft: 10,
-                                    fontWeight: "bold",
-                                    fontSize: 18,
-                                }}
+                            <TouchableOpacity
+                                onPress={() => editAction()}
+                                style={[GlobalStyle.btn, { borderRadius: 15 }]}
                             >
-                                Edit
-                            </Text>
-                        </TouchableOpacity>
+                                <Icon type="feather" name="edit" color="gray" size={25} />
+                                <Text
+                                    style={{
+                                        color: "gray",
+                                        marginLeft: 10,
+                                        fontWeight: "bold",
+                                        fontSize: 18,
+                                    }}
+                                >
+                                    Edit
+                                </Text>
+                            </TouchableOpacity>
                         }
                         {isDeletable &&
-                        <TouchableOpacity
-                            onPress={() => deleteAction()}
-                            style={[GlobalStyle.btn, { borderRadius: 15 }]}
-                        >
-                            <Icon type="feather" name="delete" color="gray" size={25} />
-                            <Text
-                                style={{
-                                    color: "gray",
-                                    marginLeft: 10,
-                                    fontWeight: "bold",
-                                    fontSize: 18,
-                                }}
+                            <TouchableOpacity
+                                onPress={() => deleteAction()}
+                                style={[GlobalStyle.btn, { borderRadius: 15 }]}
                             >
-                                Delete
-                            </Text>
-                        </TouchableOpacity>
+                                <Icon type="feather" name="delete" color="gray" size={25} />
+                                <Text
+                                    style={{
+                                        color: "gray",
+                                        marginLeft: 10,
+                                        fontWeight: "bold",
+                                        fontSize: 18,
+                                    }}
+                                >
+                                    Delete
+                                </Text>
+                            </TouchableOpacity>
                         }
                         <TouchableOpacity onPress={onClose} style={GlobalStyle.btn}>
                             <Icon type="entypo" name="cross" color="gray" size={25} />

@@ -9,7 +9,8 @@ export async function addDesignDetails(values: any) {
         const res = await designCollection.add(JSON.parse(JSON.stringify(values)))
         await res.update({
             id: res.id,
-            createdAt: firestore.FieldValue.serverTimestamp()
+            createdAt: firestore.FieldValue.serverTimestamp(),
+            isDeleted: false
         });
         const docSnapshot = await res.get();
         const addedData = await docSnapshot.data();
@@ -21,14 +22,18 @@ export async function addDesignDetails(values: any) {
 }
 
 export const getDesignDetails = async () => {
-    const querySnapshot = await designCollection.get();
-    if (querySnapshot.empty) {
-        return false;
-    } else {
-        const data = querySnapshot.docs.map(doc => ({
-            ...doc.data(),
-        }));
-        return data;
+    try {
+        const querySnapshot = await designCollection.where('isDeleted', '!=', true).get();
+        if (querySnapshot.empty) {
+            return false;
+        } else {
+            const data = querySnapshot.docs.map(doc => ({
+                ...doc.data(),
+            }));
+            return data;
+        }
+    } catch (error) {
+        console.error(error);
     }
 }
 export const updateDesignDetails = async (values: any) => {
@@ -43,10 +48,35 @@ export const updateDesignDetails = async (values: any) => {
 }
 export const deleteDesignDetail = async (values: any) => {
     try {
-        await designCollection.doc(values.id).delete();
+        const finalData = { ...values, ...{ isDeleted: true } }
+        await designCollection.doc(values.id).update(finalData);
         return true;
     } catch (error) {
         console.error('error', error)
         return error;
+    }
+}
+
+export async function checkDesignNumberExists(designNo: string) {
+    try {
+        const querySnapshot = await designCollection
+            .where('designNo', '==', designNo)
+            .get();
+        // console.log(querySnapshot.docs, 'querySnapshot', querySnapshot.empty);
+
+        if (querySnapshot.empty) {
+            // design number exists in the collection
+            return false;
+        } else {
+            const data = querySnapshot.docs.map(doc => ({
+                ...doc.data(),
+            }));
+            // design number does not exist in the collection
+            return data;
+        }
+    } catch (error) {
+        console.error('Error checking mobile number:', error);
+        // Handle error
+        return false;
     }
 }

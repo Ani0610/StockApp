@@ -257,7 +257,7 @@ const DeliveredDesign = ({ navigation }: any) => {
                           }}
                         >
                           <Image
-                            source={{ uri: item.sampleImg[0] }}
+                            source={{ uri: item.sampleImg?.length && item.sampleImg[0] }}
                             style={{
                               width: 80,
                               height: 80,

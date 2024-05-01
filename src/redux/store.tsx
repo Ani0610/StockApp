@@ -1,28 +1,24 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
-  FLUSH,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-  REHYDRATE,
-  persistReducer,
+  persistReducer
 } from "redux-persist";
-import userReducer from "./action/User/userSlice";
-import stoneReducer from "./action/StoneDetails/stoneSlice";
-import designReducer from "./action/DesignDetails/designSlice";
-import jobworkReducer from "./action/Job Work details/jobDetailsSlice";
-import designMasterReducer from "./action/DesignsMaster/designMasterSlice";
-import stoneStockReducer from "./action/Stone Stock/stoneStock";
 import jobTeamReducer from "./action/ job work/JobTeamSlice";
 import worPerDayReducer from "./action/ job work/WorkPerDaySlice";
-import usersMasterReducer from "./action/User Master/userMasterSlice";
-import challanReducer from "./action/Challan/ChallanSlice";
-import partyMasterReducer from "./action/party master/PartymasterSlice";
-import uiReducer from "./action/Ui/Uislice";
-import deliveredDesignReducer from "./action/delivered design/deliveredDesignSlice";
 import categoryReducer from "./action/Category/categorySlice";
+import challanReducer from "./action/Challan/ChallanSlice";
+import designReducer from "./action/DesignDetails/designSlice";
+import designMasterReducer from "./action/DesignsMaster/designMasterSlice";
+import jobworkReducer from "./action/Job Work details/jobDetailsSlice";
+import stoneStockReducer from "./action/Stone Stock/stoneStock";
+import stoneReducer from "./action/StoneDetails/stoneSlice";
+import uiReducer from "./action/Ui/Uislice";
+import usersMasterReducer from "./action/User Master/userMasterSlice";
+import userReducer from "./action/User/userSlice";
+import deliveredDesignReducer from "./action/delivered design/deliveredDesignSlice";
+import partyMasterReducer from "./action/party master/PartymasterSlice";
+import receiveMaalReducer from "./action/receive_maal/receiveMaalSlice";
+import assignJobReducer from "./action/assignJob/assignJobSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -39,13 +35,16 @@ const rootReducer = combineReducers({
   ui: uiReducer,
   deliveredDesigns: deliveredDesignReducer,
   categories: categoryReducer,
+  receiveMaal: receiveMaalReducer,
+  assignJobs: assignJobReducer
+
 });
 
 const persistConfig = {
   key: "root", // key for AsyncStorage
   storage: AsyncStorage,
-  whitelist: [
-    "user",
+  whitelist: ["user"],
+  blacklist: [
     "jobWorks",
     "stone",
     "designs",
@@ -56,17 +55,21 @@ const persistConfig = {
     "partyMaster",
     "deliveredDesigns",
     "categories",
-  ],
+    "receiveMaal",
+    "assignedJobs"
+  ]
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
   reducer: persistedReducer,
+
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
 });
+
 
 export type RootState = ReturnType<typeof store.getState>;
 

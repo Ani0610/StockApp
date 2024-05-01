@@ -1,43 +1,37 @@
+import { FieldArray, FormikProvider, useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
+  Image,
+  Modal,
+  Platform,
   Pressable,
   SafeAreaView,
   ScrollView,
-  StatusBar,
-  Text,
-  View,
-  Image,
   StyleSheet,
-  ImageBackground,
+  Text,
   TextInput,
-  Modal,
-  Platform,
   TouchableOpacity,
+  View
 } from "react-native";
+import DatePicker from "react-native-date-picker";
 import Icon from "react-native-easy-icon";
-import { GlobalStyle } from "../../../globalStyle";
-import { FieldArray, FormikProvider, useFormik } from "formik";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import SelectDropdown from "react-native-select-dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import ImageUploadScreen from "../../components/imageUpload/ImageUploadScreen";
-import fs, { touch } from "react-native-fs";
 import * as Yup from "yup";
+import { GlobalStyle } from "../../../globalStyle";
+import MultipleImageUploadScreen from "../../components/imageUpload/MultipleImageUpload";
 import {
   addDesignMaster,
-  editDesignMaster,
-  deleteDesignMaster,
-  setDesignMaster,
+  editDesignMaster
 } from "../../redux/action/DesignsMaster/designMasterSlice";
-import { editstoneStock } from "../../redux/action/Stone Stock/stoneStock";
-import HorizontalSlider from "../../components/HorizontalSlider/HorizontalSlider";
-import MultipleImageUploadScreen from "../../components/imageUpload/MultipleImageUpload";
-import { formatDate } from "../../services/dateFormate";
-import DatePicker from "react-native-date-picker";
 import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
-import { addDesignDetails, updateDesignDetails } from "../../services/Design/Design.Service";
+import { RootState } from "../../redux/store";
+import { addDesignDetails, checkDesignNumberExists, updateDesignDetails } from "../../services/Design/Design.Service";
+import { formatDate } from "../../services/dateFormate";
 import { uploadMultiImages } from "../../services/file/file.service";
+import AddEditStoneDetails from "../Stone details/AddEditStoneDetails";
+import AddEditDesignDetails from "../Design details/AddEditDesignDetails";
+import AddEditJobwork from "../Job work details/AddEditJobwork";
 
 interface InitialFormValues {
   designNo: string;
@@ -47,6 +41,7 @@ interface InitialFormValues {
   designDetails: any;
   jobworkDetails: any;
   totalstones: string;
+  expectedTotalStonePrice: string;
   totalDesigns: string;
   totalJobWorks: string;
   total: string;
@@ -62,7 +57,7 @@ interface InitialFormValues {
   date: any;
 }
 const CreateSampleDesign = ({ navigation, route }: any) => {
-  const { stoneStock } = useSelector((state: RootState): any => state.stoneStock);
+  const { stone } = useSelector((state: RootState): any => state.stone);
   const { designs } = useSelector((state: RootState) => state.designs);
   const { jobWorks } = useSelector((state: RootState) => state.jobWorks);
   const [iscamaraModalVisible, setIscamaraModalVisible] = useState(false);
@@ -71,6 +66,10 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   const [selectedImage, setSelectedImage] = useState<any>(false);
   const { partyMaster } = useSelector((state: RootState) => state.partyMaster);
   const { categories } = useSelector((state: RootState) => state.categories);
+  const [showAddStoneModel, setShowAddStoneModel] = useState(false);
+  const [showAddDesignModel, setShowAddDesignModel] = useState(false);
+  const [showAddJobworkModel, setShowAddJobworkModel] = useState(false);
+  const [updateStone, setUpdateStone] = useState(false);
 
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
@@ -110,6 +109,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
         },
       ],
       totalstones: "",
+      expectedTotalStonePrice: "",
       totalDesigns: "",
       totalJobWorks: "",
       total: "",
@@ -128,8 +128,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   const [update, setUpdate] = useState(false);
   useEffect(() => {
     if (route.params) {
-      patchData();
       setUpdate(true);
+      patchData();
     } else {
       setInitialFormValues({
         designNo: "",
@@ -143,7 +143,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             stoneuid: "",
             totalOneStone: "",
             expectedPrice: "",
-
             price: "",
           },
         ],
@@ -165,11 +164,11 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             jobuid: "",
             totalOnewJobWork: "",
             expectedPrice: "",
-
             price: "",
           },
         ],
         totalstones: "",
+        expectedTotalStonePrice: "",
         totalDesigns: "",
         totalJobWorks: "",
         total: "",
@@ -250,18 +249,28 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
         // values.id = Math.floor(2000 + Math.random() * 9000);
         // values.total = Number(values.total).toFixed(2);
         dispatch(setLoading(true));
-        addDesignDetails(values).then((res) => {
-          if (res) {
-            dispatch(addDesignMaster(res));
+        checkDesignNumberExists(values.designNo).then((res) => {
+          if (!res) {
+            addDesignDetails(values).then((res) => {
+              if (res) {
+                dispatch(addDesignMaster(res));
+              }
+              else {
+                dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+              }
+            }).catch((err) => console.error(err)).
+              finally(() => {
+                dispatch(setLoading(false));
+                resetForm();
+                navigation.goBack();
+              })
+          } else {
+            dispatch(setToast({ message: "Design number is already exist", isVisible: true, type: 'danger' }))
+            dispatch(setLoading(false))
           }
-          else {
-            dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
-          }
-        }).catch((err) => console.error(err)).
-          finally(() => dispatch(setLoading(false)))
+        })
       }
-      resetForm();
-      navigation.goBack();
+
     },
   });
   const {
@@ -275,18 +284,18 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     setFieldValue,
     resetForm,
   }: any = formik;
-  const updateStock = async (item: any) => {
-    const findIndex = await stoneStock.findIndex(
-      (item1: any) => item1.id === item.stoneuid
-    );
-    let newObj = {
-      ...stoneStock[findIndex],
-      avilablestone:
-        stoneStock[findIndex].avilablestone - parseInt(item.stoneunit),
-    };
-    dispatch(editstoneStock({ ...newObj }));
-    stoneStock[findIndex] = newObj;
-  };
+  // const updateStock = async (item: any) => {
+  //   const findIndex = await stoneStock.findIndex(
+  //     (item1: any) => item1.id === item.stoneuid
+  //   );
+  //   let newObj = {
+  //     ...stoneStock[findIndex],
+  //     avilablestone:
+  //       stoneStock[findIndex].avilablestone - parseInt(item.stoneunit),
+  //   };
+  //   dispatch(editstoneStock({ ...newObj }));
+  //   stoneStock[findIndex] = newObj;
+  // };
   const patchData = () => {
     setFieldValue("designNo", route.params.designNo);
     setFieldValue("sampleImg", route.params.sampleImg);
@@ -308,11 +317,11 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     setFieldValue("discountPercentage", route.params.discountPercentage);
     setFieldValue("discountRupee", route.params.discountRupee);
     setFieldValue("grandTotal", route.params.grandTotal);
-
     dispatch(setLoading(false));
   };
   useEffect(() => {
     totalofStone();
+    totalOfExpStones()
   }, [values.stoneDetails]);
   useEffect(() => {
     totalofDesign();
@@ -320,32 +329,50 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   useEffect(() => {
     totalofJobwork();
   }, [values.jobworkDetails]);
+  useEffect(() => {
+    const newTotalAmount = values.totalstones + values.totalDesigns + values.totalJobWorks;
+    handleTotalAmountChange(newTotalAmount);
+  }, [values.totalstones, values.totalDesigns, values.totalJobWorks]);
+
+
+  const handleTotalAmountChange = (amount: Number) => {
+    console.log('Total amount changed:', amount);
+    setFieldValue("total", amount);
+    let profRupee: number = 0;
+    let disRupee: number = 0;
+    if (values.profitPercentage) {
+      profRupee = (Number(values.profitPercentage) / 100) * Number(amount);
+      setFieldValue("profitRupee", profRupee || 0);
+    }
+    if (values.discountPercentage) {
+      disRupee =
+        (Number(values.discountPercentage) / 100) * Number(amount);
+      setFieldValue("discountRupee", disRupee || 0);
+    }
+    const grandTotal = Number(amount) + Number(profRupee) + Number(disRupee)
+
+    setFieldValue("grandTotal", grandTotal || 0);
+
+    // You can perform additional actions here if needed
+  };
+
+
   const totalofStone = async () => {
     const total = await values.stoneDetails.reduce(
       (stone: any, item: any) => Number(stone) + Number(item.totalOneStone),
       0
     );
     setFieldValue("totalstones", total);
-    const totalAmount =
-      (values.totalDesigns ? Number(values.totalDesigns) : 0) +
-      (values.totalJobWorks ? Number(values.totalJobWorks) : 0) +
-      total;
-    setFieldValue("total", totalAmount);
-    let profRupee: any = 0;
-    let disRupee: any = 0;
-    if (values.profitPercentage) {
-      profRupee = (Number(values.profitPercentage) / 100) * Number(totalAmount);
-      setFieldValue("profitRupee", profRupee);
-    }
-    if (values.discountPercentage) {
-      disRupee =
-        (Number(values.discountPercentage) / 100) * Number(totalAmount);
-      setFieldValue("discountRupee", disRupee);
-    }
-    setFieldValue(
-      "grandTotal",
-      Number(totalAmount) + Number(profRupee) + Number(disRupee)
+
+  };
+  const totalOfExpStones = async () => {
+    const total = await values.stoneDetails.reduce(
+      (stone: any, item: any) => Number(stone) + (Number(item.stoneunit) * Number(item.expectedPrice) / 100),
+      0
     );
+    console.log(total, 'expectedTotalStonePrice')
+    setFieldValue("expectedTotalStonePrice", total);
+
   };
 
   const totalofDesign = async () => {
@@ -358,22 +385,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       (values.totalstones ? Number(values.totalstones) : 0) +
       total +
       (values.totalJobWorks ? Number(values.totalJobWorks) : 0);
-    setFieldValue("total", totalAmount);
-    let profRupee: any = 0;
-    let disRupee: any = 0;
-    if (values.profitPercentage) {
-      profRupee = (Number(values.profitPercentage) / 100) * Number(totalAmount);
-      setFieldValue("profitRupee", profRupee);
-    }
-    if (values.discountPercentage) {
-      disRupee =
-        (Number(values.discountPercentage) / 100) * Number(totalAmount);
-      setFieldValue("discountRupee", disRupee);
-    }
-    setFieldValue(
-      "grandTotal",
-      Number(totalAmount) + Number(profRupee) + Number(disRupee)
-    );
+
   };
 
   const totalofJobwork = async () => {
@@ -382,26 +394,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       0
     );
     setFieldValue("totalJobWorks", total);
-    const totalAmount =
-      (values.totalstones ? Number(values.totalstones) : 0) +
-      (values.totalDesigns ? Number(values.totalDesigns) : 0) +
-      total;
-    setFieldValue("total", totalAmount);
-    let profRupee: any = 0;
-    let disRupee: any = 0;
-    if (values.profitPercentage) {
-      profRupee = (Number(values.profitPercentage) / 100) * Number(totalAmount);
-      setFieldValue("profitRupee", profRupee);
-    }
-    if (values.discountPercentage) {
-      disRupee =
-        (Number(values.discountPercentage) / 100) * Number(totalAmount);
-      setFieldValue("discountRupee", disRupee);
-    }
-    setFieldValue(
-      "grandTotal",
-      Number(totalAmount) + Number(profRupee) + Number(disRupee)
-    );
   };
 
   const closecamaraModel = () => {
@@ -785,16 +777,28 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         paddingVertical: 5,
                       }}
                     >
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "bold",
-                          color: "gray",
-                        }}
-                      >
-                        Stone Details
-                      </Text>
+                      <View style={{
+                        flexDirection: "row",
+                      }}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "gray",
+                          }}
+                        >
+                          Stone Details
+                        </Text>
 
+                        <Pressable
+                          style={{
+                            paddingLeft: 10,
+                          }}
+                          onPress={() => setShowAddStoneModel(true)}
+                        >
+                          <Text style={{ color: '#0000FF', borderBottomWidth: 1, borderBottomColor: '#0000FF' }}>Add Stone</Text>
+                        </Pressable>
+                      </View>
                       <Pressable
                         disabled={
                           !(
@@ -925,7 +929,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                             }}
                           >
                             <SelectDropdown
-                              data={[...stoneStock]}
+                              data={[...stone]}
                               onSelect={(selectedItem) => {
                                 replace(i, {
                                   ...stone1,
@@ -1093,12 +1097,28 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         borderColor: "lightgray",
                       }}
                     >
-                      <Text style={{ fontSize: 14, color: "gray", flex: 8 }}>
-                        Total
-                      </Text>
-                      <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
-                        {Number(values.totalstones).toFixed(2)}₹
-                      </Text>
+                      <View style={{
+                        width: "30%",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}>
+
+                        <Text style={{ fontSize: 14, color: "gray", flex: 8 }}>
+                          Total
+                        </Text>
+                      </View>
+                      <View style={{ width: "20%", alignItems: "center" }}>
+                      </View>
+                      <View style={{ width: "20%", alignItems: "center", overflow: 'hidden' }}>
+                        <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
+                          {Number(values.totalstones).toFixed(3)}₹
+                        </Text>
+                      </View>
+                      <View style={{ width: "20%", alignItems: "center", overflow: 'hidden' }}>
+                        <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
+                          {Number(values.expectedTotalStonePrice).toFixed(3)}₹
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 )}
@@ -1117,15 +1137,30 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         paddingVertical: 5,
                       }}
                     >
-                      <Text
+                      <View
                         style={{
-                          fontSize: 16,
-                          fontWeight: "bold",
-                          color: "gray",
+                          flexDirection: "row",
                         }}
                       >
-                        Design Details
-                      </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "gray",
+                          }}
+                        >
+                          Paper Details
+                        </Text>
+                        <Pressable
+
+                          style={{
+                            paddingLeft: 10,
+                          }}
+                          onPress={() => setShowAddDesignModel(true)}
+                        >
+                          <Text style={{ color: '#0000FF', borderBottomWidth: 1, borderBottomColor: '#0000FF' }}>Add Paper</Text>
+                        </Pressable>
+                      </View>
 
                       <Pressable
                         disabled={
@@ -1424,12 +1459,48 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         borderColor: "lightgray",
                       }}
                     >
-                      <Text style={{ fontSize: 14, color: "gray", flex: 10 }}>
-                        Total
-                      </Text>
-                      <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
-                        {Number(values.totalDesigns).toFixed(2)}₹
-                      </Text>
+                      <View
+                        style={{
+                          width: "30%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+
+                        <Text style={{ fontSize: 14, color: "gray", flex: 10 }}>
+                          Total
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: "20%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+
+                      </View>
+                      <View
+                        style={{
+                          width: "20%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+
+                        <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
+                          {Number(values.totalDesigns).toFixed(2)}₹
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: "20%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+
+                      </View>
                     </View>
                   </View>
                 )}
@@ -1448,15 +1519,31 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         paddingVertical: 5,
                       }}
                     >
-                      <Text
+                      <View
                         style={{
-                          fontSize: 16,
-                          fontWeight: "bold",
-                          color: "gray",
+                          flexDirection: "row",
                         }}
                       >
-                        Job Details
-                      </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "gray",
+                          }}
+                        >
+                          Job Details
+                        </Text>
+                        <Pressable
+
+                          style={{
+                            paddingLeft: 10,
+                          }}
+                          onPress={() => setShowAddJobworkModel(true)}
+                        >
+                          <Text style={{ color: '#0000FF', borderBottomWidth: 1, borderBottomColor: '#0000FF' }}>Add Jobwork</Text>
+                        </Pressable>
+                      </View>
+
 
                       <Pressable
                         disabled={
@@ -1800,12 +1887,50 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         borderColor: "lightgray",
                       }}
                     >
-                      <Text style={{ fontSize: 14, color: "gray", flex: 12 }}>
-                        Total
-                      </Text>
-                      <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
-                        {Number(values.totalJobWorks).toFixed(2)}₹
-                      </Text>
+                      <View
+                        style={{
+                          width: "25%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+
+                        <Text style={{ fontSize: 14, color: "gray", flex: 12 }}>
+                          Total
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: "20%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      ></View>
+                      <View
+                        style={{
+                          width: "20%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      ></View>
+                      <View
+                        style={{
+                          width: "20%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
+                          {Number(values.totalJobWorks).toFixed(2)}₹
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: "20%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      ></View>
                     </View>
                   </View>
                 )}
@@ -2089,7 +2214,32 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
           </View>
         </Modal>
       )}
+      <>{showAddStoneModel &&
+        <AddEditStoneDetails
+          showModal={showAddStoneModel}
+          setShowModal={setShowAddStoneModel}
+          update={updateStone}
+          setUpdate={setUpdateStone}
+        />
+
+      }
+        {showAddDesignModel &&
+          <AddEditDesignDetails
+            showModal={showAddDesignModel}
+            setShowModal={setShowAddDesignModel}
+            data={null}
+          />
+        }
+        {showAddJobworkModel &&
+          <AddEditJobwork
+            showModal={showAddJobworkModel}
+            setShowModal={setShowAddJobworkModel}
+            data={null}
+          />
+        }
+      </>
     </SafeAreaView>
+
   );
 };
 const styles = StyleSheet.create({

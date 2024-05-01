@@ -8,6 +8,7 @@ export async function signInWithPhoneNumber(phoneNumber: string) {
         const confirmation = await auth().signInWithPhoneNumber('+91' + phoneNumber);
         console.log(confirmation, 'confirmation');
         return confirmation;
+
     } catch (error) {
         console.error('error---', error);
     }
@@ -16,9 +17,6 @@ export async function signInWithPhoneNumber(phoneNumber: string) {
 export async function registerUser(values: any) {
     try {
         const isUserExist = await checkMobileNumberExists(values.mobileNumber);
-        console.log(isUserExist, 'checkMobileNumberExists(values.mobileNumber)');
-        console.log(values, '------------------------------------submited values');
-
         if (!isUserExist) {
             const collection = await db.collection('users');
             const res = await collection.add(values)
@@ -45,7 +43,7 @@ export async function checkMobileNumberExists(mobileNumber: string) {
             .collection('users')
             .where('mobileNumber', '==', mobileNumber)
             .get();
-        console.log(querySnapshot.docs, 'querySnapshot', querySnapshot.empty);
+        // console.log(querySnapshot.docs, 'querySnapshot', querySnapshot.empty);
 
         if (querySnapshot.empty) {
             // Mobile number exists in the collection

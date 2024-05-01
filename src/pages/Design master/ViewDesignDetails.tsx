@@ -112,6 +112,16 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                 ₹{route.params?.total}
               </Text>
             </View>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={{ fontSize: 16, color: "#000", fontWeight: "bold" }}>
+               Final Total
+              </Text>
+              <Text style={{ fontSize: 16, color: "gray", fontWeight: "bold" }}>
+                ₹{route.params ? route.params.grandTotal.toFixed(2):'0.00'}
+              </Text>
+            </View>
           </View>
           <View>
             <Text style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}>

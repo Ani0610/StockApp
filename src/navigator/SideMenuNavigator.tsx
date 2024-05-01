@@ -23,7 +23,6 @@ const DrawerStack = createDrawerNavigator();
 const SideMenuNavigator = ({ navigation }: any) => {
   const { user }: any = useSelector((state: RootState) => state.user);
 
-  console.log('user-------------',user?.userType);
   
   return (
     <DrawerStack.Navigator

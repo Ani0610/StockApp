@@ -13,6 +13,7 @@ import {
   Platform,
   Dimensions,
   Image,
+  Alert,
 } from "react-native";
 import Icon from "react-native-easy-icon";
 import { GlobalStyle } from "../../../globalStyle";
@@ -23,8 +24,8 @@ import Accordion from "react-native-collapsible/Accordion";
 import { formatDate } from "../../services/dateFormate";
 import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
 import NoDataFound from "../../components/UI/NoData";
-import { getDesignDetails } from "../../services/Design/Design.Service";
-import { setDesignMaster } from "../../redux/action/DesignsMaster/designMasterSlice";
+import { deleteDesignDetail, getDesignDetails } from "../../services/Design/Design.Service";
+import { deleteDesignMaster, setDesignMaster } from "../../redux/action/DesignsMaster/designMasterSlice";
 
 const DesignSample = ({ navigation }: any) => {
   const [showModal, setShowModal] = useState(false);
@@ -102,6 +103,7 @@ const DesignSample = ({ navigation }: any) => {
         dispatch(setDesignMaster(res))
       }
       else {
+        dispatch(setDesignMaster([]))
         dispatch(setToast({ message: 'No Data Found', isVisible: true, type: 'danger' }))
       }
     })
@@ -146,6 +148,33 @@ const DesignSample = ({ navigation }: any) => {
     setShowModal(true);
     setData(item);
   };
+
+  const deleteDesign=()=>{
+      Alert.alert("Are you sure?", "You want to delete this?", [
+        {
+          text: 'Cancel',
+          onPress: () => console.log("Cancel Pressed"),
+          style: 'cancel',
+  
+        },
+        {
+          text: "Yes",
+          onPress: (() => {
+            dispatch(setLoading(true))
+            deleteDesignDetail(data).then((res) => {
+              dispatch(setLoading(false))
+              setShowModal(false);
+              if (res) {
+                dispatch(deleteDesignMaster(data));
+              }
+              else {
+                dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+              }
+            })
+          })
+        }
+      ])
+  }
 
   const handleFilter = (filteredData: any) => {
     console.log("Filtered Data:", filteredData);
@@ -503,7 +532,7 @@ const DesignSample = ({ navigation }: any) => {
           >
             <View
               style={{
-                height: "15%",
+                height: "20%",
                 width: "100%",
                 marginTop: "auto",
                 backgroundColor: "white",
@@ -526,6 +555,22 @@ const DesignSample = ({ navigation }: any) => {
                   }}
                 >
                   View Design
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[GlobalStyle.btn, { borderRadius: 15 }]}
+                onPress={() => deleteDesign()}
+              >
+                 <Icon type="feather" name="delete" color="gray" size={25} />
+                <Text
+                  style={{
+                    color: "gray",
+                    marginLeft: 10,
+                    fontWeight: "bold",
+                    fontSize: 18,
+                  }}
+                >
+                  Delete
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleClose} style={GlobalStyle.btn}>

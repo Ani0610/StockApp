@@ -70,7 +70,7 @@ const CategoryMaster = () => {
       } else {
         dispatch(setLoading(true))
         addCategories(values).then((res) => {
-          console.log('res categories-------------------', res);
+          // console.log('res categories-------------------', res);
           dispatch(setLoading(false))
           if (res)
             dispatch(addCategory({ ...res }));

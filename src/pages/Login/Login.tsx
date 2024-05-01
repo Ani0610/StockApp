@@ -9,6 +9,7 @@ import { RootState } from '../../redux/store'
 import { setUser } from '../../redux/action/User/userSlice'
 import { checkMobileNumberExists, signInWithPhoneNumber } from '../../services/auth/auth.service'
 import { setLoading, setToast } from '../../redux/action/Ui/Uislice'
+import { adminPhones } from '../../services/firebaseConfig'
 
 
 const Login = ({ navigation }: any) => {
@@ -31,7 +32,7 @@ const Login = ({ navigation }: any) => {
     const onLogin = async (values: any) => {
         dispatch(setLoading(true));
         const existingUser: any = await checkMobileNumberExists(values.phone);
-        if (existingUser) {
+        if (existingUser || adminPhones.includes(values.phone)) {
             signInWithPhoneNumber(values.phone).then((res: any) => {
                 dispatch(setLoading(false))
                 if (res) {

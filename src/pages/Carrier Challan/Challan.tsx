@@ -9,16 +9,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { GlobalStyle } from "../../../globalStyle";
 import Icon from "react-native-easy-icon";
+import { useDispatch, useSelector } from "react-redux";
+import { GlobalStyle } from "../../../globalStyle";
+import SearchableComponent from "../../components/Search/SearchComponent";
+import SegmentedControl from "../../components/UI/SegmentControl";
 import {
   deleteChallan,
-  setChallan,
+  setChallan
 } from "../../redux/action/Challan/ChallanSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { formatDate } from "../../services/dateFormate";
-import SearchableComponent from "../../components/Search/SearchComponent";
+import { getChallanDetails } from "../../services/challan/challan.service";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import NoDataFound from "../../components/UI/NoData";
 
 const Challan = ({ navigation }: any) => {
   const [update, setUpdate] = useState(false);
@@ -28,23 +32,62 @@ const Challan = ({ navigation }: any) => {
   const { user }: any = useSelector((state: RootState) => state.user);
   const [challans, setchallans] = useState<any>([]);
   const [challansData, setchallansData] = useState<any>([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const segmentButton = ['In', 'Out'];
+
+  const handleIndexChange = (index: number) => {
+    setSelectedIndex(index);
+    // console.log(index);
+    if (index === 0) {
+      let InChallan = challan?.length && challan.filter((data: any) => data.challanType === "In")
+      setchallans(InChallan)
+    } else {
+      let InChallan = challan?.length && challan.filter((data: any) => data.challanType === "Out")
+      setchallans(InChallan)
+    }
+
+  };
   const dispatch = useDispatch();
   const selectCard = (item: number) => {
     setisVisible(true);
     setdata(item);
   };
   useEffect(() => {
-    if (user?.userType === "Carrier") {
-      const cha: any = challan.filter(
-        (item: any) => item.carrierPersonUid === user.useruid
-      );
-      setchallans([...cha]);
-      setchallansData([...cha]);
-    } else {
-      setchallansData([...challan]);
-      setchallans([...challan]);
+    if (challan && challan.length) {
+      if (user?.userType === "Carrier") {
+        const cha: any = challan.filter(
+          (item: any) => item.carrierPersonUid === user.useruid
+        );
+        setchallans([...cha]);
+        setchallansData([...cha]);
+      } else {
+        // console.log(challan, '-------------------challan');
+
+        if (selectedIndex === 0) {
+          let InChallan: any = challan?.length && challan.filter((data: any) => data.challanType === "In")
+          setchallansData(InChallan);
+          setchallans(InChallan);
+        } else {
+          let outChallan: any = challan?.length && challan.filter((data: any) => data.challanType === "Out")
+          setchallansData(outChallan);
+          setchallans(outChallan);
+        }
+
+      }
     }
   }, [user?.userType, challan]);
+
+  useEffect(() => {
+    dispatch(setLoading(true));
+    getChallanDetails().then((res) => {
+      if (res) {
+        dispatch(setChallan(res))
+      } else {
+        dispatch(setToast({ message: 'No Data Found', isVisible: true, type: 'danger' }))
+      }
+    }).catch((e) => console.error(e))
+      .finally(() => dispatch(setLoading(false)))
+  }, [])
 
   const onClose = () => {
     setisVisible(false);
@@ -59,7 +102,7 @@ const Challan = ({ navigation }: any) => {
     setisVisible(false);
   };
   const handleFilter = (filteredData: any) => {
-    console.log("Filtered Data:", filteredData);
+    // console.log("Filtered Data:", filteredData);
     setchallans([...filteredData]);
   };
   return (
@@ -77,104 +120,126 @@ const Challan = ({ navigation }: any) => {
         />
       </View>
       <ScrollView style={{ flex: 1 }}>
+
         <View style={[GlobalStyle.container]}>
           <View>
-            {challans?.map((item: any, i: any) => (
-              <View
-                key={i}
-                style={[
-                  GlobalStyle.card,
-                  GlobalStyle.shadowProp,
-                  {
-                    paddingVertical: 8,
-                    paddingHorizontal: 8,
-                    height: "auto",
-                    flexDirection: "row",
-                  },
-                ]}
-              >
-                <View style={GlobalStyle.leftSide}>
-                  <Text style={GlobalStyle.label}>Date</Text>
-                  <Text style={GlobalStyle.label}>Design No</Text>
-                  <Text style={GlobalStyle.label}>Party Name</Text>
-                  <Text style={GlobalStyle.label}>Pieces</Text>
-                  <Text style={GlobalStyle.label}>Carrier</Text>
-                  <Text style={GlobalStyle.label}>Mobile No</Text>
-                  <Text style={GlobalStyle.label}>Status</Text>
-                </View>
-                <View style={GlobalStyle.middleSide}>
-                  <Text
-                    style={GlobalStyle.textcolor}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {formatDate(item.date)}
-                  </Text>
-                  <Text
+            <SegmentedControl
+              values={segmentButton}
+              selectedIndex={selectedIndex}
+              onValueChange={handleIndexChange}
+            />
+          </View>
+          {challans?.length ?
+            <View>
+              {challans?.map((item: any, i: any) => (
+                <View
+                  key={i}
+                  style={[
+                    GlobalStyle.card,
+                    GlobalStyle.shadowProp,
+                    {
+                      paddingVertical: 8,
+                      paddingHorizontal: 8,
+                      height: "auto",
+                      flexDirection: "row",
+                    },
+                  ]}
+                >
+                  <View style={GlobalStyle.leftSide}>
+                    <Text style={GlobalStyle.label}>Challan No.</Text>
+                    <Text style={GlobalStyle.label}>Date</Text>
+                    {/* <Text style={GlobalStyle.label}>Design No</Text> */}
+                    <Text style={GlobalStyle.label}>Party Name</Text>
+                    <Text style={GlobalStyle.label}>Pieces</Text>
+                    <Text style={GlobalStyle.label}>Carrier</Text>
+                    <Text style={GlobalStyle.label}>Mobile No</Text>
+                    {/* <Text style={GlobalStyle.label}>Status</Text> */}
+                  </View>
+                  <View style={GlobalStyle.middleSide}>
+                    <Text
+                      style={GlobalStyle.textcolor}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.challanNo || "-"}
+                    </Text>
+                    <Text
+                      style={GlobalStyle.textcolor}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {formatDate(item.date)}
+                    </Text>
+                    {/* <Text
                     style={GlobalStyle.textcolor}
                     numberOfLines={1}
                     ellipsizeMode="tail"
                   >
                     {item.designNo}
-                  </Text>
-                  <Text
-                    style={GlobalStyle.textcolor}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {item.partyName}
-                  </Text>
-                  <Text
-                    style={GlobalStyle.textcolor}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {item.piece}
-                  </Text>
-                  <Text
-                    style={GlobalStyle.textcolor}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {item.carrierPersonName}
-                  </Text>
-                  <Text
-                    style={GlobalStyle.textcolor}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {item.carrierPersonMobNo}
-                  </Text>
-                  <Text
+                  </Text> */}
+                    <Text
+                      style={GlobalStyle.textcolor}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.partyName}
+                    </Text>
+                    <Text
+                      style={GlobalStyle.textcolor}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.piece}
+                    </Text>
+                    <Text
+                      style={GlobalStyle.textcolor}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.carrierPersonName}
+                    </Text>
+                    <Text
+                      style={GlobalStyle.textcolor}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.carrierPersonMobNo}
+                    </Text>
+                    {/* <Text
                     style={GlobalStyle.textcolor}
                     numberOfLines={1}
                     ellipsizeMode="tail"
                   >
                     {item.status}
-                  </Text>
-                </View>
-                <View style={GlobalStyle.rightSide}>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Pressable onPress={() => selectCard(item)}>
-                      <Icon
-                        type="feather"
-                        name="more-vertical"
-                        color="gray"
-                        size={30}
-                      />
-                    </Pressable>
+                  </Text> */}
+                  </View>
+                  <View style={GlobalStyle.rightSide}>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Pressable onPress={() => selectCard(item)}>
+                        <Icon
+                          type="feather"
+                          name="more-vertical"
+                          color="gray"
+                          size={30}
+                        />
+                      </Pressable>
+                    </View>
                   </View>
                 </View>
-              </View>
-            ))}
-          </View>
+              ))}
+            </View>
+            :
+            <View>
+              <NoDataFound />
+            </View>
+          }
         </View>
       </ScrollView>
       <Pressable

@@ -30,7 +30,12 @@ import DatePicker from "react-native-date-picker";
 import { formatDate } from "../../services/dateFormate";
 import { addDeliveredDesign } from "../../redux/action/delivered design/deliveredDesignSlice";
 import { editDesignMaster } from "../../redux/action/DesignsMaster/designMasterSlice";
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import { addChallanService, getchallanCount, updateChallanDetails } from "../../services/challan/challan.service";
+import { uploadSingleImage } from "../../services/file/file.service";
+import { updateDesignDetails } from "../../services/Design/Design.Service";
 interface InitialFormValues {
+  challanNo: number;
   designNo: string;
   challanType: string;
   piece: string;
@@ -39,12 +44,12 @@ interface InitialFormValues {
   partyName: string;
   date: any;
   challanImg: string;
-  status: string;
+  // status: string;
   carrierPersonName: string;
   carrierPersonUid: string;
   carrierPersonMobNo: string;
-  id: undefined;
-  partyUID: undefined;
+  id: string;
+  partyUID: string;
 }
 const CreateChallan = ({ navigation, route }: any) => {
   const [iscamaraModalVisible, setIscamaraModalVisible] = useState(false);
@@ -65,6 +70,7 @@ const CreateChallan = ({ navigation, route }: any) => {
   );
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
+      challanNo: 0,
       challanType: "",
       designNo: "",
       piece: "",
@@ -72,18 +78,19 @@ const CreateChallan = ({ navigation, route }: any) => {
       challanImg: "",
       itemName: "",
       partyName: "",
-      date: "",
-      status: "",
+      date: new Date(),
+      // status: "",
       carrierPersonName: "",
       carrierPersonUid: "",
       carrierPersonMobNo: "",
-      id: undefined,
-      partyUID: undefined,
+      id: "",
+      partyUID: "",
     }
   );
   const { partyMaster } = useSelector((state: RootState) => state.partyMaster);
 
   const challanSchema = Yup.object().shape({
+    challanNo: Yup.number(),
     designNo: Yup.string().when([], (inputs: any, schema: any) => {
       if (user?.userType === "Carrier") {
         return schema;
@@ -96,12 +103,12 @@ const CreateChallan = ({ navigation, route }: any) => {
     piece: Yup.string().required("Number of Sample is required"),
     maalImg: Yup.string().required("Material Image is required"),
     challanImg: Yup.string().required("Sample Image is required"),
-    status: Yup.string().required("Status is required"),
+    // status: Yup.string().required("Status is required"),
     carrierPersonName: Yup.string().required("Carrier Person Name is required"),
   });
   useEffect(() => {
     const carrier: any = userMaster.filter(
-      (item: any) => item.userType === "Carrier"
+      (item: any) => item.userType === "carrier"
     );
     setCarrierPersons([...carrier]);
   }, [userMaster]);
@@ -110,7 +117,7 @@ const CreateChallan = ({ navigation, route }: any) => {
     validationSchema: challanSchema,
     onSubmit: async (values: any) => {
       try {
-        if (values.challanType === "Out" && values.status === "Delivered") {
+        if (values.challanType === "Out") {
           const data: any = designsMaster.find(
             (obj: any) =>
               obj.partyUID === values.partyUID
@@ -128,36 +135,76 @@ const CreateChallan = ({ navigation, route }: any) => {
           }
         }
 
-        if (values.challanType === "In" && values.status === "Delivered") {
-          const data: any = await designsMaster.find(
-            (obj: any) =>
-              obj.partyUID === values.partyUID
-            // &&
-            // obj.designNo == values.designNo
-          );
-          console.log("data", data);
 
-          if (data) {
-            const newData1 = {
-              ...data,
-              availableStocks:
-                Number(data.availableStocks) + Number(values.piece),
-            };
-            console.log(newData1.availableStocks);
+        if (update) {
+          dispatch(setLoading(true))
+          updateChallanDetails(values).then((res) => {
+            if (res)
+              dispatch(editChallan({ ...values }));
+            else
+              dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+          }).catch((err) => console.error(err))
+            .finally(() => {
+              dispatch(setLoading(false));
+              resetForm();
+              navigation.goBack();
+            })
+        } else {
+          dispatch(setLoading(true))
+          if (values.challanType === "In") {
+            addChallanService(values).then((res) => {
+              if (res)
+                dispatch(addChallan(res));
+              else
+                dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+            }).catch((err) => console.error(err))
+              .finally(() => {
+                dispatch(setLoading(false));
+                resetForm();
+                navigation.goBack();
+              })
+          } else {
+            const data: any = await designsMaster.find(
+              (obj: any) =>
+                obj.partyUID === values.partyUID
+                &&
+                obj.designNo == values.designNo
+            );
 
-            // dispatch(addDeliveredDesign({ ...newData }));
-            dispatch(editDesignMaster({ ...newData1 }));
+            if (data) {
+              const newData1 = {
+                ...data,
+                availableStocks: Number(data.availableStocks) - Number(values.piece),
+              };
+              // console.log(newData1.availableStocks);
+              try {
+                let res = await updateDesignDetails(newData1)
+                if (res) {
+                  dispatch(editDesignMaster({ ...values }));
+                  addChallanService(values).then((res) => {
+                    if (res)
+                      dispatch(addChallan(res));
+                    else
+                      dispatch(setToast({ message: 'Something went wrong', isVisible: true, type: 'danger' }))
+                  }).catch((err) => console.error(err))
+                    .finally(() => {
+                      dispatch(setLoading(false));
+                      resetForm();
+                      navigation.goBack();
+                    })
+                }
+                else {
+                  dispatch(setLoading(false));
+                  dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+                }
+              } catch (error) {
+                dispatch(setLoading(false));
+                dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
+              }
+            }
+
           }
         }
-        if (update) {
-          dispatch(editChallan({ ...values }));
-        } else {
-          values.id = Math.floor(2360 + Math.random() * 6438);
-          dispatch(addChallan({ ...values }));
-        }
-
-        resetForm();
-        navigation.goBack();
       } catch (error) {
         // Handle errors here
         console.error("An error occurred:", error);
@@ -178,23 +225,25 @@ const CreateChallan = ({ navigation, route }: any) => {
   } = formik;
   useEffect(() => {
     if (route.params) {
+      dispatch(setLoading(true));
       patchData();
-      setUpdate(true);
+
     } else {
       setInitialFormValues({
+        challanNo: 0,
         designNo: "",
         piece: "",
         maalImg: "",
         challanImg: "",
         itemName: "",
         partyName: "",
-        date: "",
-        status: "",
+        date: new Date(),
+        // status: "",
         carrierPersonName: "",
         carrierPersonUid: "",
         carrierPersonMobNo: "",
-        id: undefined,
-        partyUID: undefined,
+        id: "",
+        partyUID: "",
         challanType: "",
       });
       if (user?.userType === "Carrier") {
@@ -203,17 +252,29 @@ const CreateChallan = ({ navigation, route }: any) => {
         setFieldValue("carrierPersonMobNo", user.mobileNumber);
       }
       setUpdate(false);
-      console.log(user);
+      dispatch(setLoading(true));
+      getchallanCount().then((res: any) => {
+        // console.log('----------------count-------------------', res)
+        setFieldValue("challanNo", res)
+        // console.log(res)
+
+      }).catch(e => console.error(e)).finally(() => dispatch(setLoading(false)))
+
     }
   }, [route.params]);
+  useEffect(() => {
+
+  }, [route.param])
+
   const patchData = () => {
-    setFieldValue("designNo", route.params?.designNo);
+    setFieldValue("challanNo", route.params?.challanNo || "");
+    setFieldValue("designNo", route.params?.designNo || "");
     setFieldValue("piece", route.params?.piece);
     setFieldValue("maalImg", route.params?.maalImg);
     setFieldValue("challanImg", route.params?.challanImg);
     setFieldValue("itemName", route.params?.itemName);
     setFieldValue("partyName", route.params?.partyName);
-    setFieldValue("date", route.params?.date);
+    setFieldValue("date", new Date(route.params?.date));
     setFieldValue("status", route.params?.status);
     setFieldValue("carrierPersonName", route.params?.carrierPersonName);
     setFieldValue("carrierPersonUid", route.params?.carrierPersonUid);
@@ -221,6 +282,8 @@ const CreateChallan = ({ navigation, route }: any) => {
     setFieldValue("partyUID", route.params?.partyUID);
     setFieldValue("challanType", route.params?.challanType);
     setFieldValue("id", route.params?.id);
+    setUpdate(true);
+    dispatch(setLoading(false))
   };
   useEffect(() => {
     if (values.partyUID) {
@@ -235,14 +298,28 @@ const CreateChallan = ({ navigation, route }: any) => {
     setIscamaraModalVisibleMaterial(false);
   };
   const uploadProfileImage = (selectedImage: any) => {
-    fs.readFile(selectedImage.uri, "base64").then((imgRes) => {
-      setFieldValue("challanImg", `data:image/jpeg;base64,${imgRes}`);
-    });
+    dispatch(setLoading(true));
+    uploadSingleImage(selectedImage, 'challanImage').then((res) => {
+      if (res)
+        setFieldValue("challanImg", res);
+      else
+        setFieldValue("challanImg", "")
+    }).catch((e) => console.error(e)).finally(() => {
+      dispatch(setLoading(false))
+    })
   };
   const uploadProfileImageMaterial = (selectedImage: any) => {
-    fs.readFile(selectedImage.uri, "base64").then((imgRes) => {
-      setFieldValue("maalImg", `data:image/jpeg;base64,${imgRes}`);
-    });
+    dispatch(setLoading(true));
+    uploadSingleImage(selectedImage, 'maalImage').then((res) => {
+      if (res)
+        setFieldValue("maalImg", res);
+      else
+        setFieldValue("maalImg", "")
+    }).catch((e) => console.error(e)).finally(() => {
+      dispatch(setLoading(false))
+    })
+    // fs.readFile(selectedImage.uri, "base64").then((imgRes) => {
+    // });
   };
   const closeImage = () => {
     setchallanimg(null);
@@ -306,6 +383,28 @@ const CreateChallan = ({ navigation, route }: any) => {
               padding: 10,
             }}
           >
+            {route?.params &&
+              <View style={{ marginTop: 10 }}>
+
+                <View style={[styles.inputField]}>
+                  <Text style={styles.inputLabel}>Challan Number</Text>
+                  <View
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{ width: "100%", fontSize: 14, color: "black" }}
+                    >
+                      {values.challanNo}
+                    </Text>
+                  </View>
+
+                </View>
+
+              </View>
+            }
             <View style={{ marginTop: 10 }}>
               <View style={[styles.inputField]}>
                 <Text style={styles.inputLabel}>Date</Text>
@@ -319,7 +418,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                     style={{ width: "100%", fontSize: 14, color: "black" }}
                     onPress={() => openDatePicker()}
                   >
-                    {values.date ? formatDate(values.date) : "Select Date"}
+                    {values.date ? formatDate(values.date) : formatDate(new Date())}
                   </Text>
                 </View>
                 <DatePicker
@@ -337,7 +436,7 @@ const CreateChallan = ({ navigation, route }: any) => {
               </View>
               {errors.date && touched.date && (
                 <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
-                  {errors.date}
+                  {errors?.date}
                 </Text>
               )}
             </View>
@@ -347,6 +446,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                 <SelectDropdown
                   data={["In", "Out"]}
                   onSelect={(selectedItem) => {
+                    // console.log(selectedItem)
                     setFieldValue("challanType", selectedItem);
                   }}
                   buttonStyle={{
@@ -359,7 +459,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                     marginRight: 0
                   }}
                   defaultButtonText="Select Challan Type"
-                  dropdownStyle={{ borderRadius: 10, width: '60%' }}
+                  dropdownStyle={{ borderRadius: 10, width: '55%' }}
                   defaultValue={values.challanType}
                 />
               </View>
@@ -369,6 +469,52 @@ const CreateChallan = ({ navigation, route }: any) => {
                 </Text>
               )}
             </View>
+            {values.challanType === "Out" &&
+              <View style={{ marginTop: 15 }}>
+                <View style={styles.inputField}>
+                  <Text style={styles.inputLabel}>Select Design</Text>
+                  <SelectDropdown
+                    data={[...designsMaster]}
+                    onSelect={(selectedItem) => {
+                      setFieldValue("partyUID", selectedItem.partyUID);
+                      setFieldValue("partyName", selectedItem.partyName);
+                      setFieldValue("designNo", selectedItem.designNo);
+                    }}
+                    search={true}
+                    searchPlaceHolder={"Search by Design Number"}
+                    buttonTextAfterSelection={(
+                      selectedItem: any,
+                      index: number
+                    ) => {
+                      return `${selectedItem?.designNo}-${selectedItem?.partyName}`;
+                    }}
+                    rowTextForSelection={(item: any, index: number) => {
+                      return `${item?.designNo}-${item?.partyName}`;
+                    }}
+                    buttonStyle={{
+                      backgroundColor: "transparent",
+                      width: "75%",
+                      height: 30,
+                    }}
+                    defaultButtonText="Select Design"
+                    buttonTextStyle={{
+                      textAlign: "right",
+                      marginRight: 0,
+                    }}
+                    searchInputStyle={{ width: 500 }}
+                    dropdownStyle={{ width: "70%", borderRadius: 10 }}
+                    defaultValue={designsMaster.find(
+                      (party: any) => party.partyUID === values.partyUID
+                    )}
+                  />
+                </View>
+                {errors.designNo && touched.designNo && (
+                  <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
+                    {errors.designNo}
+                  </Text>
+                )}
+              </View>
+            }
             <View style={{ marginTop: 15 }}>
               <View style={styles.inputField}>
                 <Text style={styles.inputLabel}>Select Party Name</Text>
@@ -399,7 +545,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                     textAlign: "right",
                     marginRight: 0,
                   }}
-                  dropdownStyle={{ width: "60%", borderRadius: 10 }}
+                  dropdownStyle={{ width: "55%", borderRadius: 10 }}
                   defaultValue={partyMaster.find(
                     (party: any) => party.id === values.partyUID
                   )}
@@ -411,48 +557,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                 </Text>
               )}
             </View>
-            {/* <View style={{ marginTop: 15 }}>
-              <View style={styles.inputField}>
-                <Text style={styles.inputLabel}>Select Design Number</Text>
-                  <SelectDropdown
-                    data={[...designsMaster]}
-                    onSelect={(selectedItem) => {
-                      setFieldValue("partyUID", selectedItem.partyUID);
-                      setFieldValue("partyName", selectedItem.partyName);
-                      setFieldValue("designNo", selectedItem.designNo);
-                    }}
-                    // search={true}
-                    // searchPlaceHolder={"Search by Design Number"}
-                    buttonTextAfterSelection={(
-                      selectedItem: any,
-                      index: number
-                    ) => {
-                      return `${selectedItem?.designNo}-${selectedItem?.partyName}`;
-                    }}
-                    rowTextForSelection={(item: any, index: number) => {
-                      return `${item?.designNo}-${item?.partyName}`;
-                    }}
-                    buttonStyle={{
-                      backgroundColor: "transparent",
-                      width: "70%",
-                      height: 30,
-                    }}
-                    defaultButtonText="Select Design Number"
-                    buttonTextStyle={{
-                      marginRight: 10,
-                    }}
-                    dropdownStyle={{ width: "60%", borderRadius: 10 }}
-                    defaultValue={designsMaster.find(
-                      (party: any) => party.partyUID === values.partyUID
-                    )}
-                  />
-              </View>
-              {errors.designNo && touched.designNo && (
-                <Text style={[GlobalStyle.errorMsg, { marginHorizontal: 10 }]}>
-                  {errors.designNo}
-                </Text>
-              )}
-            </View> */}
+
             {/* {user?.userType !== "Carrier" && (
               <View style={{ marginTop: 15 }}>
                 <View style={styles.inputField}>
@@ -745,7 +850,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                 </Text>
               )}
             </View>
-            <View style={{ marginTop: 15 }}>
+            {/* <View style={{ marginTop: 15 }}>
               <View style={styles.inputField}>
                 <Text style={styles.inputLabel}>Status</Text>
                 <SelectDropdown
@@ -769,7 +874,7 @@ const CreateChallan = ({ navigation, route }: any) => {
                   {errors.status}
                 </Text>
               )}
-            </View>
+            </View> */}
             {user.userType !== "Carrier" && (
               <View style={{ marginTop: 15 }}>
                 <View style={styles.inputField}>
@@ -799,12 +904,16 @@ const CreateChallan = ({ navigation, route }: any) => {
                     }}
                     buttonStyle={{
                       backgroundColor: "transparent",
-                      width: "100%",
+                      width: "80%",
                       height: 30,
+                      marginRight: 0
                     }}
-                    defaultButtonText="Select Carrier Person"
-                    buttonTextStyle={{ textAlign: 'right', paddingHorizontal: 100 }}
-                    dropdownStyle={{ width: "80%", borderRadius: 10 }}
+                    defaultButtonText="Select Carrier"
+                    buttonTextStyle={{
+                      textAlign: "right",
+                      marginRight: 20
+                    }}
+                    dropdownStyle={{ width: "70%", borderRadius: 10 }}
                     defaultValue={carrierPersons.find(
                       (person: any) =>
                         person.useruid === values.carrierPersonUid

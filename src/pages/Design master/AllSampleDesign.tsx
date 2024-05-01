@@ -42,7 +42,7 @@ const AllSampleDesign = ({ navigation }: any) => {
     setallsample([...designsMaster]);
     setallsampledata([...designsMaster]);
   }, [designsMaster]);
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setLoading(true))
     getDesignDetails().then((res) => {
       dispatch(setLoading(false))
@@ -50,10 +50,11 @@ const AllSampleDesign = ({ navigation }: any) => {
         dispatch(setDesignMaster(res))
       }
       else {
+        dispatch(setDesignMaster([]))
         dispatch(setToast({ message: 'No Data Found', isVisible: true, type: 'danger' }))
       }
     })
-  },[])
+  }, [])
   useEffect(() => {
     const all: any = [...designsMaster];
     const groupedByPartyName: any = Object.values(
@@ -284,7 +285,7 @@ const AllSampleDesign = ({ navigation }: any) => {
                           }}
                         >
                           <Image
-                            source={{ uri: item.sampleImg[0] }}
+                            source={{ uri: item.sampleImg?.length && item.sampleImg[0] }}
                             style={{
                               width: 80,
                               height: 80,
