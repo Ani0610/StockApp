@@ -14,7 +14,7 @@ const assignJobSlice = createSlice({
             state.assignJobs = [...state.assignJobs, action.payload]
         },
         editAssignJob: (state: any, action) => {
-            const findIndex = state.receiveMaal.findIndex((item: any) => item.id === action.payload.id)
+            const findIndex = state.assignJobs.findIndex((item: any) => item.id === action.payload.id)
             state.assignJobs[findIndex] = action.payload
         },
         deleteAssignJob: (state: any, action) => {

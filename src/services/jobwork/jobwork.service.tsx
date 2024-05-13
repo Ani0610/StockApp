@@ -35,6 +35,22 @@ export const getAssignJobDetails = async () => {
         console.error(error);
     }
 }
+export const getAssignJobDetailsForUID = async (UID: string) => {
+    try {
+        const querySnapshot = await jobCollection.where('isDeleted', '!=', true).where("assignTo", '==', UID).get();
+        if (querySnapshot.empty) {
+            return false;
+        } else {
+            const data = querySnapshot.docs.map(doc => ({
+                ...doc.data(),
+            }));
+            return data;
+        }
+    } catch (error) {
+        return false;
+        console.error(error);
+    }
+}
 export const updateAssignJobDetails = async (values: any) => {
     try {
         const res = await jobCollection.doc(values.id).update(JSON.parse(JSON.stringify(values)))

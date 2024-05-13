@@ -1,19 +1,15 @@
 [
     {
+        "merged": "com.stock.app-merged_res-44:/drawable-hdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-hdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
         "merged": "com.stock.app-merged_res-44:/mipmap-mdpi_ic_launcher_foreground.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-mdpi/ic_launcher_foreground.webp"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-xxhdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-xxhdpi\\ic_launcher_round.png"
-    },
-    {
         "merged": "com.stock.app-merged_res-44:/mipmap-xxhdpi_ic_launcher_foreground.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-xxhdpi/ic_launcher_foreground.webp"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-xhdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-xhdpi\\ic_launcher_round.png"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-xhdpi_ic_launcher_foreground.webp.flat",
@@ -24,132 +20,104 @@
         "source": "com.stock.app-main-46:/mipmap-hdpi/ic_launcher_foreground.webp"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-hdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-hdpi\\ic_launcher_round.png"
+        "merged": "com.stock.app-merged_res-44:/drawable-mdpi_node_modules_reactnavigation_elements_src_assets_backiconmask.png.flat",
+        "source": "com.stock.app-main-46:/drawable-mdpi/node_modules_reactnavigation_elements_src_assets_backiconmask.png"
+    },
+    {
+        "merged": "com.stock.app-merged_res-44:/drawable-hdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-hdpi/node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher_foreground.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-xxxhdpi/ic_launcher_foreground.webp"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-hdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-hdpi\\ic_launcher.png"
+        "merged": "com.stock.app-merged_res-44:/drawable-xxxhdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-xxxhdpi/node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-anydpi-v26_ic_launcher.xml.flat",
         "source": "com.stock.app-main-46:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-mdpi_src_assets_sample4.jpg.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-mdpi\\src_assets_sample4.jpg"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-mdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-mdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-mdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-mdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
+        "merged": "com.stock.app-merged_res-44:/drawable-mdpi_src_assets_sample3.jpg.flat",
+        "source": "com.stock.app-main-46:/drawable-mdpi/src_assets_sample3.jpg"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-hdpi_ic_launcher_round.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-hdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-hdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-hdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
-    },
-    {
         "merged": "com.stock.app-merged_res-44:/mipmap-hdpi_ic_launcher.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-hdpi/ic_launcher.webp"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-xhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-xhdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
         "source": "com.stock.app-main-46:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-xxhdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-xxhdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
+        "merged": "com.stock.app-merged_res-44:/drawable-mdpi_src_assets_sample1.jpg.flat",
+        "source": "com.stock.app-main-46:/drawable-mdpi/src_assets_sample1.jpg"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-xxxhdpi\\ic_launcher_round.png"
+        "merged": "com.stock.app-merged_res-44:/drawable-xhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-xhdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-mdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-mdpi\\ic_launcher_round.png"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-mdpi_src_assets_sample2.jpg.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-mdpi\\src_assets_sample2.jpg"
+        "merged": "com.stock.app-merged_res-44:/drawable-xxxhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-xxxhdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-mdpi_ic_launcher_round.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-mdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-mdpi_src_assets_sample1.jpg.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-mdpi\\src_assets_sample1.jpg"
+        "merged": "com.stock.app-merged_res-44:/drawable-mdpi_src_assets_sample4.jpg.flat",
+        "source": "com.stock.app-main-46:/drawable-mdpi/src_assets_sample4.jpg"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-xxxhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-hdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-hdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
-    },
-    {
         "merged": "com.stock.app-merged_res-44:/mipmap-mdpi_ic_launcher.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-mdpi/ic_launcher.webp"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-xxhdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-mdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-mdpi\\ic_launcher.png"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-xxhdpi_ic_launcher.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-xxhdpi/ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable_rn_edit_text_material.xml.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable\\rn_edit_text_material.xml"
+        "merged": "com.stock.app-merged_res-44:/drawable-mdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-mdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-xhdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-xhdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
+        "merged": "com.stock.app-merged_res-44:/drawable_rn_edit_text_material.xml.flat",
+        "source": "com.stock.app-main-46:/drawable/rn_edit_text_material.xml"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-xxxhdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-xxxhdpi\\node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
+        "merged": "com.stock.app-merged_res-44:/drawable-xxhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-xxhdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
     },
     {
         "merged": "com.stock.app-merged_res-44:/drawable_ic_launcher_background.xml.flat",
         "source": "com.stock.app-main-46:/drawable/ic_launcher_background.xml"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-mdpi_src_assets_sample3.jpg.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-mdpi\\src_assets_sample3.jpg"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-xxhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-xxhdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-xxxhdpi\\ic_launcher.png"
+        "merged": "com.stock.app-merged_res-44:/drawable-xhdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-xhdpi/node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-xhdpi_ic_launcher.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.stock.app-merged_res-44:/drawable-mdpi_src_assets_sample2.jpg.flat",
+        "source": "com.stock.app-main-46:/drawable-mdpi/src_assets_sample2.jpg"
+    },
+    {
+        "merged": "com.stock.app-merged_res-44:/drawable-xxhdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-xxhdpi/node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
     },
     {
         "merged": "com.stock.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher.webp.flat",
@@ -160,19 +128,11 @@
         "source": "com.stock.app-main-46:/mipmap-xxhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-xxxhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-xxxhdpi\\node_modules_reactnavigation_elements_src_assets_backicon.png"
-    },
-    {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\drawable-mdpi_node_modules_reactnavigation_elements_src_assets_backiconmask.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\drawable-mdpi\\node_modules_reactnavigation_elements_src_assets_backiconmask.png"
-    },
-    {
         "merged": "com.stock.app-merged_res-44:/mipmap-xhdpi_ic_launcher_round.webp.flat",
         "source": "com.stock.app-main-46:/mipmap-xhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-merged_res-44:\\mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\aniru\\.gradle\\daemon\\8.3\\com.stock.app-main-46:\\mipmap-xhdpi\\ic_launcher.png"
+        "merged": "com.stock.app-merged_res-44:/drawable-mdpi_node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png.flat",
+        "source": "com.stock.app-main-46:/drawable-mdpi/node_modules_reactnavigation_drawer_src_views_assets_toggledrawericon.png"
     }
 ]

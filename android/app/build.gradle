@@ -106,8 +106,12 @@ android {
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
+    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
+    implementation "androidx.browser:browser:1.2.0"
+    implementation 'com.google.android.play:integrity:1.1.0'
+
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

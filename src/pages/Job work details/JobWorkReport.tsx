@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, Text, View } from 'react-native';
-import { GlobalStyle } from '../../../globalStyle';
-import SearchableComponent from '../../components/Search/SearchComponent';
+import { Pressable, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import Icon from "react-native-easy-icon";
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoading } from '../../redux/action/Ui/Uislice';
-import { getAssignJobDetails } from '../../services/jobwork/jobwork.service';
-import { setAssignJobs } from '../../redux/action/assignJob/assignJobSlice';
-import { RootState } from '../../redux/store';
+import { GlobalStyle } from '../../../globalStyle';
+import ActionBarModel from '../../components/ActionBarModel/ActionBarModel';
+import SearchableComponent from '../../components/Search/SearchComponent';
 import NoDataFound from '../../components/UI/NoData';
+import SegmentedControl from '../../components/UI/SegmentControl';
+import { setLoading } from '../../redux/action/Ui/Uislice';
+import { editAssignJob, setAssignJobs } from '../../redux/action/assignJob/assignJobSlice';
+import { RootState } from '../../redux/store';
+import { getAssignJobDetails, updateAssignJobDetails } from '../../services/jobwork/jobwork.service';
+// import { updateJobWork } from '../../services/master/master.service';
 
 const JobworkReport = () => {
   const [reportData, setReportData]: any = useState([]);
@@ -16,9 +20,13 @@ const JobworkReport = () => {
   const handleFilter = () => {
     console.log('filter');
   }
+  const [isVisible, setIsVisible] = useState(false);
+  const [rowData, setRowData] = useState();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const segmentButton = ['PENDING', 'COMPLETED'];
   useEffect(() => {
-    console.log('assignJobs-----------', assignJobs)
-    setReportData(assignJobs)
+    // setReportData(assignJobs)
+    handleIndexChange(selectedIndex)
   }, [assignJobs])
   useEffect(() => {
     dispatch(setLoading(true))
@@ -28,6 +36,30 @@ const JobworkReport = () => {
       dispatch(setAssignJobs(res))
     }).finally(() => dispatch(setLoading(false)))
   }, [])
+  const handleIndexChange = (index: number) => {
+    setSelectedIndex(index);
+    // console.log(index);
+    if (index === 0) {
+      let InChallan = assignJobs?.length && assignJobs.filter((data: any) => data?.status !== "COMPLETED")
+      setReportData(InChallan)
+    } else {
+      let InChallan = assignJobs?.length && assignJobs.filter((data: any) => data.status === "COMPLETED")
+      setReportData(InChallan)
+    }
+  };
+
+  const updateJobWork = (data: any) => {
+    dispatch(setLoading(true));
+    const finalData = { ...data, ...{ status: "COMPLETED" } }
+    updateAssignJobDetails(finalData).then((res) => {
+      if (res)
+        dispatch(editAssignJob(finalData))
+    }).finally(() => {
+      dispatch(setLoading(false));
+      setIsVisible(false)
+    })
+  }
+
   return (
     <>
       <SafeAreaView style={[GlobalStyle.safeAreaCotainer, { height: "100%" }]}>
@@ -41,6 +73,13 @@ const JobworkReport = () => {
             searchKey="jobNo"
             placeholder={"job number"}
             onFilter={handleFilter}
+          />
+        </View>
+        <View style={{ paddingHorizontal: 15, paddingTop: 10 }}>
+          <SegmentedControl
+            values={segmentButton}
+            selectedIndex={selectedIndex}
+            onValueChange={handleIndexChange}
           />
         </View>
         <ScrollView>
@@ -113,14 +152,16 @@ const JobworkReport = () => {
                         justifyContent: "center",
                       }}
                     >
-                      {/* <Pressable onPress={() => setIsVisible(true)}>
-                      <Icon
-                        type="feather"
-                        name="more-vertical"
-                        color="gray"
-                        size={30}
-                      />
-                    </Pressable> */}
+                      {item.status !== "COMPLETED" &&
+                        <Pressable onPress={() => { setIsVisible(true); setRowData(item); }}>
+                          <Icon
+                            type="feather"
+                            name="more-vertical"
+                            color="gray"
+                            size={30}
+                          />
+                        </Pressable>
+                      }
                     </View>
                   </View>
                 </View>
@@ -130,47 +171,37 @@ const JobworkReport = () => {
             </View>
           </View>
         </ScrollView>
-        {/* <Pressable
-        style={{
-          position: "absolute",
-          bottom: 40,
-          right: 20,
-          backgroundColor: "blue",
-          padding: 16,
-          borderRadius: 50,
-        }}
-        onPress={() => navigation.navigate('AddEditReceiveMaal')}
-      >
-        <Icon type="feather" name="plus" color="white" size={35} />
-      </Pressable> */}
-        {/* {isVisible &&
-        <ActionBarModel
-          modalHeight={'30%'}
-          isVisible={isVisible}
-          onClose={() => setIsVisible(false)}
-          editAction={() => console.log('edit Receive')}
-          deleteAction={() => console.log('delete Receive')}
-          isExtraButton={true}
-          extraButton={
-            <TouchableOpacity
-              onPress={() =>navigation.navigate('AssignJobwork') }
-              style={[GlobalStyle.btn, { borderRadius: 15 }]}
-            >
-              <Icon type="material" name="assignment-ind" color="gray" size={25} />
-              <Text
-                style={{
-                  color: "gray",
-                  marginLeft: 10,
-                  fontWeight: "bold",
-                  fontSize: 18,
-                }}
+
+        {isVisible &&
+          <ActionBarModel
+            modalHeight={'30%'}
+            isVisible={isVisible}
+            isEditable={false}
+            isDeletable={false}
+            onClose={() => setIsVisible(false)}
+            editAction={() => console.log('edit Receive')}
+            deleteAction={() => console.log('delete Receive')}
+            isExtraButton={true}
+            extraButton={
+              <TouchableOpacity
+                onPress={() => updateJobWork(rowData)}
+                style={[GlobalStyle.btn, { borderRadius: 15 }]}
               >
-                Assign
-              </Text>
-            </TouchableOpacity>
-          }
-        />
-      } */}
+                <Icon type="material" name="check-box" color="gray" size={25} />
+                <Text
+                  style={{
+                    color: "gray",
+                    marginLeft: 10,
+                    fontWeight: "bold",
+                    fontSize: 18,
+                  }}
+                >
+                  Mark as complete
+                </Text>
+              </TouchableOpacity>
+            }
+          />
+        }
       </SafeAreaView>
     </>
   )

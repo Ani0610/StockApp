@@ -1,11 +1,15 @@
-import auth from "@react-native-firebase/auth";
+import auth, { firebase } from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import { db } from "../firebaseConfig";
 
 export async function signInWithPhoneNumber(phoneNumber: string) {
     try {
-        console.log('mobile', phoneNumber)
-        const confirmation = await auth().signInWithPhoneNumber('+91' + phoneNumber);
+        // console.log('mobile', phoneNumber)
+        // const appVerifier = await auth().verifyPhoneNumber('+91' + phoneNumber);
+        firebase.auth().settings.appVerificationDisabledForTesting = true;
+        const settings = auth().settings;
+        console.log(settings.appVerificationDisabledForTesting);
+        const confirmation = await auth().signInWithPhoneNumber('+91' + phoneNumber,true);
         console.log(confirmation, 'confirmation');
         return confirmation;
 

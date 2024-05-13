@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "883485950090",
+    "project_id": "stockapp-4401a",
+    "storage_bucket": "stockapp-4401a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883485950090:android:f4054d387dd0e5c0b8ad73",
+        "android_client_info": {
+          "package_name": "com.stock.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKgBAaQfpM3TrdroM3P1blXBHcydJ_Sug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

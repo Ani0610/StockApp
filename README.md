@@ -81,3 +81,19 @@ To learn more about React Native, take a look at the following resources:
 # debug build 
 * 'react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res'
 * go to android folder and and run command './gradlew assembleDebug'
+
+
+# release build keystore info
+-  Alias Name:stockapp
+   Password:Skyban@1234
+   Organization Unit:Skyban
+   Organization:Skyban
+   city:Surat
+   State:Gujarat
+   Country Code:IN
+
+## To generate SHA key store use this command : 
+- keytool -list -v -keystore "D:\Skyban work\Projects\React-Native\StockApp\stockapp.jks" -alias stockapp
+
+   Release keystore SHA-256 = C2:6D:10:3A:E9:C5:70:17:1D:92:FA:F5:4F:82:1E:A4:87:4B:AB:DD:65:C5:A4:10:EF:09:C9:F9:65:C2:32:87
+                     SHA-1 = 34:92:1E:C0:26:96:DE:7C:5E:73:8B:4F:E0:15:C6:70:73:BF:70:79

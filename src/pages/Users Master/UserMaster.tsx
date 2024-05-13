@@ -36,7 +36,7 @@ interface InitialFormValues {
   fullName: string;
   userType: string;
   mobileNumber: string;
-  uid: string;
+  partyUid: string;
   partyName: string;
 }
 const UserMaster = () => {
@@ -64,7 +64,7 @@ const UserMaster = () => {
       fullName: "",
       userType: "",
       mobileNumber: "",
-      uid: "",
+      partyUid: "",
       partyName: "",
     }
   );
@@ -155,7 +155,7 @@ const UserMaster = () => {
     setFieldValue("userType", data.userType);
     setFieldValue("fullName", data.fullName);
     setFieldValue("mobileNumber", data.mobileNumber);
-    setFieldValue("uid", data.uid);
+    setFieldValue("partyUid", data.partyUid);
     setUpdate(true);
     setisVisible(false);
     setShowModal(true);
@@ -498,7 +498,7 @@ const UserMaster = () => {
                           data={[...jobWorks]}
                           onSelect={(selectedItem) => {
                             console.log(selectedItem, "selecteditem");
-                            setFieldValue("uid", selectedItem.id);
+                            setFieldValue("partyUid", selectedItem.id);
                             setFieldValue("partyName", selectedItem.partyName);
                           }}
                           buttonTextAfterSelection={(
@@ -521,7 +521,7 @@ const UserMaster = () => {
                           }}
                           dropdownStyle={{ width: "80%", borderRadius: 10 }}
                           defaultValue={jobWorks.find(
-                            (job: any) => job.id === values.uid
+                            (job: any) => job.id === values.partyUid
                           )}
                         />
                       </View>

@@ -21,7 +21,9 @@ interface InitialFormValues {
     worktype: string;
     assignTo: string;
     partyName: string;
-    stoneType: any
+    partyUid:string;
+    stoneType: any;
+    status:string;
 }
 const AssignJobwork = ({ navigation, route }: any) => {
     const { jobWorks } = useSelector((state: RootState) => state.jobWorks);
@@ -42,7 +44,9 @@ const AssignJobwork = ({ navigation, route }: any) => {
             worktype: "",
             assignTo: "",
             partyName: "",
-            stoneType: null
+            partyUid:"",
+            stoneType: null,
+            status:"PENDING"
         }
     );
 
@@ -58,7 +62,6 @@ const AssignJobwork = ({ navigation, route }: any) => {
         initialValues: initialFormValues,
         validationSchema: assignSchema,
         onSubmit: async (values: any) => {
-            console.log(errors, values)
             if (values.piece && values.piece > 0) {
                 if (values.worktype === "stone") {
                     if (values.stoneType) {
@@ -272,6 +275,7 @@ const AssignJobwork = ({ navigation, route }: any) => {
                                 setFieldValue("jobwork", selectedItem?.workType)
                                 setFieldValue("assignTo", selectedItem?.id)
                                 setFieldValue("partyName", selectedItem?.partyName)
+                                setFieldValue("partyUid", selectedItem?.partyUid)
                                 if (jobs) {
                                     let finalPiece = Number(values.piece) - Number(pieces) || 0
                                     setFieldValue("piece", finalPiece.toString())

@@ -57,8 +57,9 @@ const AddEditGodownReceive = ({ navigation, route }: any) => {
         if (route?.params && route?.params.rowData) {
             dispatch(setLoading(true));
             getChallanDetails().then((res: any) => {
+                const inChallan=res.filter((item:any)=>item.challanType==="In")
+                setInChallan(inChallan)
                 if (res && res.findIndex((data: any) => data.challanType === "In") > -1) {
-                    setInChallan(res)
                     const selectedItem = route?.params?.rowData;
                     setRowdata(rowData)
                     setFieldValue("challanNo", selectedItem.challanNo);
@@ -78,12 +79,13 @@ const AddEditGodownReceive = ({ navigation, route }: any) => {
         } else {
             dispatch(setLoading(true));
             getChallanDetails().then((res: any) => {
+                const inChallan=res.filter((item:any)=>item.challanType==="In")
+                setInChallan(inChallan)
                 if (res && res.findIndex((data: any) => data.challanType === "In") > -1) {
                     const commonChallanNos = res.map((entry: any) => entry.challanNo)
                         .filter((challanNo: any) => route.params.map((entry: any) => entry.challanNo).includes(challanNo));
                     const filteredData = res.filter((entry: any) => !commonChallanNos.includes(entry.challanNo));
                     console.log(filteredData)
-                    setInChallan(filteredData)
                 }
             }).catch(e => console.error(e)).then(() => dispatch(setLoading(false)))
         }
@@ -435,7 +437,6 @@ const AddEditGodownReceive = ({ navigation, route }: any) => {
                     <View style={{ marginTop: 15 }}>
                         <View style={styles.inputField}>
                             <Text style={styles.inputLabel}>Select Party Name</Text>
-
                             <SelectDropdown
                                 data={[...partyMaster]}
                                 onSelect={(selectedItem) => {
