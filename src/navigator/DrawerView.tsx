@@ -95,14 +95,14 @@ const DrawerView = ({ navigation, state }: any) => {
                     <Icon
                       type="feather"
                       name="chevron-down"
-                      color="#000"
+                      // color="#000"
                       size={30}
                     />
                   ) : (
                     <Icon
                       type="feather"
                       name="chevron-right"
-                      color="#000"
+                      // color="#000"
                       size={30}
                     />
                   )}
@@ -617,6 +617,8 @@ const DrawerView = ({ navigation, state }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#24acf2",
+    color:"#FFF"
   },
   scrollContainer: {
     flex: 1,
@@ -628,13 +630,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     backgroundColor: "transparent",
+    color:"#FFF"
   },
   activeDrawerItem: {
-    backgroundColor: "#c6f5f5",
+    backgroundColor: "blue",
+    color:"#000"
   },
   drawerText: {
     fontSize: 16,
-    color: "#333",
+    color: "#FFF",
   },
   logoutContainer: {
     borderTopWidth: 1,

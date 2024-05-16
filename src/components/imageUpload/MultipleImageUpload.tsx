@@ -1,39 +1,36 @@
 import React, { useEffect } from 'react';
 import { Modal, PermissionsAndroid, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { CameraOptions, ImageLibraryOptions, launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { PERMISSIONS, PermissionStatus, request } from 'react-native-permissions';
-import { GlobalStyle } from '../../../globalStyle';
-import Icon from 'react-native-easy-icon';
 import ImagePicker, { Image } from 'react-native-image-crop-picker';
+import { PERMISSIONS, request } from 'react-native-permissions';
+import Icon from 'react-native-easy-icon';
+import { GlobalStyle } from '../../../globalStyle'; // adjust the import path as needed
 
 interface UploadPhotosProps {
     isVisible: boolean;
     onClose: () => void;
-    uploadFunction: (imageData: string) => void;
+    uploadFunction: (images: any[]) => void; // changed type to any[] to handle multiple images
 }
 
 const MultipleImageUploadScreen = ({ isVisible, onClose, uploadFunction }: UploadPhotosProps) => {
-
     useEffect(() => {
-        if (isVisible)
-            requestCameraPermission();
-    }, [isVisible])
+        if (isVisible) requestCameraPermission();
+    }, [isVisible]);
 
     const requestCameraPermission = async () => {
-        if (Platform.OS == 'android') {
+        if (Platform.OS === 'android') {
             try {
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.CAMERA,
                     {
                         title: 'Camera Permission',
-                        message: 'App needs access to your camera ',
+                        message: 'App needs access to your camera',
                         buttonNeutral: 'Ask Me Later',
                         buttonNegative: 'Cancel',
                         buttonPositive: 'OK',
-                    },
+                    }
                 );
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    console.log("Camera Permission Granted")
+                    console.log("Camera Permission Granted");
                 } else {
                     console.log('Camera permission denied');
                 }
@@ -41,121 +38,114 @@ const MultipleImageUploadScreen = ({ isVisible, onClose, uploadFunction }: Uploa
                 console.warn(err);
             }
         } else {
-            request(PERMISSIONS.IOS.CAMERA).then((result: PermissionStatus) => {
-                console.log(result, 'camera permission granted')
-            }).catch(() => console.warn('camera permission denied')).finally(() => {
-                request(PERMISSIONS.IOS.PHOTO_LIBRARY).then((result: PermissionStatus) => {
-                    console.log(result, 'photo permission granted')
-                }).catch(() => console.warn('photo permission denied'))
-            })
+            request(PERMISSIONS.IOS.CAMERA)
+                .then(result => console.log(result, 'camera permission granted'))
+                .catch(() => console.warn('camera permission denied'))
+                .finally(() => {
+                    request(PERMISSIONS.IOS.PHOTO_LIBRARY)
+                        .then(result => console.log(result, 'photo permission granted'))
+                        .catch(() => console.warn('photo permission denied'));
+                });
         }
     };
+
     const selectCamera = () => {
         onClose();
         setTimeout(() => {
             ImagePicker.openCamera({
                 multiple: true,
-                mediaType:'photo',
-                cropping:true
+                mediaType: 'photo',
+                cropping: true,
             })
                 .then((images: Image[] | Image) => {
                     const selectedImages: any = Array.isArray(images)
-                        ? images.map((image) => ({
-                            uri: image.path,
-                            width: image.width,
-                            height: image.height,
-                            mime: image.mime,
-                        }))
+                        ? images.map(image => ({
+                              uri: image.path,
+                              width: image.width,
+                              height: image.height,
+                              mime: image.mime,
+                          }))
                         : [
-                            {
-                                uri: images.path,
-                                width: images.width,
-                                height: images.height,
-                                mime: images.mime,
-                            },
-                        ];
-    
+                              {
+                                  uri: images.path,
+                                  width: images.width,
+                                  height: images.height,
+                                  mime: images.mime,
+                              },
+                          ];
+
                     if (selectedImages.length > 0) {
-                        // onClose();
                         uploadFunction(selectedImages);
                     }
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.log('ImagePicker Error: ', error);
                 });
         }, 200);
-    }
+    };
+
     const selectImage = () => {
-       
         ImagePicker.openPicker({
             multiple: true,
-            mediaType:'photo',
-            cropping:true
+            mediaType: 'photo',
+            cropping: true,
         })
             .then((images: Image[] | Image) => {
                 const selectedImages: any = Array.isArray(images)
-                    ? images.map((image) => ({
-                        uri: image.path,
-                        width: image.width,
-                        height: image.height,
-                        mime: image.mime,
-                    }))
+                    ? images.map(image => ({
+                          uri: image.path,
+                          width: image.width,
+                          height: image.height,
+                          mime: image.mime,
+                      }))
                     : [
-                        {
-                            uri: images.path,
-                            width: images.width,
-                            height: images.height,
-                            mime: images.mime,
-                        },
-                    ];
+                          {
+                              uri: images.path,
+                              width: images.width,
+                              height: images.height,
+                              mime: images.mime,
+                          },
+                      ];
 
                 if (selectedImages.length > 0) {
-                    // onClose();
                     uploadFunction(selectedImages);
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('ImagePicker Error: ', error);
             });
     };
 
-    // const selectImage = () => {
-    //     const options: ImageLibraryOptions = {
-    //         mediaType: 'photo',
-    //         quality: 0.7,
-    //         includeBase64: false,
-    //         maxHeight: 1080,
-    //         maxWidth: 1080,
-
-    //     };
-    //     setTimeout(() => {
-    //         launchImageLibrary(options, async (response: any) => {
-    //             if (response.didCancel) {
-    //                 console.log('User cancelled image picker');
-    //             } else if (response.error) {
-    //                 console.log('ImagePicker Error: ', response.error);
-    //             } else if (response.assets && response.assets.length > 0) {
-    //                 onClose()
-    //                 const selectedImage = response.assets[0];
-    //                 uploadFunction(selectedImage);
-    //             }
-    //         })
-    //     }, 300);
-    // };
     return (
-        <Modal visible={isVisible} animationType="slide"
-            transparent={true} onRequestClose={onClose} onPointerDown={onClose} style={{ zIndex: 999 }}>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }} onTouchEnd={onClose}>
-                <View style={{
-                    height: "25%",
-                    width: "100%",
-                    marginTop: 'auto',
-                    backgroundColor: 'white',
-                    elevation: 5,
-                    borderTopLeftRadius: 15,
-                    borderTopRightRadius: 15
-                }}>
-                    <TouchableOpacity onPress={() => selectCamera()} style={[styles.btn, { borderRadius: 15 }]}>
+        <Modal
+            visible={isVisible}
+            animationType="slide"
+            transparent={true}
+            onRequestClose={onClose}
+            onPointerDown={onClose}
+            style={{ zIndex: 999 }}
+        >
+            <View
+                style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                }}
+                onTouchEnd={onClose}
+            >
+                <View
+                    style={{
+                        height: '25%',
+                        width: '100%',
+                        marginTop: 'auto',
+                        backgroundColor: 'white',
+                        elevation: 5,
+                        borderTopLeftRadius: 15,
+                        borderTopRightRadius: 15,
+                    }}
+                >
+                    <TouchableOpacity onPress={selectCamera} style={[styles.btn, { borderRadius: 15 }]}>
                         <Icon type="feather" name="camera" color="black" size={30} />
                         <Text style={[GlobalStyle.btntext, { color: 'black', marginLeft: 10 }]}>Open Camera</Text>
                     </TouchableOpacity>
@@ -170,7 +160,6 @@ const MultipleImageUploadScreen = ({ isVisible, onClose, uploadFunction }: Uploa
                 </View>
             </View>
         </Modal>
-
     );
 };
 
@@ -184,6 +173,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         backgroundColor: '#fff',
         paddingVertical: 15,
-        paddingHorizontal: 10
-    }
-})
+        paddingHorizontal: 10,
+    },
+});

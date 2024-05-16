@@ -11,7 +11,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  Alert
 } from "react-native";
 import DatePicker from "react-native-date-picker";
 import Icon from "react-native-easy-icon";
@@ -22,11 +23,15 @@ import { GlobalStyle } from "../../../globalStyle";
 import MultipleImageUploadScreen from "../../components/imageUpload/MultipleImageUpload";
 import {
   addDesignMaster,
-  editDesignMaster
+  editDesignMaster,
 } from "../../redux/action/DesignsMaster/designMasterSlice";
 import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
 import { RootState } from "../../redux/store";
-import { addDesignDetails, checkDesignNumberExists, updateDesignDetails } from "../../services/Design/Design.Service";
+import {
+  addDesignDetails,
+  checkDesignNumberExists,
+  updateDesignDetails,
+} from "../../services/Design/Design.Service";
 import { formatDate } from "../../services/dateFormate";
 import { uploadMultiImages } from "../../services/file/file.service";
 import AddEditStoneDetails from "../Stone details/AddEditStoneDetails";
@@ -70,6 +75,17 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   const [showAddDesignModel, setShowAddDesignModel] = useState(false);
   const [showAddJobworkModel, setShowAddJobworkModel] = useState(false);
   const [updateStone, setUpdateStone] = useState(false);
+
+  const handleUploadPress = () => {
+    if (values.sampleImg.length >= 3) {
+      Alert.alert(
+        "Upload Limit Reached",
+        "You can only upload a maximum of 3 images."
+      );
+    } else {
+      setIscamaraModalVisible(true);
+    }
+  };
 
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
@@ -236,41 +252,60 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
 
       if (update) {
         dispatch(setLoading(true));
-        updateDesignDetails(values).then((res) => {
-          if (res) {
-            dispatch(editDesignMaster({ ...values }));
-          }
-          else {
-            dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
-          }
-        }).catch((err) => console.error(err)).
-          finally(() => dispatch(setLoading(false)))
+        updateDesignDetails(values)
+          .then((res) => {
+            if (res) {
+              dispatch(editDesignMaster({ ...values }));
+            } else {
+              dispatch(
+                setToast({
+                  message: "Something went wrong",
+                  isVisible: true,
+                  type: "danger",
+                })
+              );
+            }
+          })
+          .catch((err) => console.error(err))
+          .finally(() => dispatch(setLoading(false)));
       } else {
         // values.id = Math.floor(2000 + Math.random() * 9000);
         // values.total = Number(values.total).toFixed(2);
         dispatch(setLoading(true));
         checkDesignNumberExists(values.designNo).then((res) => {
           if (!res) {
-            addDesignDetails(values).then((res) => {
-              if (res) {
-                dispatch(addDesignMaster(res));
-              }
-              else {
-                dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }))
-              }
-            }).catch((err) => console.error(err)).
-              finally(() => {
+            addDesignDetails(values)
+              .then((res) => {
+                if (res) {
+                  dispatch(addDesignMaster(res));
+                } else {
+                  dispatch(
+                    setToast({
+                      message: "Something went wrong",
+                      isVisible: true,
+                      type: "danger",
+                    })
+                  );
+                }
+              })
+              .catch((err) => console.error(err))
+              .finally(() => {
                 dispatch(setLoading(false));
                 resetForm();
                 navigation.goBack();
-              })
+              });
           } else {
-            dispatch(setToast({ message: "Design number is already exist", isVisible: true, type: 'danger' }))
-            dispatch(setLoading(false))
+            dispatch(
+              setToast({
+                message: "Design number is already exist",
+                isVisible: true,
+                type: "danger",
+              })
+            );
+            dispatch(setLoading(false));
           }
-        })
+        });
       }
-
     },
   });
   const {
@@ -321,7 +356,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   };
   useEffect(() => {
     totalofStone();
-    totalOfExpStones()
+    totalOfExpStones();
   }, [values.stoneDetails]);
   useEffect(() => {
     totalofDesign();
@@ -330,13 +365,13 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     totalofJobwork();
   }, [values.jobworkDetails]);
   useEffect(() => {
-    const newTotalAmount = values.totalstones + values.totalDesigns + values.totalJobWorks;
+    const newTotalAmount =
+      values.totalstones + values.totalDesigns + values.totalJobWorks;
     handleTotalAmountChange(newTotalAmount);
   }, [values.totalstones, values.totalDesigns, values.totalJobWorks]);
 
-
   const handleTotalAmountChange = (amount: Number) => {
-    console.log('Total amount changed:', amount);
+    console.log("Total amount changed:", amount);
     setFieldValue("total", amount);
     let profRupee: number = 0;
     let disRupee: number = 0;
@@ -345,17 +380,15 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       setFieldValue("profitRupee", profRupee || 0);
     }
     if (values.discountPercentage) {
-      disRupee =
-        (Number(values.discountPercentage) / 100) * Number(amount);
+      disRupee = (Number(values.discountPercentage) / 100) * Number(amount);
       setFieldValue("discountRupee", disRupee || 0);
     }
-    const grandTotal = Number(amount) + Number(profRupee) + Number(disRupee)
+    const grandTotal = Number(amount) + Number(profRupee) + Number(disRupee);
 
     setFieldValue("grandTotal", grandTotal || 0);
 
     // You can perform additional actions here if needed
   };
-
 
   const totalofStone = async () => {
     const total = await values.stoneDetails.reduce(
@@ -363,16 +396,16 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       0
     );
     setFieldValue("totalstones", total);
-
   };
   const totalOfExpStones = async () => {
     const total = await values.stoneDetails.reduce(
-      (stone: any, item: any) => Number(stone) + (Number(item.stoneunit) * Number(item.expectedPrice) / 100),
+      (stone: any, item: any) =>
+        Number(stone) +
+        (Number(item.stoneunit) * Number(item.expectedPrice)) / 100,
       0
     );
-    console.log(total, 'expectedTotalStonePrice')
+    console.log(total, "expectedTotalStonePrice");
     setFieldValue("expectedTotalStonePrice", total);
-
   };
 
   const totalofDesign = async () => {
@@ -385,7 +418,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       (values.totalstones ? Number(values.totalstones) : 0) +
       total +
       (values.totalJobWorks ? Number(values.totalJobWorks) : 0);
-
   };
 
   const totalofJobwork = async () => {
@@ -399,17 +431,44 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   const closecamaraModel = () => {
     setIscamaraModalVisible(false);
   };
-  const uploadProfileImage = async (selectedImage: any) => {
+  // const uploadProfileImage = async (selectedImage: any) => {
+  //   try {
+  //     dispatch(setLoading(true))
+  //     uploadMultiImages(selectedImage).then((res: any) => {
+  //       dispatch(setLoading(false))
+  //       setFieldValue("sampleImg", res);
+  //     }).catch(err => dispatch(setLoading(false)))
+  //   } catch (error) {
+  //     console.error("Error uploading images:", error);
+  //   }
+  // };
+
+  const uploadProfileImage = async (selectedImages: any[]) => {
     try {
-      dispatch(setLoading(true))
-      uploadMultiImages(selectedImage).then((res: any) => {
-        dispatch(setLoading(false))
-        setFieldValue("sampleImg", res);
-      }).catch(err => dispatch(setLoading(false)))
+        const newImageCount = values.sampleImg.length + selectedImages.length;
+        if (newImageCount <= 3) {
+            dispatch(setLoading(true));
+            uploadMultiImages(selectedImages)
+                .then((res: any) => {
+                    dispatch(setLoading(false));
+                    setFieldValue("sampleImg", [...values.sampleImg, ...res]); // Merge new images with existing ones
+                })
+                .catch(err => {
+                    dispatch(setLoading(false));
+                    console.error("Error uploading images:", err);
+                });
+        } else {
+            Alert.alert(
+                "Upload Limit Exceeded",
+                `You can only upload ${3 - values.sampleImg.length} more images.`
+            );
+        }
     } catch (error) {
-      console.error("Error uploading images:", error);
+        console.error("Error uploading images:", error);
     }
-  };
+};
+
+
   const closeImage = (i: any) => {
     // Create a copy of the sampleImg array
     const updatedSampleImg = [...values.sampleImg];
@@ -440,8 +499,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       "grandTotal",
       Number(
         Number(values.total) +
-        Number(totalProfitRupee) +
-        Number(values.discountRupee)
+          Number(totalProfitRupee) +
+          Number(values.discountRupee)
       ).toFixed(2)
     );
   };
@@ -453,8 +512,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       "grandTotal",
       Number(
         Number(values.total) +
-        Number(totalDiscountRupee) +
-        Number(values.profitRupee)
+          Number(totalDiscountRupee) +
+          Number(values.profitRupee)
       ).toFixed(2)
     );
   };
@@ -727,7 +786,11 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         alignItems: "center",
                       }}
                     >
-                      <Pressable onPress={() => setIscamaraModalVisible(true)}>
+                      {/* <Pressable onPress={() => setIscamaraModalVisible(true)}>
+                        <Text style={{ color: "gray" }}>Upload Sample</Text>
+                      </Pressable> */}
+
+                      <Pressable onPress={handleUploadPress}>
                         <Text style={{ color: "gray" }}>Upload Sample</Text>
                       </Pressable>
                     </View>
@@ -777,9 +840,11 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         paddingVertical: 5,
                       }}
                     >
-                      <View style={{
-                        flexDirection: "row",
-                      }}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                        }}
+                      >
                         <Text
                           style={{
                             fontSize: 16,
@@ -796,7 +861,15 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           }}
                           onPress={() => setShowAddStoneModel(true)}
                         >
-                          <Text style={{ color: '#0000FF', borderBottomWidth: 1, borderBottomColor: '#0000FF' }}>Add Stone</Text>
+                          <Text
+                            style={{
+                              color: "#0000FF",
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#0000FF",
+                            }}
+                          >
+                            Add Stone
+                          </Text>
                         </Pressable>
                       </View>
                       <Pressable
@@ -816,14 +889,14 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           backgroundColor:
                             values.stoneDetails &&
-                              values.stoneDetails.every(
-                                (st: any) =>
-                                  st.stoneType &&
-                                  st.stoneunit &&
-                                  st.stoneuid &&
-                                  st.price &&
-                                  st.totalOneStone
-                              )
+                            values.stoneDetails.every(
+                              (st: any) =>
+                                st.stoneType &&
+                                st.stoneunit &&
+                                st.stoneuid &&
+                                st.price &&
+                                st.totalOneStone
+                            )
                               ? "#05E3D5"
                               : "gray",
                           borderRadius: 50,
@@ -1097,24 +1170,38 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         borderColor: "lightgray",
                       }}
                     >
-                      <View style={{
-                        width: "30%",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                      }}>
-
+                      <View
+                        style={{
+                          width: "30%",
+                          alignItems: "center",
+                          justifyContent: "flex-start",
+                        }}
+                      >
                         <Text style={{ fontSize: 14, color: "gray", flex: 8 }}>
                           Total
                         </Text>
                       </View>
-                      <View style={{ width: "20%", alignItems: "center" }}>
-                      </View>
-                      <View style={{ width: "20%", alignItems: "center", overflow: 'hidden' }}>
+                      <View
+                        style={{ width: "20%", alignItems: "center" }}
+                      ></View>
+                      <View
+                        style={{
+                          width: "20%",
+                          alignItems: "center",
+                          overflow: "hidden",
+                        }}
+                      >
                         <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
                           {Number(values.totalstones).toFixed(3)}₹
                         </Text>
                       </View>
-                      <View style={{ width: "20%", alignItems: "center", overflow: 'hidden' }}>
+                      <View
+                        style={{
+                          width: "20%",
+                          alignItems: "center",
+                          overflow: "hidden",
+                        }}
+                      >
                         <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
                           {Number(values.expectedTotalStonePrice).toFixed(3)}₹
                         </Text>
@@ -1152,13 +1239,20 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           Paper Details
                         </Text>
                         <Pressable
-
                           style={{
                             paddingLeft: 10,
                           }}
                           onPress={() => setShowAddDesignModel(true)}
                         >
-                          <Text style={{ color: '#0000FF', borderBottomWidth: 1, borderBottomColor: '#0000FF' }}>Add Paper</Text>
+                          <Text
+                            style={{
+                              color: "#0000FF",
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#0000FF",
+                            }}
+                          >
+                            Add Paper
+                          </Text>
                         </Pressable>
                       </View>
 
@@ -1179,14 +1273,14 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           backgroundColor:
                             values.designDetails &&
-                              values.designDetails.every(
-                                (dsgn: any) =>
-                                  dsgn.measurement &&
-                                  dsgn.designunit &&
-                                  dsgn.designuid &&
-                                  dsgn.price &&
-                                  dsgn.totalOneDesign
-                              )
+                            values.designDetails.every(
+                              (dsgn: any) =>
+                                dsgn.measurement &&
+                                dsgn.designunit &&
+                                dsgn.designuid &&
+                                dsgn.price &&
+                                dsgn.totalOneDesign
+                            )
                               ? "#05E3D5"
                               : "gray",
                           borderRadius: 50,
@@ -1466,7 +1560,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           justifyContent: "center",
                         }}
                       >
-
                         <Text style={{ fontSize: 14, color: "gray", flex: 10 }}>
                           Total
                         </Text>
@@ -1477,9 +1570,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           alignItems: "center",
                           justifyContent: "center",
                         }}
-                      >
-
-                      </View>
+                      ></View>
                       <View
                         style={{
                           width: "20%",
@@ -1487,7 +1578,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           justifyContent: "center",
                         }}
                       >
-
                         <Text style={{ fontSize: 14, color: "gray", flex: 5 }}>
                           {Number(values.totalDesigns).toFixed(2)}₹
                         </Text>
@@ -1498,9 +1588,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           alignItems: "center",
                           justifyContent: "center",
                         }}
-                      >
-
-                      </View>
+                      ></View>
                     </View>
                   </View>
                 )}
@@ -1534,16 +1622,22 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           Job Details
                         </Text>
                         <Pressable
-
                           style={{
                             paddingLeft: 10,
                           }}
                           onPress={() => setShowAddJobworkModel(true)}
                         >
-                          <Text style={{ color: '#0000FF', borderBottomWidth: 1, borderBottomColor: '#0000FF' }}>Add Jobwork</Text>
+                          <Text
+                            style={{
+                              color: "#0000FF",
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#0000FF",
+                            }}
+                          >
+                            Add Jobwork
+                          </Text>
                         </Pressable>
                       </View>
-
 
                       <Pressable
                         disabled={
@@ -1563,15 +1657,15 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           backgroundColor:
                             values.jobworkDetails &&
-                              values.jobworkDetails.every(
-                                (jb: any) =>
-                                  jb.partyName &&
-                                  jb.workType &&
-                                  jb.unit &&
-                                  jb.jobuid &&
-                                  jb.totalOnewJobWork &&
-                                  jb.price
-                              )
+                            values.jobworkDetails.every(
+                              (jb: any) =>
+                                jb.partyName &&
+                                jb.workType &&
+                                jb.unit &&
+                                jb.jobuid &&
+                                jb.totalOnewJobWork &&
+                                jb.price
+                            )
                               ? "#05E3D5"
                               : "gray",
                           borderRadius: 50,
@@ -1894,7 +1988,6 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           justifyContent: "center",
                         }}
                       >
-
                         <Text style={{ fontSize: 14, color: "gray", flex: 12 }}>
                           Total
                         </Text>
@@ -2214,32 +2307,31 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
           </View>
         </Modal>
       )}
-      <>{showAddStoneModel &&
-        <AddEditStoneDetails
-          showModal={showAddStoneModel}
-          setShowModal={setShowAddStoneModel}
-          update={updateStone}
-          setUpdate={setUpdateStone}
-        />
-
-      }
-        {showAddDesignModel &&
+      <>
+        {showAddStoneModel && (
+          <AddEditStoneDetails
+            showModal={showAddStoneModel}
+            setShowModal={setShowAddStoneModel}
+            update={updateStone}
+            setUpdate={setUpdateStone}
+          />
+        )}
+        {showAddDesignModel && (
           <AddEditDesignDetails
             showModal={showAddDesignModel}
             setShowModal={setShowAddDesignModel}
             data={null}
           />
-        }
-        {showAddJobworkModel &&
+        )}
+        {showAddJobworkModel && (
           <AddEditJobwork
             showModal={showAddJobworkModel}
             setShowModal={setShowAddJobworkModel}
             data={null}
           />
-        }
+        )}
       </>
     </SafeAreaView>
-
   );
 };
 const styles = StyleSheet.create({

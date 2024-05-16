@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GlobalStyle } from "../../../globalStyle";
+import { SliderBox } from "react-native-image-slider-box";
 import {
   Image,
   Modal,
@@ -10,12 +11,30 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StyleSheet
 } from "react-native";
 import Icon from "react-native-easy-icon";
 import { formatDate } from "../../services/dateFormate";
 
 const ViewDesignDetails = ({ navigation, route }: any) => {
   const [selectedImage, setSelectedImage] = useState<any>(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+
+  const openModal = (index: number) => {
+    setSelectedImageIndex(index);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+
+
+  useEffect(()=>{
+    console.log("route.params.sampleImg == > ",route.params.sampleImg)
+  })
   const closeImageModal = () => {
     setSelectedImage(false);
   };
@@ -24,35 +43,38 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
       <SafeAreaView style={[GlobalStyle.safeAreaCotainer, { height: "100%" }]}>
         <StatusBar
           backgroundColor="#fff"
-          barStyle="dark-content" // Here is where you change the font-color
+          barStyle="dark-content" // Here is where change the font-color
         />
         <View
           style={{
+            flex:0,
             flexDirection: "row",
             alignItems: "center",
-            marginLeft: 20,
+            paddingLeft: 20,
             marginTop: 15,
+            backgroundColor:"#24acf2",
+            paddingVertical:10
           }}
         >
           <TouchableOpacity
-            style={{ flex: 1 }}
+            style={{ flex: 0 }}
             onPress={() => navigation.goBack()}
           >
-            <Icon type="feather" name="arrow-left" color="#000" size={35} />
+            <Icon type="feather" name="arrow-left" color="#fff" size={35} />
           </TouchableOpacity>
           <View
             style={{
-              flex: 5,
-              justifyContent: "center",
-              alignItems: "center",
-              marginLeft: -35,
+             flex:1,
+             alignItems:"center",
+             justifyContent:"center",
+             margin:"auto"
             }}
           >
             <Text
               style={{
                 textAlign: "center",
                 fontSize: 20,
-                color: "#000",
+                color: "#fff",
                 fontWeight: "bold",
               }}
             >
@@ -61,6 +83,67 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
           </View>
         </View>
         <ScrollView style={{ padding: 10, paddingHorizontal: 15 }}>
+          
+          <View>
+            <Text style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}>
+              Designs
+            </Text>
+            <View
+              style={[
+                GlobalStyle.card,
+                GlobalStyle.shadowProp,
+                {
+                  paddingVertical: 8,
+                  paddingHorizontal: 8,
+                  height: "auto",
+                },
+              ]}
+            >
+              {/* <Image
+                source={{ uri: route.params.sampleImg[0] }}
+                style={{
+                  width: "100%",
+                  height: 200,
+                  resizeMode: "cover",
+                }}
+              />
+              {route.params.sampleImg.length - 1 !== 0 && (
+                <TouchableOpacity onPress={() => setSelectedImage(true)}>
+                  <Text style={{ color: "gray", alignSelf: "flex-end" }}>
+                    +{route.params.sampleImg.length - 1} more
+                  </Text>
+                </TouchableOpacity>
+              )} */}
+              <SliderBox
+              images={route.params.sampleImg.map((img: any) => ({ uri: img }))}
+              sliderBoxHeight={300}
+              resizeMode="cover"
+              onCurrentImagePressed={(index:any) =>{
+               // console.warn(`image ${index} pressed`)
+                //setSelectedImage(true)
+                openModal(index);
+              }
+              }
+            />
+
+      <Modal
+           animationType="slide"
+           transparent={false}
+           visible={modalVisible}
+           onRequestClose={closeModal}
+        >
+         <View style={{ flex: 1, backgroundColor: "black" }}>
+            <Image
+               source={{ uri: route.params.sampleImg[selectedImageIndex] }}
+               style={{ flex: 1, resizeMode: "contain" }}
+            />
+            <TouchableOpacity style={{ position: 'absolute', top: 40, right: 40 }} onPress={closeModal}>
+               <Icon type="entypo" name="cross" color="white" size={30} />
+             </TouchableOpacity>
+         </View>
+      </Modal>
+            </View>
+          </View>
           <View
             style={[
               GlobalStyle.card,
@@ -121,38 +204,6 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
               <Text style={{ fontSize: 16, color: "gray", fontWeight: "bold" }}>
                 ₹{route.params ? route.params.grandTotal.toFixed(2):'0.00'}
               </Text>
-            </View>
-          </View>
-          <View>
-            <Text style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}>
-              Designs
-            </Text>
-            <View
-              style={[
-                GlobalStyle.card,
-                GlobalStyle.shadowProp,
-                {
-                  paddingVertical: 8,
-                  paddingHorizontal: 8,
-                  height: "auto",
-                },
-              ]}
-            >
-              <Image
-                source={{ uri: route.params.sampleImg[0] }}
-                style={{
-                  width: "100%",
-                  height: 200,
-                  resizeMode: "cover",
-                }}
-              />
-              {route.params.sampleImg.length - 1 !== 0 && (
-                <TouchableOpacity onPress={() => setSelectedImage(true)}>
-                  <Text style={{ color: "gray", alignSelf: "flex-end" }}>
-                    +{route.params.sampleImg.length - 1} more
-                  </Text>
-                </TouchableOpacity>
-              )}
             </View>
           </View>
           {route.params.stoneDetails?.length > 0 && (
@@ -617,5 +668,24 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
     </>
   );
 };
+
+
+
+const styles = StyleSheet.create({
+  closeButton: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+});
+
+
 
 export default ViewDesignDetails;

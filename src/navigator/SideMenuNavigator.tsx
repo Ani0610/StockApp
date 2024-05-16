@@ -29,7 +29,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
       drawerContent={(props) => <DrawerView {...props} />}
       screenOptions={{
           headerStyle: {
-          backgroundColor: "#f5f5f5", // Set the background color of the header for all screens
+          backgroundColor: "#24acf2", // Set the background color of the header for all screens
         },
       }}
     >
@@ -39,7 +39,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
             return (
               <>
                 <DrawerStack.Screen
-                  name="Home"
+                  name=" "
                   component={BottomTabNavigator}
                 />
                 <DrawerStack.Screen
