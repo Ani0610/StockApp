@@ -13,7 +13,7 @@ import {
   Platform,
   SafeAreaView,
   StyleSheet,
-  View
+  View,
 } from "react-native";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -27,6 +27,10 @@ import ViewDesignDetails from "./src/pages/Design master/ViewDesignDetails";
 import { RootState } from "./src/redux/store";
 import Toast from "./src/components/Toast/toast";
 import { setToast } from "./src/redux/action/Ui/Uislice";
+import AllSampleDesign from "./src/pages/Design master/AllSampleDesign";
+import DeliveredDesign from "./src/pages/Design master/DeliveredDesign";
+import JobWorkDetails from "./src/pages/Job work details/JobWorkDetails";
+import JobworkReport from "./src/pages/Job work details/JobWorkReport";
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -36,11 +40,11 @@ function App(): React.JSX.Element {
   const dispatch = useDispatch();
 
   const Stack = createNativeStackNavigator();
-  const {user} = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const { isLoading, toast } = useSelector((state: RootState) => state.ui);
   const [isLoggedIn, setIsLogged] = useState(false);
   useEffect(() => {
-    console.log('user', user);
+    console.log("user", user);
     if (user) {
       setIsLogged(true);
     } else {
@@ -48,73 +52,107 @@ function App(): React.JSX.Element {
     }
   }, [user]);
   useEffect(() => {
-    dispatch(setToast({ message: 'Welcome Back', isVisible: true, type: 'success' }))
-  }, [])
+    dispatch(
+      setToast({ message: "Welcome Back", isVisible: true, type: "success" })
+    );
+  }, []);
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {
-        toast?.isVisible &&
+      {toast?.isVisible && (
         <Toast
           message={toast.message}
           visible={toast.isVisible}
           type={toast.type}
-        />}
+        />
+      )}
       {isLoading && (
         <View style={[styles.container, styles.horizontal]}>
           <ActivityIndicator size={"large"} />
         </View>
       )}
       {/* <View style={{ height: "100%", backgroundColor: "#fff" }}> */}
-        <NavigationContainer theme={DefaultTheme}>
-          {isLoggedIn ? (
-            // <SideMenuNavigator />
-            <Stack.Navigator>
-              <Stack.Screen
-                name="AppDrawerStack"
-                component={SideMenuNavigator}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="Add Design"
-                component={CreateSampleDesign}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="View Design"
-                component={ViewDesignDetails}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="Party Wise Design"
-                component={ViewDesignByPartyName}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="Create Challan"
-                component={CreateChallan}
-                options={{
-                  headerShown: false,
-                }}
-              />
-            </Stack.Navigator>
-          ) : (
-            <Stack.Navigator initialRouteName="Login">
-              <Stack.Screen
-                name="Auth"
-                options={{ headerShown: false }}
-                component={AuthNavigator}
-              />
-            </Stack.Navigator>
-          )}
-        </NavigationContainer>
+      <NavigationContainer theme={DefaultTheme}>
+        {isLoggedIn ? (
+          // <SideMenuNavigator />
+          <Stack.Navigator>
+            <Stack.Screen
+              name="AppDrawerStack"
+              component={SideMenuNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Add Design"
+              component={CreateSampleDesign}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="View Design"
+              component={ViewDesignDetails}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Party Wise Design"
+              component={ViewDesignByPartyName}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Create Challan"
+              component={CreateChallan}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="AllSampleDesign"
+              component={AllSampleDesign} // Add the new screen
+              options={{
+                headerShown: true,
+                title: "All Sample Design",
+              }}
+            />
+            <Stack.Screen
+              name="DeliveredDesign"
+              component={DeliveredDesign} // Add the new screen
+              options={{
+                headerShown: true,
+                title: "Delivered Design",
+              }}
+            />
+            {/* <Stack.Screen
+              name="Pending Design"
+              component={AllSampleDesign} // Add the new screen
+              options={{
+                headerShown: true,
+                title: "Pending Design",
+              }}
+            /> */}
+            <Stack.Screen
+              name="JobworkReport"
+              component={JobworkReport} 
+              options={{
+                headerShown: true,
+                title: "Job work Report",
+              }}
+            />
+          </Stack.Navigator>
+        ) : (
+          <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen
+              name="Auth"
+              options={{ headerShown: false }}
+              component={AuthNavigator}
+            />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
       {/* </View> */}
     </SafeAreaView>
   );
