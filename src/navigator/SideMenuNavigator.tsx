@@ -23,14 +23,17 @@ const DrawerStack = createDrawerNavigator();
 const SideMenuNavigator = ({ navigation }: any) => {
   const { user }: any = useSelector((state: RootState) => state.user);
 
-  
   return (
     <DrawerStack.Navigator
       drawerContent={(props) => <DrawerView {...props} />}
       screenOptions={{
-          headerStyle: {
+        headerStyle: {
           backgroundColor: "#24acf2", // Set the background color of the header for all screens
+          elevation: 0,
+          shadowOpacity:0,
+         
         },
+        headerTintColor: 'white',
       }}
     >
       {(() => {
@@ -124,7 +127,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
           case "jobwork":
             return (
               <>
-               <DrawerStack.Screen
+                <DrawerStack.Screen
                   name="Home"
                   component={CurrentJobWork}
                 />

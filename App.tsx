@@ -10,6 +10,7 @@ import type { PropsWithChildren } from "react";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  LogBox,
   Platform,
   SafeAreaView,
   StyleSheet,
@@ -35,7 +36,15 @@ import JobworkReport from "./src/pages/Job work details/JobWorkReport";
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
+const ignoreWarns = [
+  "Setting a timer for a long period of time",
+  "VirtualizedLists should never be nested inside plain ScrollViews with the same orientation",
+  "ViewPropTypes will be removed",
+  "AsyncStorage has been extracted from react-native",
+  "EventEmitter.removeListener",
+];
 
+LogBox.ignoreLogs(ignoreWarns);
 function App(): React.JSX.Element {
   const dispatch = useDispatch();
 

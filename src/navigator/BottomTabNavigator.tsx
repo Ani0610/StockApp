@@ -116,6 +116,10 @@ const BottomTabNavigator = () => {
         tabBarShowLabel: true,
         tabBarStyle: GlobalStyle.tabBar,
         tabBarActiveTintColor: "blue",
+        headerStyle:{
+          elevation:0,
+          shadowOpacity:0
+        }
       })}
     >
       <BottomStack.Screen
@@ -137,6 +141,8 @@ const BottomTabNavigator = () => {
           headerTitle:"Overview",
           headerStyle: {
             backgroundColor: "#24acf2", 
+            elevation:0,
+            shadowOpacity:0
           },
           headerTintColor: "#FFF", 
           headerShown: true,
@@ -201,9 +207,11 @@ const BottomTabNavigator = () => {
           headerTitle:"Designs",
           headerStyle: {
             backgroundColor: "#24acf2", 
+            elevation:0,
+            shadowOpacity:0
           },
           headerTintColor: "#FFF", 
-          headerShown: true,
+          headerShown: false,
         })}
       />
       <BottomStack.Screen
@@ -224,10 +232,12 @@ const BottomTabNavigator = () => {
           },
           headerTitle:"Statistics",
           headerStyle: {
-            backgroundColor: "#24acf2", 
+            backgroundColor: "#24acf2",
+            elevation:0,
+            shadowOpacity:0 
           },
           headerTintColor: "#FFF", 
-          headerShown: true,
+          headerShown: false,
         })}
       />
     </BottomStack.Navigator>

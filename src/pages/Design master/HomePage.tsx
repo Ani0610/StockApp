@@ -30,7 +30,7 @@ const HomePage = ({ navigation }: any) => {
   const deliveredDetails = [{ label: "Order", value: 0 }];
   const pendingDetails = [{ label: "Order", value: 0 }];
 
-  const [reportData, setReportData] = useState([]);
+  const [pendingJobs, setPendingJobs] = useState([]);
   const { assignJobs } = useSelector((state: RootState) => state.assignJobs);
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(false);
@@ -48,10 +48,12 @@ const HomePage = ({ navigation }: any) => {
 
   // Filter pending jobs
   useEffect(() => {
-    const pendingJobs = assignJobs.filter(
-      (data: any) => data?.status !== "COMPLETED"
-    );
-    setReportData(pendingJobs);
+    if (assignJobs && assignJobs.length) {
+      const pendingJobs = assignJobs?.filter(
+        (data: any) => data?.status !== "COMPLETED"
+      );
+      setPendingJobs(pendingJobs);
+    }
   }, [assignJobs]);
 
   const updateJobWork = (data: any) => {
@@ -67,7 +69,6 @@ const HomePage = ({ navigation }: any) => {
       });
   };
 
-  const isDataAvailable = reportData.length > 0;
 
   return (
     <>
@@ -88,26 +89,33 @@ const HomePage = ({ navigation }: any) => {
             {/* <TouchableOpacity onPress={() => navigation.navigate("Pending Design")}>
                         <Card title="Pending Design" details={pendingDetails} />
                     </TouchableOpacity> */}
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <Card title="Pending Design" details={pendingDetails} />
             </TouchableOpacity>
           </View>
 
           {/* See More Navigation */}
-          <View style={styles.pendingView}>
-            <Text style={styles.text}>Pending Job Work</Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("JobworkReport")}
-            >
-              <Text style={{ color: "blue" }}>See more</Text>
-            </TouchableOpacity>
-          </View>
+          {
+            pendingJobs?.length ? (
+              <View style={styles.pendingView}>
+                <Text style={styles.text}>Pending Job Work</Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("JobworkReport")}
+                >
+                  <Text style={{ color: "blue" }}>See more</Text>
+                </TouchableOpacity>
+
+              </View>)
+              :
+              <>
+              </>
+          }
 
           {/* Pending Design Report data */}
           <View style={GlobalStyle.container}>
-            {reportData?.length ? (
-              reportData
-                .slice(0, showAll ? reportData.length : 3)
+            {pendingJobs?.length ? (
+              pendingJobs
+                .slice(0, showAll ? pendingJobs.length : 3)
                 .map((item: any, i: any) => (
                   <View
                     key={i}

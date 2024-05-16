@@ -32,9 +32,9 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
 
 
 
-  useEffect(()=>{
-    console.log("route.params.sampleImg == > ",route.params.sampleImg)
-  })
+  // useEffect(() => {
+  //   console.log("route.params.sampleImg == > ", route.params.sampleImg)
+  // },[])
   const closeImageModal = () => {
     setSelectedImage(false);
   };
@@ -47,13 +47,13 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
         />
         <View
           style={{
-            flex:0,
+            flex: 0,
             flexDirection: "row",
             alignItems: "center",
             paddingLeft: 20,
             marginTop: 15,
-            backgroundColor:"#24acf2",
-            paddingVertical:10
+            backgroundColor: "#24acf2",
+            paddingVertical: 10
           }}
         >
           <TouchableOpacity
@@ -64,10 +64,10 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
           </TouchableOpacity>
           <View
             style={{
-             flex:1,
-             alignItems:"center",
-             justifyContent:"center",
-             margin:"auto"
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "auto"
             }}
           >
             <Text
@@ -83,7 +83,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
           </View>
         </View>
         <ScrollView style={{ padding: 10, paddingHorizontal: 15 }}>
-          
+
           <View>
             <Text style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}>
               Designs
@@ -115,33 +115,33 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
                 </TouchableOpacity>
               )} */}
               <SliderBox
-              images={route.params.sampleImg.map((img: any) => ({ uri: img }))}
-              sliderBoxHeight={300}
-              resizeMode="cover"
-              onCurrentImagePressed={(index:any) =>{
-               // console.warn(`image ${index} pressed`)
-                //setSelectedImage(true)
-                openModal(index);
-              }
-              }
-            />
+                images={route.params.sampleImg.map((img: any) => ({ uri: img }))}
+                sliderBoxHeight={300}
+                resizeMode="cover"
+                onCurrentImagePressed={(index: any) => {
+                  // console.warn(`image ${index} pressed`)
+                  //setSelectedImage(true)
+                  openModal(index);
+                }
+                }
+              />
 
-      <Modal
-           animationType="slide"
-           transparent={false}
-           visible={modalVisible}
-           onRequestClose={closeModal}
-        >
-         <View style={{ flex: 1, backgroundColor: "black" }}>
-            <Image
-               source={{ uri: route.params.sampleImg[selectedImageIndex] }}
-               style={{ flex: 1, resizeMode: "contain" }}
-            />
-            <TouchableOpacity style={{ position: 'absolute', top: 40, right: 40 }} onPress={closeModal}>
-               <Icon type="entypo" name="cross" color="white" size={30} />
-             </TouchableOpacity>
-         </View>
-      </Modal>
+              <Modal
+                animationType="slide"
+                transparent={false}
+                visible={modalVisible}
+                onRequestClose={closeModal}
+              >
+                <View style={{ flex: 1, backgroundColor: "black" }}>
+                  <Image
+                    source={{ uri: route.params.sampleImg[selectedImageIndex] }}
+                    style={{ flex: 1, resizeMode: "contain" }}
+                  />
+                  <TouchableOpacity style={{ position: 'absolute', top: 40, right: 40 }} onPress={closeModal}>
+                    <Icon type="entypo" name="cross" color="white" size={30} />
+                  </TouchableOpacity>
+                </View>
+              </Modal>
             </View>
           </View>
           <View
@@ -199,10 +199,10 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <Text style={{ fontSize: 16, color: "#000", fontWeight: "bold" }}>
-               Final Total
+                Final Total
               </Text>
               <Text style={{ fontSize: 16, color: "gray", fontWeight: "bold" }}>
-                ₹{route.params ? route.params.grandTotal.toFixed(2):'0.00'}
+                ₹{(route.params && route.params.grandTotal) ? route.params.grandTotal : '0.00'}
               </Text>
             </View>
           </View>

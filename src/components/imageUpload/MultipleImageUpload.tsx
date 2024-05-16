@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Modal, PermissionsAndroid, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, PermissionsAndroid, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ImagePicker, { Image } from 'react-native-image-crop-picker';
 import { PERMISSIONS, request } from 'react-native-permissions';
 import Icon from 'react-native-easy-icon';
@@ -59,20 +59,24 @@ const MultipleImageUploadScreen = ({ isVisible, onClose, uploadFunction }: Uploa
             })
                 .then((images: Image[] | Image) => {
                     const selectedImages: any = Array.isArray(images)
-                        ? images.map(image => ({
-                              uri: image.path,
-                              width: image.width,
-                              height: image.height,
-                              mime: image.mime,
-                          }))
+                        ? images.length < 4 ? images.map(image => ({
+                            uri: image.path,
+                            width: image.width,
+                            height: image.height,
+                            mime: image.mime,
+                        })) :
+                            Alert.alert(
+                                "Upload Limit Reached",
+                                "You can only upload a maximum of 3 images."
+                            )
                         : [
-                              {
-                                  uri: images.path,
-                                  width: images.width,
-                                  height: images.height,
-                                  mime: images.mime,
-                              },
-                          ];
+                            {
+                                uri: images.path,
+                                width: images.width,
+                                height: images.height,
+                                mime: images.mime,
+                            },
+                        ];
 
                     if (selectedImages.length > 0) {
                         uploadFunction(selectedImages);
@@ -93,19 +97,19 @@ const MultipleImageUploadScreen = ({ isVisible, onClose, uploadFunction }: Uploa
             .then((images: Image[] | Image) => {
                 const selectedImages: any = Array.isArray(images)
                     ? images.map(image => ({
-                          uri: image.path,
-                          width: image.width,
-                          height: image.height,
-                          mime: image.mime,
-                      }))
+                        uri: image.path,
+                        width: image.width,
+                        height: image.height,
+                        mime: image.mime,
+                    }))
                     : [
-                          {
-                              uri: images.path,
-                              width: images.width,
-                              height: images.height,
-                              mime: images.mime,
-                          },
-                      ];
+                        {
+                            uri: images.path,
+                            width: images.width,
+                            height: images.height,
+                            mime: images.mime,
+                        },
+                    ];
 
                 if (selectedImages.length > 0) {
                     uploadFunction(selectedImages);
