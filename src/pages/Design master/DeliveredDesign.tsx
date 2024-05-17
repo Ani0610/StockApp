@@ -405,13 +405,13 @@ const DeliveredDesign = ({ navigation }: any) => {
             position: "absolute",
             bottom: 90,
             right: 20,
-            backgroundColor: "blue",
+            backgroundColor: "#24acf2",
             padding: 16,
             borderRadius: 50,
           }}
           onPress={() => navigation.navigate("Add Design")}
         >
-          <Icon type="feather" name="plus" color="white" size={35} />
+          <Icon type="feather" name="plus" color="white" size={20} />
         </Pressable>
       </SafeAreaView>
       {showModal && (

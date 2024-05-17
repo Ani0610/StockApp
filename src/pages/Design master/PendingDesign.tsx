@@ -21,55 +21,43 @@ import { RootState } from "../../redux/store";
 import SearchableComponent from "../../components/Search/SearchComponent";
 import Accordion from "react-native-collapsible/Accordion";
 import { formatDate } from "../../services/dateFormate";
-import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
+import { setLoading } from "../../redux/action/Ui/Uislice";
 import NoDataFound from "../../components/UI/NoData";
-import { getDesignDetails } from "../../services/Design/Design.Service";
-import { setDesignMaster } from "../../redux/action/DesignsMaster/designMasterSlice";
 
-const AllSampleDesign = ({ navigation }: any) => {
+const PendingDesign = ({ navigation }: any) => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState<any>();
-  // const allSamples = []
 
-  const { designsMaster } = useSelector(
-    (state: RootState) => state.designMaster
+
+  const { deliveredDesigns } = useSelector(
+    (state: RootState) => state.deliveredDesigns
   );
   const dispatch = useDispatch();
   const [allsample, setallsample] = useState<any>([]);
   const [allsampleData, setallsampledata] = useState<any>([]);
   const [allsamplePartyName, setallsamplePartyName] = useState<any>([]);
   useEffect(() => {
-    setallsample([...designsMaster]);
-    setallsampledata([...designsMaster]);
-  }, [designsMaster]);
+    setallsample([...deliveredDesigns]);
+    setallsampledata([...deliveredDesigns]);
+  }, [deliveredDesigns]);
   useEffect(() => {
-    dispatch(setLoading(true))
-    getDesignDetails().then((res) => {
-      dispatch(setLoading(false))
-      if (res) {
-        dispatch(setDesignMaster(res))
-      }
-      else {
-        dispatch(setDesignMaster([]))
-        dispatch(setToast({ message: 'No Data Found', isVisible: true, type: 'danger' }))
-      }
-    })
-  }, [])
-  useEffect(() => {
-    const all: any = [...designsMaster];
-    const groupedByPartyName: any = Object.values(
-      all.reduce((acc: any, obj: any) => {
-        const { partyName }: any = obj;
-        if (!acc[partyName]) {
-          acc[partyName] = { partyName, data: [] };
-        }
-        acc[partyName].data.push(obj);
-        return acc;
-      }, {})
-    );
-    setallsamplePartyName([...groupedByPartyName]);
-    console.log(groupedByPartyName, "groupedByPartyName");
-  }, [designsMaster]);
+    if (deliveredDesigns && deliveredDesigns.length) {
+      const all: any = [...deliveredDesigns];
+      const groupedByPartyName: any = Object.values(
+        all.reduce((acc: any, obj: any) => {
+          const { partyName }: any = obj;
+          if (!acc[partyName]) {
+            acc[partyName] = { partyName, data: [] };
+          }
+          acc[partyName].data.push(obj);
+          return acc;
+        }, {})
+      );
+
+      setallsamplePartyName([...groupedByPartyName]);
+      console.log(groupedByPartyName, "groupedByPartyName");
+    }
+  }, [deliveredDesigns]);
 
   const renderThumbnail = (uri: any, designNo: any, total: any) => {
     return (
@@ -192,22 +180,6 @@ const AllSampleDesign = ({ navigation }: any) => {
         </View> */}
         <ScrollView>
           <View style={[GlobalStyle.container, { marginHorizontal: 0 }]}>
-            {/* <>
-              <View>
-                <Accordion
-                  align={"center"}
-                  sections={allsamplePartyName}
-                  activeSections={activeSections}
-                  renderHeader={(section, isActive) =>
-                    renderHeader(section, isActive)
-                  }
-                  renderContent={renderContent}
-                  keyExtractor={(item, index) => index}
-                  onChange={updateSections}
-                  underlayColor={"transparenet"}
-                />
-              </View>
-            </> */}
             <>
               <View>
                 {allsamplePartyName?.length ? allsamplePartyName.map((partyName: any, i: any) => (
@@ -536,4 +508,4 @@ const styles = StyleSheet.create({
   },
   inputLabel: { color: "#05E3D5", fontSize: 14 },
 });
-export default AllSampleDesign;
+export default PendingDesign;

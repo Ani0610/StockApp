@@ -235,13 +235,13 @@ const CategoryMaster = () => {
             position: "absolute",
             bottom: 40,
             right: 20,
-            backgroundColor: "blue",
+            backgroundColor: "#24acf2",
             padding: 16,
             borderRadius: 50,
           }}
           onPress={() => setShowModal(true)}
         >
-          <Icon type="feather" name="plus" color="white" size={35} />
+          <Icon type="feather" name="plus" color="white" size={20} />
         </Pressable>
       </SafeAreaView>
       {isVisible && (

@@ -60,7 +60,7 @@ const ViewDesignDetails = ({ navigation, route }: any) => {
             style={{ flex: 0 }}
             onPress={() => navigation.goBack()}
           >
-            <Icon type="feather" name="arrow-left" color="#fff" size={35} />
+            <Icon type="feather" name="arrow-left" color="#fff" size={20} />
           </TouchableOpacity>
           <View
             style={{

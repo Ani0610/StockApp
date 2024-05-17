@@ -25,7 +25,7 @@ import {
 } from "../../services/jobwork/jobwork.service";
 
 const HomePage = ({ navigation }: any) => {
-  const sampleDetails = [{ label: "Sample Created", value: 4 }];
+  const sampleDetails = [{ label: "Sample Created", value: 6 }];
 
   const deliveredDetails = [{ label: "Order", value: 0 }];
   const pendingDetails = [{ label: "Order", value: 0 }];
@@ -86,11 +86,8 @@ const HomePage = ({ navigation }: any) => {
             >
               <Card title="Delivered" details={deliveredDetails} />
             </TouchableOpacity>
-            {/* <TouchableOpacity onPress={() => navigation.navigate("Pending Design")}>
-                        <Card title="Pending Design" details={pendingDetails} />
-                    </TouchableOpacity> */}
-            <TouchableOpacity onPress={() => { }}>
-              <Card title="Pending Design" details={pendingDetails} />
+            <TouchableOpacity onPress={() => navigation.navigate("Pending Design")}>
+                <Card title="Pending Design" details={pendingDetails} />
             </TouchableOpacity>
           </View>
 
@@ -255,13 +252,13 @@ const HomePage = ({ navigation }: any) => {
             position: "absolute",
             bottom: 110,
             right: 20,
-            backgroundColor: "blue",
+            backgroundColor: "#24acf2",
             padding: 16,
             borderRadius: 50,
           }}
           onPress={() => navigation.navigate("Add Design")}
         >
-          <Icon type="feather" name="plus" color="white" size={35} />
+          <Icon type="feather" name="plus" color="white" size={20} />
         </Pressable>
       </View>
     </>
