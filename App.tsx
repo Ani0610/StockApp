@@ -32,6 +32,7 @@ import AllSampleDesign from "./src/pages/Design master/AllSampleDesign";
 import DeliveredDesign from "./src/pages/Design master/DeliveredDesign";
 import JobWorkDetails from "./src/pages/Job work details/JobWorkDetails";
 import JobworkReport from "./src/pages/Job work details/JobWorkReport";
+import PendingDesign from "./src/pages/Design master/PendingDesign";
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -135,14 +136,14 @@ function App(): React.JSX.Element {
                 title: "Delivered Design",
               }}
             />
-            {/* <Stack.Screen
+            <Stack.Screen
               name="Pending Design"
-              component={AllSampleDesign} // Add the new screen
+              component={PendingDesign} // Add the new screen
               options={{
                 headerShown: true,
                 title: "Pending Design",
               }}
-            /> */}
+            />
             <Stack.Screen
               name="JobworkReport"
               component={JobworkReport} 
