@@ -115,7 +115,7 @@ const BottomTabNavigator = () => {
         headerBackgroundContainerStyle: "#fff",
         tabBarShowLabel: true,
         tabBarStyle: GlobalStyle.tabBar,
-        tabBarActiveTintColor: "blue",
+        tabBarActiveTintColor: "#24acf2",
         headerStyle:{
           elevation:0,
           shadowOpacity:0
@@ -132,7 +132,7 @@ const BottomTabNavigator = () => {
                 <Icon
                   type="foundation"
                   name="home"
-                  color={focused ? "blue" : "gray"}
+                  color={focused ? "#24acf2" : "gray"}
                   size={35}
                 />
               </View>
@@ -198,7 +198,7 @@ const BottomTabNavigator = () => {
                 <Icon
                   type="feather"
                   name="menu"
-                  color={focused ? "blue" : "gray"}
+                  color={focused ? "#24acf2" : "gray"}
                   size={35}
                 />
               </View>
@@ -224,7 +224,7 @@ const BottomTabNavigator = () => {
                 <Icon
                   type="entypo"
                   name="area-graph"
-                  color={focused ? "blue" : "gray"}
+                  color={focused ? "#24acf2" : "gray"}
                   size={35}
                 />
               </View>
