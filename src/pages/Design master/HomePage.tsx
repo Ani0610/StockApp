@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Pressable,
 } from "react-native";
-import Card from "../../components/Card/Card"; // Ensure this path is correct
 import Icon from "react-native-easy-icon";
 import { useDispatch, useSelector } from "react-redux";
 import { GlobalStyle } from "../../../globalStyle";
 import ActionBarModel from "../../components/ActionBarModel/ActionBarModel";
+import Card from "../../components/Card/Card"; // Ensure this path is correct
 import NoDataFound from "../../components/UI/NoData";
 import { setLoading } from "../../redux/action/Ui/Uislice";
 import {
@@ -20,40 +20,36 @@ import {
 } from "../../redux/action/assignJob/assignJobSlice";
 import { RootState } from "../../redux/store";
 import {
+  getTotalDesignCount
+} from "../../services/Design/Design.Service";
+import {
   getAssignJobDetails,
   updateAssignJobDetails,
 } from "../../services/jobwork/jobwork.service";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  addDesignDetails, getTotalDesignCount } from "../../services/Design/Design.Service";
-const HomePage = ({ navigation}: any) => {
-  const [totalCount, setTotalCount] = useState(0);
-
-  useEffect(() => {
-    const fetchTotalCount = async () => {
-      const storedCount = await AsyncStorage.getItem('totalCount');
-      if (storedCount !== null) {
-        setTotalCount(parseInt(storedCount));
-      } else {
-        const count = await getTotalDesignCount();
-        setTotalCount(count);
-        await AsyncStorage.setItem('totalCount', count.toString());
-      }
-    };
-    fetchTotalCount();
-  }, []);
-
+import { updateDesignTotal } from "../../redux/action/DesignsMaster/designMasterSlice";
+const HomePage = ({ navigation }: any) => {
+  const totalCount = useSelector((state: RootState) => state.designMaster.totalDesignCount) || 0
   const sampleDetails = [{ label: "Sample Created", value: totalCount }];
-
   const deliveredDetails = [{ label: "Order", value: 0 }];
   const pendingDetails = [{ label: "Order", value: 0 }];
-
   const [pendingJobs, setPendingJobs] = useState([]);
   const { assignJobs } = useSelector((state: RootState) => state.assignJobs);
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(false);
   const [rowData, setRowData] = useState<any>(null);
   const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    const fetchTotalCount = async () => {
+      try {
+        const count = await getTotalDesignCount();
+        dispatch(updateDesignTotal(count))
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchTotalCount();
+  }, []);
 
   useEffect(() => {
     dispatch(setLoading(true));
@@ -105,7 +101,7 @@ const HomePage = ({ navigation}: any) => {
               <Card title="Delivered" details={deliveredDetails} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate("Pending Design")}>
-                <Card title="Pending Design" details={pendingDetails} />
+              <Card title="Pending Design" details={pendingDetails} />
             </TouchableOpacity>
           </View>
 

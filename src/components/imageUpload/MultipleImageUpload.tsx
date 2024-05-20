@@ -56,6 +56,9 @@ const MultipleImageUploadScreen = ({ isVisible, onClose, uploadFunction }: Uploa
                 multiple: true,
                 mediaType: 'photo',
                 cropping: true,
+                compressImageMaxHeight:800,
+                compressImageMaxWidth:800,
+                compressImageQuality:0.6
             })
                 .then((images: Image[] | Image) => {
                     const selectedImages: any = Array.isArray(images)
@@ -63,7 +66,7 @@ const MultipleImageUploadScreen = ({ isVisible, onClose, uploadFunction }: Uploa
                             uri: image.path,
                             width: image.width,
                             height: image.height,
-                            mime: image.mime,
+                            mime: image.mime    
                         })) :
                             Alert.alert(
                                 "Upload Limit Reached",
@@ -92,7 +95,10 @@ const MultipleImageUploadScreen = ({ isVisible, onClose, uploadFunction }: Uploa
         ImagePicker.openPicker({
             multiple: true,
             mediaType: 'photo',
-            cropping: true,
+            cropping: false,
+            compressImageQuality:0.6,
+            compressImageMaxHeight:800,
+            compressImageMaxWidth:800,
         })
             .then((images: Image[] | Image) => {
                 const selectedImages: any = Array.isArray(images)

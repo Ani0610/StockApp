@@ -24,6 +24,7 @@ import MultipleImageUploadScreen from "../../components/imageUpload/MultipleImag
 import {
   addDesignMaster,
   editDesignMaster,
+  updateDesignTotal,
 } from "../../redux/action/DesignsMaster/designMasterSlice";
 import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
 import { RootState } from "../../redux/store";
@@ -31,12 +32,14 @@ import {
   addDesignDetails,
   checkDesignNumberExists,
   updateDesignDetails,
+  updateTotalDesignCount,
 } from "../../services/Design/Design.Service";
-import { formatDate } from "../../services/dateFormate";
+import { formatDate, formatFireDate } from "../../services/dateFormate";
 import { uploadMultiImages } from "../../services/file/file.service";
 import AddEditStoneDetails from "../Stone details/AddEditStoneDetails";
 import AddEditDesignDetails from "../Design details/AddEditDesignDetails";
 import AddEditJobwork from "../Job work details/AddEditJobwork";
+import moment from "moment";
 
 interface InitialFormValues {
   designNo: string;
@@ -75,6 +78,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   const [showAddDesignModel, setShowAddDesignModel] = useState(false);
   const [showAddJobworkModel, setShowAddJobworkModel] = useState(false);
   const [updateStone, setUpdateStone] = useState(false);
+  const totalCount = useSelector((state: RootState) => state.designMaster.totalDesignCount) || 0
 
   const handleUploadPress = () => {
     if (values.sampleImg.length >= 3) {
@@ -132,7 +136,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       id: "",
       partyName: "",
       partyUID: undefined,
-      date: "",
+      date: formatDate(new Date()),
       profitPercentage: "0",
       profitRupee: 0,
       discountPercentage: "0",
@@ -191,7 +195,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
         id: "",
         partyName: "",
         partyUID: undefined,
-        date: "",
+        date: formatDate(new Date()),
         profitPercentage: "0",
         profitRupee: 0,
         discountPercentage: "",
@@ -228,12 +232,11 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
     jobworkDetails: Yup.array().of(
       Yup.object().shape({
         partyName: Yup.string().required("Party Name is required"),
-        workType: Yup.string().required("Work Type is required"),
+        itemName: Yup.string().required("Item Name is required"),
+        workType: Yup.string(),
         unit: Yup.string().required("Unit is required"),
         jobuid: Yup.string().required("Job UID is required"),
-        totalOnewJobWork: Yup.number().required(
-          "Total One Job Work is required"
-        ),
+        totalOnewJobWork: Yup.number().required("Total One Job Work is required"),
         price: Yup.number().required("Price is required"),
       })
     ),
@@ -252,6 +255,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
 
       if (update) {
         dispatch(setLoading(true));
+        console.log(values)
         updateDesignDetails(values)
           .then((res) => {
             if (res) {
@@ -267,7 +271,11 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             }
           })
           .catch((err) => console.error(err))
-          .finally(() => dispatch(setLoading(false)));
+          .finally(() => {
+            dispatch(setLoading(false));
+            resetForm();
+            navigation.goBack();
+          });
       } else {
         // values.id = Math.floor(2000 + Math.random() * 9000);
         // values.total = Number(values.total).toFixed(2);
@@ -277,7 +285,10 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
             addDesignDetails(values)
               .then((res) => {
                 if (res) {
+                  const count = Number(totalCount) + 1;
+                  updateTotalDesignCount(count);
                   dispatch(addDesignMaster(res));
+                  dispatch(updateDesignTotal(count))
                 } else {
                   dispatch(
                     setToast({
@@ -332,6 +343,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   //   stoneStock[findIndex] = newObj;
   // };
   const patchData = () => {
+    console.log(route.paramsr)
     setFieldValue("designNo", route.params.designNo);
     setFieldValue("sampleImg", route.params.sampleImg);
     setFieldValue("stoneDetails", route.params.stoneDetails);
@@ -445,28 +457,28 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
 
   const uploadProfileImage = async (selectedImages: any[]) => {
     try {
-        const newImageCount = values.sampleImg.length + selectedImages.length;
-        if (newImageCount <= 3) {
-            dispatch(setLoading(true));
-            uploadMultiImages(selectedImages)
-                .then((res: any) => {
-                    dispatch(setLoading(false));
-                    setFieldValue("sampleImg", [...values.sampleImg, ...res]); // Merge new images with existing ones
-                })
-                .catch(err => {
-                    dispatch(setLoading(false));
-                    console.error("Error uploading images:", err);
-                });
-        } else {
-            Alert.alert(
-                "Upload Limit Exceeded",
-                `You can only upload ${3 - values.sampleImg.length} more images.`
-            );
-        }
+      const newImageCount = values.sampleImg.length + selectedImages.length;
+      if (newImageCount <= 3) {
+        dispatch(setLoading(true));
+        uploadMultiImages(selectedImages)
+          .then((res: any) => {
+            dispatch(setLoading(false));
+            setFieldValue("sampleImg", [...values.sampleImg, ...res]); // Merge new images with existing ones
+          })
+          .catch(err => {
+            dispatch(setLoading(false));
+            console.error("Error uploading images:", err);
+          });
+      } else {
+        Alert.alert(
+          "Upload Limit Exceeded",
+          `You can only upload ${3 - values.sampleImg.length} more images.`
+        );
+      }
     } catch (error) {
-        console.error("Error uploading images:", error);
+      console.error("Error uploading images:", error);
     }
-};
+  };
 
 
   const closeImage = (i: any) => {
@@ -488,7 +500,9 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
   };
 
   const handleDateChange = (date: any) => {
-    setFieldValue("date", date);
+    const formatedDate = formatDate(date)
+    console.log(formatedDate)
+    setFieldValue("date",formatedDate);
     setDatePickerVisible(false);
   };
   const handleTotalProfile = (item: any) => {
@@ -499,8 +513,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       "grandTotal",
       Number(
         Number(values.total) +
-          Number(totalProfitRupee) +
-          Number(values.discountRupee)
+        Number(totalProfitRupee) +
+        Number(values.discountRupee)
       ).toFixed(2)
     );
   };
@@ -512,8 +526,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
       "grandTotal",
       Number(
         Number(values.total) +
-          Number(totalDiscountRupee) +
-          Number(values.profitRupee)
+        Number(totalDiscountRupee) +
+        Number(values.profitRupee)
       ).toFixed(2)
     );
   };
@@ -582,6 +596,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                   date={new Date()}
                   mode="date"
                   onConfirm={(date) => {
+                    console.log(date);
                     handleDateChange(date);
                   }}
                   onCancel={() => {
@@ -784,6 +799,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
+                        width: '100%'
                       }}
                     >
                       {/* <Pressable onPress={() => setIscamaraModalVisible(true)}>
@@ -889,14 +905,14 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           backgroundColor:
                             values.stoneDetails &&
-                            values.stoneDetails.every(
-                              (st: any) =>
-                                st.stoneType &&
-                                st.stoneunit &&
-                                st.stoneuid &&
-                                st.price &&
-                                st.totalOneStone
-                            )
+                              values.stoneDetails.every(
+                                (st: any) =>
+                                  st.stoneType &&
+                                  st.stoneunit &&
+                                  st.stoneuid &&
+                                  st.price &&
+                                  st.totalOneStone
+                              )
                               ? "#05E3D5"
                               : "gray",
                           borderRadius: 50,
@@ -1273,14 +1289,14 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           backgroundColor:
                             values.designDetails &&
-                            values.designDetails.every(
-                              (dsgn: any) =>
-                                dsgn.measurement &&
-                                dsgn.designunit &&
-                                dsgn.designuid &&
-                                dsgn.price &&
-                                dsgn.totalOneDesign
-                            )
+                              values.designDetails.every(
+                                (dsgn: any) =>
+                                  dsgn.measurement &&
+                                  dsgn.designunit &&
+                                  dsgn.designuid &&
+                                  dsgn.price &&
+                                  dsgn.totalOneDesign
+                              )
                               ? "#05E3D5"
                               : "gray",
                           borderRadius: 50,
@@ -1647,6 +1663,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                               (jb: any) =>
                                 jb.partyName &&
                                 jb.workType &&
+                                jb.itemName &&
                                 jb.unit &&
                                 jb.jobuid &&
                                 jb.totalOnewJobWork &&
@@ -1657,15 +1674,16 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                         style={{
                           backgroundColor:
                             values.jobworkDetails &&
-                            values.jobworkDetails.every(
-                              (jb: any) =>
-                                jb.partyName &&
-                                jb.workType &&
-                                jb.unit &&
-                                jb.jobuid &&
-                                jb.totalOnewJobWork &&
-                                jb.price
-                            )
+                              values.jobworkDetails.every(
+                                (jb: any) =>
+                                  jb.partyName &&
+                                  jb.workType &&
+                                  jb.unit &&
+                                  jb.itemName &&
+                                  jb.jobuid &&
+                                  jb.totalOnewJobWork &&
+                                  jb.price
+                              )
                               ? "#05E3D5"
                               : "gray",
                           borderRadius: 50,
@@ -1791,7 +1809,8 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                   workType: selectedItem.workType,
                                   price: selectedItem.price,
                                   jobuid: selectedItem.id,
-                                  partyName: selectedItem.itemName, //Note: Currently We are showing here ItemName
+                                  itemName: selectedItem.itemName,
+                                  partyName: selectedItem.partyName, //Note: Currently We are showing here ItemName
                                 });
                               }}
                               buttonTextAfterSelection={(
@@ -1804,7 +1823,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 item: any,
                                 index: number
                               ) => {
-                                return `${item?.workType} - ${item.itemName}`;
+                                return `${item?.workType} - ${item.partyName}`;
                               }}
                               buttonStyle={{
                                 backgroundColor: "transparent",
@@ -1839,12 +1858,12 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           <View style={{ width: "20%", alignItems: "center" }}>
                             <TextInput
                               onChangeText={handleChange(
-                                `jobworkDetails[${i}].partyName`
+                                `jobworkDetails[${i}].itemName`
                               )}
                               onBlur={() => {
-                                handleBlur(`jobworkDetails[${i}].partyName`);
+                                handleBlur(`jobworkDetails[${i}].itemName`);
                               }}
-                              value={job.partyName}
+                              value={job.itemName}
                               style={{
                                 fontSize: 14,
                                 color: "#000",
@@ -1860,7 +1879,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                               touched.jobworkDetails &&
                               touched.jobworkDetails[i] && (
                                 <Text style={GlobalStyle.errorMsg}>
-                                  {errors.jobworkDetails[i].partyName}
+                                  {errors.jobworkDetails[i].itemName}
                                 </Text>
                               )}
                           </View>

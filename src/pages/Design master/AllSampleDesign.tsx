@@ -20,11 +20,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import SearchableComponent from "../../components/Search/SearchComponent";
 import Accordion from "react-native-collapsible/Accordion";
-import { formatDate } from "../../services/dateFormate";
+import { formatDate, formatFireDate } from "../../services/dateFormate";
 import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
 import NoDataFound from "../../components/UI/NoData";
-import { getDesignDetails } from "../../services/Design/Design.Service";
-import { setDesignMaster } from "../../redux/action/DesignsMaster/designMasterSlice";
+import { getDesignDetails, getTotalDesignCount } from "../../services/Design/Design.Service";
+import { setDesignMaster, updateDesignTotal } from "../../redux/action/DesignsMaster/designMasterSlice";
 
 const AllSampleDesign = ({ navigation }: any) => {
   const [showModal, setShowModal] = useState(false);
@@ -38,16 +38,24 @@ const AllSampleDesign = ({ navigation }: any) => {
   const [allsample, setallsample] = useState<any>([]);
   const [allsampleData, setallsampledata] = useState<any>([]);
   const [allsamplePartyName, setallsamplePartyName] = useState<any>([]);
+
+
   useEffect(() => {
     setallsample([...designsMaster]);
     setallsampledata([...designsMaster]);
   }, [designsMaster]);
   useEffect(() => {
     dispatch(setLoading(true))
-    getDesignDetails().then((res) => {
+    getDesignDetails().then(async (res) => {
       dispatch(setLoading(false))
       if (res) {
         dispatch(setDesignMaster(res))
+        try {
+          const count = await getTotalDesignCount();
+          dispatch(updateDesignTotal(count))
+        } catch (error) {
+          console.error(error);
+        }
       }
       else {
         dispatch(setDesignMaster([]))
@@ -291,6 +299,7 @@ const AllSampleDesign = ({ navigation }: any) => {
                               height: 80,
                               resizeMode: "cover",
                             }}
+                            defaultSource={require('../../assets/sample1.jpg')}
                           />
                           <View>
                             <Text
@@ -300,7 +309,7 @@ const AllSampleDesign = ({ navigation }: any) => {
                                 fontSize: 16,
                               }}
                             >
-                              {formatDate(item.date)}
+                              {formatDate(item.date) || formatFireDate(item.date)}
                             </Text>
                             <Text
                               style={{
@@ -431,7 +440,7 @@ const AllSampleDesign = ({ navigation }: any) => {
         <Pressable
           style={{
             position: "absolute",
-            bottom: 90,
+            bottom: 50,
             right: 20,
             backgroundColor: "#24acf2",
             padding: 16,

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   designsMaster: [],
+  totalDesignCount: [],
 };
 const designMasterSlice = createSlice({
   name: "SET_DESIGN_MASTER",
@@ -48,6 +49,9 @@ const designMasterSlice = createSlice({
         (item: any) => item.id !== action.payload.id
       );
     },
+    updateDesignTotal: (state: any, action) => {
+      state.totalDesignCount = action.payload
+    },
   },
 });
 export const {
@@ -55,6 +59,7 @@ export const {
   addDesignMaster,
   editDesignMaster,
   deleteDesignMaster,
+  updateDesignTotal
 } = designMasterSlice.actions;
 
 const designMasterReducer = designMasterSlice.reducer;

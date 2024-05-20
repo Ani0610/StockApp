@@ -27,7 +27,13 @@ export const formatDate = (date: any) => {
       return formattedDate;
     }
   }
-
   // Return empty string if the input date couldn't be parsed
   return "";
 };
+
+export const formatFireDate = (date: any) => {
+  const formatDate = new Date(
+    date.seconds * 1000 + date.nanoseconds / 1000000
+  );
+  return moment(new Date(formatDate)).format("DD/MM/YYYY")
+}
