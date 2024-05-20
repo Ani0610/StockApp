@@ -23,9 +23,27 @@ import {
   getAssignJobDetails,
   updateAssignJobDetails,
 } from "../../services/jobwork/jobwork.service";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  addDesignDetails, getTotalDesignCount } from "../../services/Design/Design.Service";
+const HomePage = ({ navigation}: any) => {
+  const [totalCount, setTotalCount] = useState(0);
 
-const HomePage = ({ navigation }: any) => {
-  const sampleDetails = [{ label: "Sample Created", value: 6 }];
+  useEffect(() => {
+    const fetchTotalCount = async () => {
+      const storedCount = await AsyncStorage.getItem('totalCount');
+      if (storedCount !== null) {
+        setTotalCount(parseInt(storedCount));
+      } else {
+        const count = await getTotalDesignCount();
+        setTotalCount(count);
+        await AsyncStorage.setItem('totalCount', count.toString());
+      }
+    };
+    fetchTotalCount();
+  }, []);
+
+  const sampleDetails = [{ label: "Sample Created", value: totalCount }];
 
   const deliveredDetails = [{ label: "Order", value: 0 }];
   const pendingDetails = [{ label: "Order", value: 0 }];

@@ -1726,7 +1726,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                           color: "gray",
                         }}
                       >
-                        Party
+                        Item Name
                       </Text>
                       <Text
                         style={{
@@ -1791,7 +1791,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                   workType: selectedItem.workType,
                                   price: selectedItem.price,
                                   jobuid: selectedItem.id,
-                                  partyName: selectedItem.partyName,
+                                  partyName: selectedItem.itemName, //Note: Currently We are showing here ItemName
                                 });
                               }}
                               buttonTextAfterSelection={(
@@ -1804,7 +1804,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 item: any,
                                 index: number
                               ) => {
-                                return `${item?.workType} - ${item.partyName}`;
+                                return `${item?.workType} - ${item.itemName}`;
                               }}
                               buttonStyle={{
                                 backgroundColor: "transparent",
@@ -1852,7 +1852,7 @@ const CreateSampleDesign = ({ navigation, route }: any) => {
                                 padding: 0,
                               }}
                               placeholderTextColor="gray"
-                              placeholder="party"
+                              placeholder="Item Name"
                               editable={false}
                             />
                             {errors.jobworkDetails &&
