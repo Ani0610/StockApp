@@ -64,8 +64,8 @@ const DrawerView = ({ navigation, state }: any) => {
     {
       name: 'Job Work', label: "Job work", isSubmenu: true, item: [
         { name: 'Job work Report', label: "Report", isSubmenu: false },
-        // { name: 'Job work Team', label: "Team", isSubmenu: false },
-        // { name: 'Per Day Work by Team', label: "Work By Team", isSubmenu: false },
+        { name: 'Job work Team', label: "Team", isSubmenu: false },
+        { name: 'Per Day Work by Team', label: "Work By Team", isSubmenu: false },
       ]
     },
     {

@@ -287,3 +287,77 @@ export const deletePartyById = async (values: any) => {
 // ## Party Master API ends
 
 
+
+// ## Jobwork TEam API Start
+export async function addTeam(values) {
+    try {
+        // Remove undefined fields from values
+        const sanitizedValues = {};
+        Object.keys(values).forEach((key) => {
+            if (values[key] !== undefined) {
+                sanitizedValues[key] = values[key];
+            }
+        });
+
+        // Add the document to the collection
+        const res = await collectionJobwork.add({
+            ...sanitizedValues,
+            createdAt: firestore.FieldValue.serverTimestamp(), // Adding the created timestamp
+        });
+
+        // Update the document with the generated ID
+        await res.update({
+            id: res.id,
+        });
+
+        // Get the updated document snapshot
+        const docSnapshot = await res.get();
+
+        // Get the data from the document snapshot
+        const addedData = docSnapshot.data();
+        
+        return addedData;
+    } catch (error) {
+        console.error('Error adding team:', error);
+        return false;
+    }
+}
+
+
+export const getJobWorkTeam = async () => {
+    const querySnapshot = await collectionJobwork.get();
+    if (querySnapshot.empty) {
+        return false;
+    }
+    else {
+        const data = querySnapshot.docs.map(doc => ({
+            ...doc.data(),
+        }));
+        return data;
+    }
+}
+
+export const updateJobWorkTeam = async (values: any) => {
+    try {
+        const res = await collectionJobwork.doc(values.id).update(values);
+        console.log("collectionJobwork.doc(values.id)",collectionJobwork.doc(values.id))
+        return true;
+    }
+    catch (error) {
+        console.error("error", error);
+        return error;
+    }
+}
+
+export const deleteJobWorkTeamById = async (values: any) => {
+    try {
+        await collectionJobwork.doc(values.id).delete();
+        return true;
+    }
+    catch (error) {
+        console.error("error", error);
+        return error;
+    }
+}
+
+// ## Jobwork Team API ends
