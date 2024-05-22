@@ -9,9 +9,18 @@ import {
 } from "react-native";
 import Icon from "react-native-easy-icon";
 import { useDispatch, useSelector } from "react-redux";
-import { setToast } from "../redux/action/Ui/Uislice";
+import { setLoading, setToast } from "../redux/action/Ui/Uislice";
 import { logOut, setUser } from "../redux/action/User/userSlice";
 import { RootState } from "../redux/store";
+import { Subscription, forkJoin } from "rxjs";
+import { getCategories, getJobWork, getPapers, getParty, getStones } from "../services/master/master.service";
+import { getUsers } from "../services/user/user.service";
+import { setStone } from "../redux/action/StoneDetails/stoneSlice";
+import { setDesign } from "../redux/action/DesignDetails/designSlice";
+import { setJobWork } from "../redux/action/Job Work details/jobDetailsSlice";
+import { setCategory } from "../redux/action/Category/categorySlice";
+import { setPartyMaster } from "../redux/action/party master/PartymasterSlice";
+import { setUsers } from "../redux/action/User Master/userMasterSlice";
 
 
 const DrawerView = ({ navigation, state }: any) => {
@@ -24,7 +33,62 @@ const DrawerView = ({ navigation, state }: any) => {
   const handlePress = (screenName: string) => {
     navigation.navigate(screenName);
   };
+  let subscription: Subscription;
 
+  const fetchData = () => {
+    const stones = getStones();
+    const papers = getPapers();
+    const jobworks = getJobWork();
+    const categories = getCategories();
+    const parties = getParty();
+    const users = getUsers();
+    dispatch(setLoading(true))
+    const combinedRequests = forkJoin([
+      stones,
+      papers,
+      jobworks,
+      categories,
+      parties,
+      users,
+    ]);
+
+    subscription = combinedRequests.subscribe({
+      next: ([data1, data2, data3, data4, data5, data6]) => {
+        // Handle the data from all requests
+        console.log(
+          data1,
+          "-----------------------------------------------------------------------------"
+        );
+
+        if (data1) dispatch(setStone(data1));
+        else dispatch(setStone([]));
+        if (data2) dispatch(setDesign(data2));
+        else dispatch(setDesign([]));
+        if (data3) dispatch(setJobWork(data3));
+        else dispatch(setJobWork([]));
+        if (data4) dispatch(setCategory(data4));
+        else dispatch(setCategory([]));
+        if (data5) dispatch(setPartyMaster(data5));
+        else dispatch(setPartyMaster([]));
+        if (data6) {
+          let userLists = data6.filter(
+            (data) => data.mobileNumber !== user?.mobileNumber
+          );
+          dispatch(setUsers(userLists));
+        } else dispatch(setUsers([]));
+
+
+      },
+      error: (err) => {
+        // Handle error
+        console.error("Error fetching data:", err);
+      },
+      complete: () => {
+        dispatch(setLoading(false));
+        subscription.unsubscribe()
+      }
+    });
+  };
   const handleLogout = () => {
     Alert.alert("Are you sure!", "Do you want to logout?", [
       {
@@ -47,37 +111,61 @@ const DrawerView = ({ navigation, state }: any) => {
     {
       name: 'Home',
       label: "Home",
+      iconName: 'home',
+      iconType: 'Feather',
       isSubmenu: false
     },
     {
-      name: 'Master', label: "Masters",
+      name: 'Master',
+      label: "Masters",
+      iconName: 'people',
+      iconType: 'material',
       isSubmenu: true,
-      item: [{ name: 'Stone Details', label: "Stone" },
-      { name: 'Design Details', label: "Paper" },
-      { name: 'JobWork Details', label: "Jobwork" },
-      { name: 'Users', label: "Users" },
-      { name: 'Party Master', label: "Party" },
-      { name: 'Category', label: "Category" }]
+      item: [{ name: 'Stone Details', label: "Stone", iconName: 'diamond', iconType: 'FontAwesome' },
+      { name: 'Design Details', label: "Paper", iconName: 'map', iconType: 'Feather' },
+      { name: 'JobWork Details', label: "Jobwork", iconName: 'group-work', iconType: 'Entypo' },
+      { name: 'Users', label: "Users", iconName: 'person', iconType: 'material' },
+      { name: 'Party Master', label: "Party", iconName: 'person-add', iconType: 'material' },
+      { name: 'Category', label: "Category", iconName: 'file-copy', iconType: 'material' }]
     },
-    { name: 'Stone Stock', label: "Stone Stock", isSubmenu: false },
+    { name: 'Stone Stock', label: "Stone Stock", isSubmenu: false, iconName: 'inventory', iconType: 'material' },
 
     {
-      name: 'Job Work', label: "Job work", isSubmenu: true, item: [
-        { name: 'Job work Report', label: "Report", isSubmenu: false },
-        { name: 'Job work Team', label: "Team", isSubmenu: false },
-        { name: 'Per Day Work by Team', label: "Work By Team", isSubmenu: false },
+      name: 'Job Work', label: "Job work", isSubmenu: true, iconName: 'group-work', iconType: 'Entypo', item: [
+        { name: 'Job work Report', label: "Report", isSubmenu: false, iconName: 'table-view', iconType: 'material' },
+        { name: 'Job work Team', label: "Team", isSubmenu: false, iconName: 'people', iconType: 'material' },
+        { name: 'Per Day Work by Team', label: "Work By Team", isSubmenu: false, iconName: 'run-circle', iconType: 'material' },
       ]
     },
     {
-      name: 'GodownReceive', label: "Receive Maal", isSubmenu: false,
+      name: 'GodownReceive', label: "Receive Maal", isSubmenu: false, iconName: 'upload-file', iconType: 'material'
     },
 
-    { name: 'Challan', label: "Challan", isSubmenu: false },
+    { name: 'Challan', label: "Challan", isSubmenu: false, iconName: 'book', iconType: 'Feather' },
   ]
 
   const MenuCopomponent = ({ items }: any) => (
     <>
       {/* {console.log(items, 'items=----------')} */}
+
+      <TouchableOpacity
+        style={[
+          styles.drawerItem,
+          { display: 'flex', flexDirection: 'row', alignItems: 'center' },
+        ]}
+        onPress={() => {
+          navigation.closeDrawer();
+          fetchData();
+        }}
+      >
+        <Icon
+          type='material'
+          name='sync'
+          color="#000"
+          size={24}
+        />
+        <Text style={styles.drawerText}>Sync</Text>
+      </TouchableOpacity>
       {items && items.length && items.map((menu: any, i: any) => (
         <React.Fragment key={i}>
           {
@@ -86,24 +174,36 @@ const DrawerView = ({ navigation, state }: any) => {
                 <TouchableOpacity
                   style={{
                     flexDirection: "row",
-                    justifyContent: "space-between",
+                    alignItems: "center",
+                    justifyContent: 'space-between'
                   }}
                   onPress={() => setdropDown(i)}
                 >
-                  <Text style={styles.drawerText}>{menu.label} </Text>
+                  <View style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}>
+                    <Icon
+                      type={menu.iconType}
+                      name={menu.iconName}
+                      color="#000"
+                      size={24}
+                    />
+                    <Text style={styles.drawerText}>{menu.label} </Text>
+                  </View>
                   {dropDown == i ? (
                     <Icon
                       type="feather"
                       name="chevron-down"
-                      // color="#000"
-                      size={30}
+                      color="#000"
+                      size={24}
                     />
                   ) : (
                     <Icon
                       type="feather"
                       name="chevron-right"
-                      // color="#000"
-                      size={30}
+                      color="#000"
+                      size={24}
                     />
                   )}
                 </TouchableOpacity>
@@ -112,10 +212,17 @@ const DrawerView = ({ navigation, state }: any) => {
                     <TouchableOpacity key={index}
                       style={[
                         styles.drawerItem,
+                        { display: 'flex', flexDirection: 'row', alignItems: 'center' },
                         masterDropdown === index && styles.activeDrawerItem,
                       ]}
                       onPress={() => { setmasterDropdown(index); handlePress(submenu.name) }}
                     >
+                      <Icon
+                        type={submenu.iconType}
+                        name={submenu.iconName}
+                        color="#000"
+                        size={24}
+                      />
                       <Text style={styles.drawerText}>{submenu.label}</Text>
                     </TouchableOpacity>
                   ))
@@ -125,6 +232,7 @@ const DrawerView = ({ navigation, state }: any) => {
               <TouchableOpacity
                 style={[
                   styles.drawerItem,
+                  { display: 'flex', flexDirection: 'row', alignItems: 'center' },
                   dropDown === i && styles.activeDrawerItem,
                 ]}
                 onPress={() => {
@@ -133,6 +241,12 @@ const DrawerView = ({ navigation, state }: any) => {
                   handlePress(menu.name)
                 }}
               >
+                <Icon
+                  type={menu.iconType}
+                  name={menu.iconName}
+                  color="#000"
+                  size={24}
+                />
                 <Text style={styles.drawerText}>{menu.label}</Text>
               </TouchableOpacity>
           }
@@ -176,14 +290,14 @@ const DrawerView = ({ navigation, state }: any) => {
                           type="feather"
                           name="chevron-down"
                           color="#000"
-                          size={30}
+                          size={24}
                         />
                       ) : (
                         <Icon
                           type="feather"
                           name="chevron-right"
                           color="#000"
-                          size={30}
+                          size={24}
                         />
                       )}
                     </TouchableOpacity>
@@ -205,14 +319,14 @@ const DrawerView = ({ navigation, state }: any) => {
                                 type="feather"
                                 name="chevron-down"
                                 color="#000"
-                                size={30}
+                                size={24}
                               />
                             ) : (
                               <Icon
                                 type="feather"
                                 name="chevron-right"
                                 color="#000"
-                                size={30}
+                                size={24}
                               />
                             )}
                           </TouchableOpacity>
@@ -270,14 +384,14 @@ const DrawerView = ({ navigation, state }: any) => {
                                 type="feather"
                                 name="chevron-down"
                                 color="#000"
-                                size={30}
+                                size={24}
                               />
                             ) : (
                               <Icon
                                 type="feather"
                                 name="chevron-right"
                                 color="#000"
-                                size={30}
+                                size={24}
                               />
                             )}
                           </TouchableOpacity>
@@ -412,14 +526,14 @@ const DrawerView = ({ navigation, state }: any) => {
                           type="feather"
                           name="chevron-down"
                           color="#000"
-                          size={30}
+                          size={24}
                         />
                       ) : (
                         <Icon
                           type="feather"
                           name="chevron-right"
                           color="#000"
-                          size={30}
+                          size={24}
                         />
                       )}
                     </TouchableOpacity>
@@ -441,14 +555,14 @@ const DrawerView = ({ navigation, state }: any) => {
                                 type="feather"
                                 name="chevron-down"
                                 color="#000"
-                                size={30}
+                                size={24}
                               />
                             ) : (
                               <Icon
                                 type="feather"
                                 name="chevron-right"
                                 color="#000"
-                                size={30}
+                                size={24}
                               />
                             )}
                           </TouchableOpacity>
@@ -506,14 +620,14 @@ const DrawerView = ({ navigation, state }: any) => {
                                 type="feather"
                                 name="chevron-down"
                                 color="#000"
-                                size={30}
+                                size={24}
                               />
                             ) : (
                               <Icon
                                 type="feather"
                                 name="chevron-right"
                                 color="#000"
-                                size={30}
+                                size={24}
                               />
                             )}
                           </TouchableOpacity>
@@ -617,8 +731,8 @@ const DrawerView = ({ navigation, state }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#24acf2",
-    color:"#FFF"
+    backgroundColor: "#fff",
+    color: "#FFF"
   },
   scrollContainer: {
     flex: 1,
@@ -626,25 +740,27 @@ const styles = StyleSheet.create({
   },
   drawerItem: {
     paddingVertical: 15,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "#f1f1f1",
     backgroundColor: "transparent",
-    color:"#FFF"
+    color: "#FFF",
+
   },
   activeDrawerItem: {
-    backgroundColor: "blue",
-    color:"#000"
+    backgroundColor: "#24acf2",
+    color: "#000"
   },
   drawerText: {
-    fontSize: 16,
-    color: "#FFF",
+    fontSize: 14,
+    color: "#000",
+    marginLeft: 10
   },
   logoutContainer: {
     borderTopWidth: 1,
-    borderTopColor: "#ccc",
+    borderTopColor: "#f1f1f1",
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "#f1f1f1",
   },
   logoutButton: {
     paddingVertical: 15,
