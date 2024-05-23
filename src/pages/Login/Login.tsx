@@ -1,5 +1,5 @@
 import { Formik } from 'formik'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Pressable, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import * as yup from "yup"
 import { GlobalStyle } from '../../../globalStyle'
@@ -10,6 +10,7 @@ import { setUser } from '../../redux/action/User/userSlice'
 import { checkMobileNumberExists, signInWithPhoneNumber } from '../../services/auth/auth.service'
 import { setLoading, setToast } from '../../redux/action/Ui/Uislice'
 import { adminPhones } from '../../services/firebaseConfig'
+import auth from '@react-native-firebase/auth';
 
 
 const Login = ({ navigation }: any) => {
@@ -29,6 +30,19 @@ const Login = ({ navigation }: any) => {
         code: yup.string().required('Code is required')
             .matches(/^\d{6}$/, 'OTP code must be six digits')
     })
+    function onAuthStateChanged(user:any) {
+        if (user) {
+          // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
+          // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
+          // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
+          // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
+        }
+      }
+    
+      useEffect(() => {
+        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+        return subscriber; // unsubscribe on unmount
+      }, []);
     const onLogin = async (values: any) => {
         dispatch(setLoading(true));
         const existingUser: any = await checkMobileNumberExists(values.phone);

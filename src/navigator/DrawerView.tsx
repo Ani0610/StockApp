@@ -721,6 +721,12 @@ const DrawerView = ({ navigation, state }: any) => {
       </ScrollView>
       <View style={styles.logoutContainer}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Icon
+          type='material'
+          name='logout'
+          color="#000"
+          size={24}
+        />
           <Text style={styles.drawerText}>Logout</Text>
         </TouchableOpacity>
       </View>
@@ -765,6 +771,8 @@ const styles = StyleSheet.create({
   logoutButton: {
     paddingVertical: 15,
     paddingHorizontal: 20,
+    display:'flex',
+    flexDirection:'row'
   },
 });
 

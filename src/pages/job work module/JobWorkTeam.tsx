@@ -1,5 +1,7 @@
+import { FieldArray, FormikProvider, useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   Modal,
   Platform,
@@ -12,39 +14,29 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
 } from "react-native";
-import { GlobalStyle } from "../../../globalStyle";
-import * as yup from "yup";
-import { FieldArray, FormikProvider, useFormik } from "formik";
 import Icon from "react-native-easy-icon";
+import SelectDropdown from "react-native-select-dropdown";
 import { useDispatch, useSelector } from "react-redux";
+import * as yup from "yup";
+import { GlobalStyle } from "../../../globalStyle";
+import NoDataFound from "../../components/UI/NoData";
+import {
+  addJobworkTeam,
+  deleteJobworkTeam,
+  editTeamJobwork,
+  setJobworkTeam,
+} from "../../redux/action/ job work/JobTeamSlice";
 import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
 import { RootState } from "../../redux/store";
 import {
-  addjobTeam,
-  editjobTeam,
-  editJobworkTeamPerson,
-  editTeamJobWork,
-  getJobWorkTeamPersons,
-  addJobworkTeamPerson,
-  deletejobTeam,
-} from "../../redux/action/ job work/JobTeamSlice";
-import SelectDropdown from "react-native-select-dropdown";
-import {
-  addTeam,
-  getJobWorkTeam,
-  updateJobWorkTeam,
-  deleteJobWorkTeamById,
-  addJobWorkTeam,
-  checkTeamExists,
   addJobWorkTeamPerson,
-  editMyJobWorkTeam,
-  editJobWorkTeamPerson,
+  checkTeamExists,
+  createJobWorkTeam,
+  deleteJobWorkTeamById,
+  getJobWorkTeam,
   getMyJobWorkTeam,
-  getMyJobWorkTeamPersons,
-  addJobWorkTeamIfNotExists,
-  addJobWorkTeamPersonIfNotExists,
+  getMyJobWorkTeamPersons
 } from "../../services/master/master.service";
 
 var heightY = Dimensions.get("window").height;
@@ -52,6 +44,7 @@ var heightY = Dimensions.get("window").height;
 interface InitialFormValues {
   partyName: string;
   workType: string;
+  jobId: string;
   teamName: string;
   teamPersonName: any;
   useruid: "";
@@ -67,26 +60,27 @@ const JobWorkTeam = () => {
   const [personName, setPersonName] = useState("");
   // const error = useSelector((state) => state.jobTeamPerson.error);
   const { user }: any = useSelector((state: RootState) => state.user);
-  const { teams }: any = useSelector((state: RootState) => state.teams);
+  const { jobworkTeams }: any = useSelector((state: RootState) => state.jobworkTeam);
   const { jobWorks } = useSelector((state: RootState) => state.jobWorks);
   const [team, setTeam] = useState<any[]>([]);
   const [teamPersons, setTeamPersons] = useState<any[]>([]);
   const dispatch = useDispatch();
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
-      partyName: user.userType === "Job Work" ? user.partyName : "",
-      workType: user.userType === "Job Work" ? user.workType : "",
+      partyName: user.userType === "jobwork" ? user.partyName : "",
+      workType: user.userType === "jobwork" ? user.workType : "",
+      jobId: "",
       teamName: "",
       teamPersonName: [{ personName: "" }],
-      useruid: user.userType === "Job Work" ? user.useruid : "",
-      price: user.userType === "Job Work" ? user.price : "",
+      useruid: user.userType === "jobwork" ? user.useruid : "",
+      price: user.userType === "jobwork" ? user.price : "",
       id: undefined,
     }
   );
   const teamSchema = yup.object().shape({
     partyName: yup.string().required("Party Name is required"),
     workType: yup.string().required("Work Type is required"),
-    itemName: yup.string().required("Team Name is required"),
+    teamName: yup.string().required("Team Name is required"),
     teamPersonName: yup.array().of(
       yup.object().shape({
         personName: yup.string().required("Person name is required"),
@@ -120,119 +114,86 @@ const JobWorkTeam = () => {
     validationSchema: teamSchema,
     onSubmit: async (values: any) => {
       if (update) {
-        // Update operation
-        updateJobWorkTeam(values)
-          .then((res) => {
-            if (res) {
-              dispatch(editjobTeam({ ...values }));
-              dispatch(
-                setToast({
-                  message: "Team updated successfully",
-                  isVisible: true,
-                  type: "success",
-                })
-              );
-            } else {
-              dispatch(
-                setToast({
-                  message: "Something went wrong",
-                  isVisible: true,
-                  type: "danger",
-                })
-              );
-            }
+        dispatch(editTeamJobwork({ ...values }));
+        dispatch(
+          setToast({
+            message: "Team updated successfully",
+            isVisible: true,
+            type: "success",
           })
-          .catch((error) => {
-            console.error("Error updating team:", error);
-            dispatch(
-              setToast({
-                message: "Something went wrong",
-                isVisible: true,
-                type: "danger",
-              })
-            );
-          });
+        );
       } else {
-        addTeam(values)
-          .then(async (res) => {
-            if (res) {
-              dispatch(addjobTeam({ ...res }));
-              dispatch(
-                setToast({
-                  message: "Team added successfully",
-                  isVisible: true,
-                  type: "success",
-                })
-              );
-
-              try {
-                if (await checkTeamExists(values.itemName)) {
-                  setError(
-                    "Team name already exists. Please choose another name."
-                  );
-                  return;
-                }
-                // await addJobWorkTeamIfNotExists();
-                const teamData = {
-                  teamName: values.itemName,
-                  jobID: res.id,
-                  partyName: values.partyName,
-                  workType: values.workType,
-                };
-                const newTeam = await addJobWorkTeam(teamData);
-                dispatch(addjobTeam(newTeam));
-
-                //   await addJobWorkTeamPersonIfNotExists();
+        console.log(values, 'values')
+        dispatch(setLoading(true));
+        checkTeamExists(values.teamName).then(async (res) => {
+          if (res) {
+            dispatch(setToast({
+              message: "Team name already exists. Please choose another name.",
+              isVisible: true,
+              type: "danger",
+            }));
+            dispatch(setLoading(false));
+            return;
+          }
+          else {
+            try {
+              const teamData = {
+                teamName: values.teamName,
+                jobId: values.jobId,
+                partyName: values.partyName,
+                workType: values.workType,
+                personName: values.teamPersonName.map((person: any) => person.personName).join(", ")
+              };
+              console.log(teamData, values.teamPersonName.map((person: any) => person.personName).join(", "))
+              createJobWorkTeam(teamData).then((newTeam: any) => {
+                dispatch(addJobworkTeam(newTeam));
                 if (values.teamPersonName && values.teamPersonName.length > 0) {
                   for (const member of values.teamPersonName) {
                     const personData = {
                       teamID: newTeam.id,
-                      jobID: res.id,
+                      jobId: values.jobId,
                       personName: member.personName,
                     };
-                    await addJobWorkTeamPerson(personData);
+                    addJobWorkTeamPerson(personData);
                   }
                 } else {
                   console.log("No team members found");
                 }
-              } catch (err) {
-                setError(err.message);
-                console.error("Error adding team:", err);
                 dispatch(
                   setToast({
-                    message: "Error adding team: " + err.message,
+                    message: "Team added successfully",
                     isVisible: true,
-                    type: "danger",
+                    type: "success",
                   })
-                );
-              }
-            } else {
+                )
+              }).finally(() => {
+                dispatch(setLoading(false))
+                setShowModal(false);
+                setUpdate(false);
+                resetForm();
+              })
+
+            } catch (err: any) {
+              setError(err.message);
+              console.error("Error adding team:", err);
               dispatch(
                 setToast({
-                  message: "Something went wrong",
+                  message: "Error adding team: " + err.message,
                   isVisible: true,
                   type: "danger",
                 })
               );
             }
-          })
-          .catch((error) => {
-            console.error("Error adding team:", error);
-            setError(error.message);
-            dispatch(
-              setToast({
-                message: "Error adding team: " + error.message,
-                isVisible: true,
-                type: "danger",
-              })
-            );
-          });
+          }
+        })
       }
-      setShowModal(false);
-      setUpdate(false);
-      resetForm();
-    },
-  });
+
+      // await addJobWorkTeamIfNotExists();
+
+
+    }
+  })
+
 
   const {
     handleChange,
@@ -251,15 +212,16 @@ const JobWorkTeam = () => {
     resetForm();
   };
   useEffect(() => {
-    if (user.userType === "Job Work") {
-      const tm: any = teams.filter(
+    if (user.userType === "job") {
+      const tm: any = jobworkTeams.filter(
         (item: any) => item.useruid === user.useruid
       );
       setTeam([...tm]);
     } else {
-      setTeam([...teams]);
+      console.log('jobworkTeams-----------------', jobworkTeams)
+      setTeam([...jobworkTeams]);
     }
-  }, [user.userType, teams]);
+  }, [user.userType, jobworkTeams]);
 
   const selectCard = (item: number) => {
     setisVisible(true);
@@ -273,11 +235,15 @@ const JobWorkTeam = () => {
     fetchTeamData();
   }, []);
 
+  
   const fetchTeamData = async () => {
     try {
+      await dispatch(setLoading(true));
       const fetchedData = await getJobWorkTeam();
+      console.log('fetchedData', fetchedData)
+      await dispatch(setLoading(false))
       if (fetchedData) {
-        setTeam(fetchedData);
+        dispatch(setJobworkTeam(fetchedData))
       } else {
         setTeam([]);
       }
@@ -307,22 +273,21 @@ const JobWorkTeam = () => {
 
   useEffect(() => {
     fetchJobWorkTeamData();
-    fetchJobWorkTeamPersonsData();
+    // fetchJobWorkTeamPersonsData();
   }, []);
 
   const fetchJobWorkTeamData = async () => {
     try {
-      const fetchedJobWorkTeam = await getMyJobWorkTeam();
-      if (fetchedJobWorkTeam) {
-        // Update the form fields with the fetched jobWorkTeam data
-        const { teamName, partyName, workType } = fetchedJobWorkTeam;
-        setFieldValue("itemName", teamName);
-        setFieldValue("partyName", partyName);
-        setFieldValue("workType", workType);
-        setTeam(fetchedJobWorkTeam);
-      } else {
-        setTeam([]);
-      }
+      dispatch(setLoading(true));
+      getMyJobWorkTeam().then((res) => {
+        if (res && res.length) {
+          dispatch(setJobworkTeam(res));
+          // setTeam(res);
+        } else {
+          dispatch(setJobworkTeam([]));
+          // setTeam([]);
+        }
+      }).finally(() => dispatch(setLoading(false)))
     } catch (error) {
       console.error("Error fetching team data:", error);
       setTeam([]);
@@ -362,7 +327,7 @@ const JobWorkTeam = () => {
             .then((res) => {
               dispatch(setLoading(false));
               if (res) {
-                dispatch(deletejobTeam(data));
+                dispatch(deleteJobworkTeam(data));
                 setShowModal(false); // Update the visibility by closing the modal
               } else {
                 dispatch(
@@ -399,84 +364,83 @@ const JobWorkTeam = () => {
         />
         <ScrollView>
           <View style={[GlobalStyle.container]}>
-            <View>
-              {team?.map((item: any, i: any) => (
-                <View
-                  key={i}
-                  style={[
-                    GlobalStyle.card,
-                    GlobalStyle.shadowProp,
-                    {
-                      paddingVertical: 8,
-                      paddingHorizontal: 8,
-                      height: "auto",
-                      flexDirection: "row",
-                    },
-                  ]}
-                >
-                  <View style={GlobalStyle.leftSide}>
-                    <Text style={GlobalStyle.label}>Team Name</Text>
-                    <Text style={GlobalStyle.label}>Party Name</Text>
-                    <Text style={GlobalStyle.label}>Work Type</Text>
-                    <Text style={GlobalStyle.label}>Persons</Text>
-                  </View>
-                  <View style={GlobalStyle.middleSide}>
-                    <Text
-                      style={GlobalStyle.textcolor}
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                    >
-                      {item.teamName}
-                    </Text>
-                    <Text
-                      style={GlobalStyle.textcolor}
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                    >
-                      {item.partyName}
-                    </Text>
-                    <Text
-                      style={GlobalStyle.textcolor}
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                    >
-                      {item.workType}
-                    </Text>
-                    <Text
-                      style={GlobalStyle.textcolor}
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                    >
-                      {teamPersons && Array.isArray(teamPersons)
-                        ? teamPersons
-                            .filter((person: any) => person.teamID === item.id)
-                            .map((person: any) => person.personName)
-                            .join(", ")
-                        : "No persons"}
-                    </Text>
-                  </View>
-                  <View style={GlobalStyle.rightSide}>
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Pressable onPress={() => selectCard(item)}>
-                        <Icon
-                          type="feather"
-                          name="more-vertical"
-                          color="gray"
-                          size={30}
-                        />
-                      </Pressable>
+            {team && team.length ?
+              <View>
+                {team?.map((item: any, i: any) => (
+                  <View
+                    key={i}
+                    style={[
+                      GlobalStyle.card,
+                      GlobalStyle.shadowProp,
+                      {
+                        paddingVertical: 8,
+                        paddingHorizontal: 8,
+                        height: "auto",
+                        flexDirection: "row",
+                      },
+                    ]}
+                  >
+                    <View style={GlobalStyle.leftSide}>
+                      <Text style={GlobalStyle.label}>Team Name</Text>
+                      <Text style={GlobalStyle.label}>Party Name</Text>
+                      <Text style={GlobalStyle.label}>Work Type</Text>
+                      <Text style={GlobalStyle.label}>Persons</Text>
+                    </View>
+                    <View style={GlobalStyle.middleSide}>
+                      <Text
+                        style={GlobalStyle.textcolor}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
+                        {item.teamName}
+                      </Text>
+                      <Text
+                        style={GlobalStyle.textcolor}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
+                        {item.partyName}
+                      </Text>
+                      <Text
+                        style={GlobalStyle.textcolor}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
+                        {item.workType}
+                      </Text>
+                      <Text
+                        style={GlobalStyle.textcolor}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
+                       {item.personName}
+                      </Text>
+                    </View>
+                    <View style={GlobalStyle.rightSide}>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Pressable onPress={() => selectCard(item)}>
+                          <Icon
+                            type="feather"
+                            name="more-vertical"
+                            color="gray"
+                            size={30}
+                          />
+                        </Pressable>
+                      </View>
                     </View>
                   </View>
-                </View>
-              ))}
-            </View>
+                ))}
+              </View>
+              :
+              <NoDataFound />
+            }
           </View>
         </ScrollView>
         <Pressable
@@ -484,13 +448,13 @@ const JobWorkTeam = () => {
             position: "absolute",
             bottom: 40,
             right: 20,
-            backgroundColor: "blue",
+            backgroundColor: "#24acf2",
             padding: 16,
             borderRadius: 50,
           }}
           onPress={() => setShowModal(true)}
         >
-          <Icon type="feather" name="plus" color="white" size={35} />
+          <Icon type="feather" name="plus" color="white" size={25} />
         </Pressable>
       </SafeAreaView>
       {isVisible && (
@@ -598,7 +562,7 @@ const JobWorkTeam = () => {
                     }}
                   >
                     <Text style={{ color: "black", fontSize: 20 }}>
-                      Add Team Details
+                      {update ? 'Update Team Details' : 'Add Team Details'}
                     </Text>
                     <Pressable onPress={() => handleClose()}>
                       <Icon
@@ -615,7 +579,7 @@ const JobWorkTeam = () => {
                       padding: 10,
                     }}
                   >
-                    {user.userType === "Job Work" ? (
+                    {user.userType === "jobwork" ? (
                       <View style={{ marginTop: 10 }}>
                         <View style={Style.inputField}>
                           <Text style={Style.inputLabel}>Party Name</Text>
@@ -665,7 +629,7 @@ const JobWorkTeam = () => {
                               data={[...jobWorks]}
                               onSelect={(selectedItem) => {
                                 console.log(selectedItem, "selecteditem");
-                                setFieldValue("useruid", selectedItem.id);
+                                setFieldValue("jobId", selectedItem.id);
                                 setFieldValue(
                                   "partyName",
                                   selectedItem.partyName
@@ -755,11 +719,11 @@ const JobWorkTeam = () => {
                           }}
                         >
                           <TextInput
-                            onChangeText={handleChange("itemName")}
+                            onChangeText={handleChange("teamName")}
                             onBlur={() => {
-                              handleBlur("itemName");
+                              handleBlur("teamName");
                             }}
-                            value={values.itemName}
+                            value={values.teamName}
                             style={{
                               textAlign: "right",
                               fontSize: 16,
@@ -807,7 +771,7 @@ const JobWorkTeam = () => {
                                   type="feather"
                                   name="plus"
                                   color="blue"
-                                  size={25}
+                                  size={30}
                                 />
                               </Pressable>
                             </View>

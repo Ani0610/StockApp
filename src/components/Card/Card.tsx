@@ -7,14 +7,14 @@ interface CardProps {
   details: { label: string; value: string | number }[];
 }
 
-const Card: React.FC<CardProps> = ({ title, details }) => {
+const Card: React.FC<CardProps> = ({ title, details }:any) => {
   return (
     <View style={cardStyles.cardContainer}>
       <View style={cardStyles.cardHeader}>
         <Text style={cardStyles.cardTitle}>{title}</Text>
       </View>
       <View style={cardStyles.cardContent}>
-        {details.map((detail, index) => (
+        {details.map((detail:any, index:number) => (
           <View key={index} style={cardStyles.detailContainer}>
             <Text style={cardStyles.detailLabel}>{detail.label}</Text>
             <Text style={cardStyles.detailValue}>{detail.value}</Text>

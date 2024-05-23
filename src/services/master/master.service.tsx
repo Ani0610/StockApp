@@ -291,10 +291,10 @@ export const deletePartyById = async (values: any) => {
 
 
 // ## Jobwork Team API Start
-export async function addTeam(values) {
+export async function addTeam(values: any) {
     try {
         // Remove undefined fields from values
-        const sanitizedValues = {};
+        const sanitizedValues: any = {};
         Object.keys(values).forEach((key) => {
             if (values[key] !== undefined) {
                 sanitizedValues[key] = values[key];
@@ -317,7 +317,7 @@ export async function addTeam(values) {
 
         // Get the data from the document snapshot
         const addedData = docSnapshot.data();
-        
+
         return addedData;
     } catch (error) {
         console.error('Error adding team:', error);
@@ -327,7 +327,7 @@ export async function addTeam(values) {
 
 
 export const getJobWorkTeam = async () => {
-    const querySnapshot = await collectionJobwork.get();
+    const querySnapshot = await collectionJobworkTeam.get();
     if (querySnapshot.empty) {
         return false;
     }
@@ -342,7 +342,7 @@ export const getJobWorkTeam = async () => {
 export const updateJobWorkTeam = async (values: any) => {
     try {
         const res = await collectionJobwork.doc(values.id).update(values);
-        console.log("collectionJobwork.doc(values.id)",collectionJobwork.doc(values.id))
+        console.log("collectionJobwork.doc(values.id)", collectionJobwork.doc(values.id))
         return true;
     }
     catch (error) {
@@ -368,34 +368,34 @@ export const deleteJobWorkTeamById = async (values: any) => {
 
 
 // Job Work Team Table Operations
- //## New Job Work Team table collection Start
+//## New Job Work Team table collection Start
 // Check if the collection exists
-export const checkTeamCollectionExists = async (collectionName) => {
-    const collections = await admin.firestore().listCollections();
-    const collectionExists = collections.some((col) => col.id === collectionName);
-    return collectionExists;
-};
+// export const checkTeamCollectionExists = async (collectionName:any) => {
+//     const collections = await admin.firestore().listCollections();
+//     const collectionExists = collections.some((col) => col.id === collectionName);
+//     return collectionExists;
+// };
 
 // Add jobworkTeam if it doesn't exist
-export const addJobWorkTeamIfNotExists = async () => {
-    const collectionExists = await checkTeamCollectionExists('jobworkTeam');
-    if (!collectionExists) {
-        // Collection doesn't exist, create it
-        await admin.firestore().createCollection('jobworkTeam');
-    }
-};
+// export const addJobWorkTeamIfNotExists = async () => {
+//     const collectionExists = await checkTeamCollectionExists('jobworkTeam');
+//     if (!collectionExists) {
+//         // Collection doesn't exist, create it
+//         await admin.firestore().createCollection('jobworkTeam');
+//     }
+// };
 
- // Check if a team with the same name already exists
-export const checkTeamExists = async (teamName) => {
+// Check if a team with the same name already exists
+export const checkTeamExists = async (teamName: any) => {
     const snapshot = await collectionJobworkTeam.where('teamName', '==', teamName).get();
     return !snapshot.empty;
 };
 
 // Create a new job work team with id and createdAt fields
-export const createJobWorkTeam = async (data) => {
+export const createJobWorkTeam = async (data: any) => {
     try {
         // Remove undefined fields from data
-        const sanitizedData = {};
+        const sanitizedData: any = {};
         Object.keys(data).forEach((key) => {
             if (data[key] !== undefined) {
                 sanitizedData[key] = data[key];
@@ -427,24 +427,30 @@ export const createJobWorkTeam = async (data) => {
 };
 
 // Add a job work team if it doesn't already exist
-export const addJobWorkTeam = async (teamData) => {
-    if (await checkTeamExists(teamData.teamName)) {
-        throw new Error('Team name already exists');
-    }
-    return await createJobWorkTeam(teamData);
-};
+// export const addJobWorkTeam = async (teamData:any) => {
+//     if (await checkTeamExists(teamData.teamName)) {
+//         throw new Error('Team name already exists');
+//     }
+//     return await createJobWorkTeam(teamData);
+// };
 
 // Get all job work teams
 export const getMyJobWorkTeam = async () => {
     const querySnapshot = await collectionJobworkTeam.get();
+    console.log(querySnapshot)
     if (querySnapshot.empty) {
         return [];
     }
-    return querySnapshot.docs.map(doc => doc.data());
+    else {
+        const data = querySnapshot.docs.map(doc => ({
+            ...doc.data(),
+        }));
+        return data;
+    }
 };
 
 // Edit a job work team
-export const editMyJobWorkTeam = async (teamData) => {
+export const editMyJobWorkTeam = async (teamData: any) => {
     try {
         await collectionJobworkTeam.doc(teamData.id).update(teamData);
         return true;
@@ -455,7 +461,7 @@ export const editMyJobWorkTeam = async (teamData) => {
 };
 
 // Delete a job work team by ID
-export const deleteNewJobWorkTeamById = async (id) => {
+export const deleteNewJobWorkTeamById = async (id: string) => {
     try {
         await collectionJobworkTeam.doc(id).delete();
         return true;
@@ -471,9 +477,9 @@ export const deleteNewJobWorkTeamById = async (id) => {
 
 // Job Work Team Person Table Operations
 // Create a new job work team person with id and createdAt fields
-export const createJobWorkTeamPerson = async (data) => {
+export const createJobWorkTeamPerson = async (data: any) => {
     try {
-        const sanitizedData = {};
+        const sanitizedData: any = {};
         Object.keys(data).forEach((key) => {
             if (data[key] !== undefined) {
                 sanitizedData[key] = data[key];
@@ -481,7 +487,7 @@ export const createJobWorkTeamPerson = async (data) => {
         });
         const res = await collectionJobworkTeamPerson.add({
             ...sanitizedData,
-            createdAt: firestore.FieldValue.serverTimestamp(), 
+            createdAt: firestore.FieldValue.serverTimestamp(),
         });
         await res.update({
             id: res.id,
@@ -496,10 +502,8 @@ export const createJobWorkTeamPerson = async (data) => {
 };
 
 // Add a job work team person if it doesn't already exist
-export const addJobWorkTeamPerson = async (personData) => {
-    if (await checkPersonExistence(personData.personName)) {
-        throw new Error('Person name already exists');
-    }
+export const addJobWorkTeamPerson = async (personData: any) => {
+
     return await createJobWorkTeamPerson(personData);
 };
 
@@ -513,7 +517,7 @@ export const getMyJobWorkTeamPersons = async () => {
 };
 
 // Edit a job work team person
-export const editJobWorkTeamPerson = async (values) => {
+export const editJobWorkTeamPerson = async (values: any) => {
     try {
         await collectionJobworkTeamPerson.doc(values.id).update(values);
         return true;
@@ -524,7 +528,7 @@ export const editJobWorkTeamPerson = async (values) => {
 };
 
 // Delete a job work team person by ID
-export const deleteJobWorkTeamPersonById = async (id) => {
+export const deleteJobWorkTeamPersonById = async (id: any) => {
     try {
         await collectionJobworkTeamPerson.doc(id).delete();
         return true;
@@ -535,23 +539,23 @@ export const deleteJobWorkTeamPersonById = async (id) => {
 };
 
 // Check if the collection exists
-export const checkPersonCollectionExists = async (collectionName) => {
-    const collections = await admin.firestore().listCollections();
-    const collectionExists = collections.some((col) => col.id === collectionName);
-    return collectionExists;
-};
+// export const checkPersonCollectionExists = async (collectionName:any) => {
+//     const collections = await admin.firestore().listCollections();
+//     const collectionExists = collections.some((col) => col.id === collectionName);
+//     return collectionExists;
+// };
 
 // Add jobworkTeamPerson if it doesn't exist
-export const addJobWorkTeamPersonIfNotExists = async () => {
-    const collectionExists = await checkPersonCollectionExists('jobworkTeamPerson');
-    if (!collectionExists) {
-        // Collection doesn't exist, create it
-        await admin.firestore().createCollection('jobworkTeamPerson');
-    }
-};
+// export const addJobWorkTeamPersonIfNotExists = async () => {
+//     const collectionExists = await checkPersonCollectionExists('jobworkTeamPerson');
+//     if (!collectionExists) {
+//         // Collection doesn't exist, create it
+//         await admin.firestore().createCollection('jobworkTeamPerson');
+//     }
+// };
 
 // Check if a person with the same name already exists
-export const checkPersonExistence = async (personName) => {
+export const checkPersonExistence = async (personName: any) => {
     const querySnapshot = await collectionJobworkTeamPerson.where('personName', '==', personName).get();
     return !querySnapshot.empty;
 };

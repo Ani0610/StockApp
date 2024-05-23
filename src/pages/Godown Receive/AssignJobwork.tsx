@@ -21,9 +21,9 @@ interface InitialFormValues {
     worktype: string;
     assignTo: string;
     partyName: string;
-    partyUid:string;
+    partyUid: string;
     stoneType: any;
-    status:string;
+    status: string;
 }
 const AssignJobwork = ({ navigation, route }: any) => {
     const { jobWorks } = useSelector((state: RootState) => state.jobWorks);
@@ -44,9 +44,9 @@ const AssignJobwork = ({ navigation, route }: any) => {
             worktype: "",
             assignTo: "",
             partyName: "",
-            partyUid:"",
+            partyUid: "",
             stoneType: null,
-            status:"PENDING"
+            status: "PENDING"
         }
     );
 
@@ -145,6 +145,7 @@ const AssignJobwork = ({ navigation, route }: any) => {
                 setExistingDesign(existingDesign)
             }
         }
+        console.log(designsMaster, values?.designNo)
     }, [designsMaster, values.designNo],)
     const patchValues = () => {
         let data = route.params?.rowData;

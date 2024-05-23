@@ -28,7 +28,7 @@ const rootReducer = combineReducers({
   designMaster: designMasterReducer,
   stoneStock: stoneStockReducer,
   perDayWorks: worPerDayReducer,
-  teams: jobTeamReducer,
+  jobworkTeam: jobTeamReducer,
   userMaster: usersMasterReducer,
   challan: challanReducer,
   partyMaster: partyMasterReducer,

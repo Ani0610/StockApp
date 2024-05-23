@@ -6,7 +6,7 @@ import { FieldArray, FormikProvider, useFormik } from 'formik'
 import Icon from 'react-native-easy-icon'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
-import { addjobTeam, deletejobTeam, editjobTeam } from '../../redux/action/ job work/JobTeamSlice'
+// import { addjobTeam, deletejobTeam, editjobTeam } from '../../redux/action/ job work/JobTeamSlice'
 import SelectDropdown from 'react-native-select-dropdown'
 import { addperDayWork, deleteperDayWork, editperDayWork } from '../../redux/action/ job work/WorkPerDaySlice'
 var heightY = Dimensions.get("window").height;
@@ -27,7 +27,7 @@ const TeamWorkPerDay = () => {
     const [data, setdata] = useState<any | null>(null); // Track the selected card's ID
     const [isVisible, setisVisible] = useState(false);
     const { user }: any = useSelector((state: RootState) => state.user)
-    const { teams }: any = useSelector((state: RootState) => state.teams)
+    const { jobworkTeams }: any = useSelector((state: RootState) => state.jobworkTeam)
     const { perDayWorks }: any = useSelector((state: RootState) => state.perDayWorks)
     const [work, setWork] = useState<any>([])
     const dispatch = useDispatch()
@@ -152,8 +152,8 @@ const TeamWorkPerDay = () => {
                         </View>
                     </View>
                 </ScrollView>
-                <Pressable style={{ position: 'absolute', bottom: 40, right: 20, backgroundColor: 'blue', padding: 16, borderRadius: 50 }} onPress={() => setShowModal(true)}>
-                    <Icon type="feather" name="plus" color="white" size={35} />
+                <Pressable style={{ position: 'absolute', bottom: 40, right: 20, backgroundColor: '#24acf2', padding: 16, borderRadius: 50 }} onPress={() => setShowModal(true)}>
+                    <Icon type="feather" name="plus" color="white" size={25} />
                 </Pressable>
             </SafeAreaView>
             {isVisible &&
@@ -214,7 +214,7 @@ const TeamWorkPerDay = () => {
                                                 <Text style={Style.inputLabel}>Team Name</Text>
                                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                                     <SelectDropdown
-                                                        data={[...teams]}
+                                                        data={[...jobworkTeams]}
                                                         onSelect={(selectedItem: any) => {
                                                             const arry: any = []
                                                             selectedItem.teamPersonName.map((item: any) => {
@@ -238,7 +238,7 @@ const TeamWorkPerDay = () => {
                                                         defaultButtonText={values.teamName ? values.teamName : 'Select Team'}
                                                         buttonTextStyle={{ textAlign: 'right', marginLeft: -6 }}
                                                         dropdownStyle={{ width: '80%', borderRadius: 10 }}
-                                                        defaultValue={teams.find((team: any) => team.teamName === values.teamName)}
+                                                        defaultValue={jobworkTeams.find((team: any) => team.teamName === values.teamName)}
                                                     />
                                                     {/* <TextInput
                                                     onChangeText={handleChange('teamName')}

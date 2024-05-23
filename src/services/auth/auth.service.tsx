@@ -5,16 +5,16 @@ import { db } from "../firebaseConfig";
 export async function signInWithPhoneNumber(phoneNumber: string) {
     try {
         // console.log('mobile', phoneNumber)
-        // const appVerifier = await auth().verifyPhoneNumber('+91' + phoneNumber);
-        firebase.auth().settings.appVerificationDisabledForTesting = true;
-        const settings = auth().settings;
-        console.log(settings.appVerificationDisabledForTesting);
-        const confirmation = await auth().signInWithPhoneNumber('+91' + phoneNumber,true);
-        console.log(confirmation, 'confirmation');
+        // await auth().verifyPhoneNumber('+91' + phoneNumber);
+        // firebase.auth().settings.appVerificationDisabledForTesting = true;
+        // const settings = auth().settings;
+        // console.log(settings.appVerificationDisabledForTesting);
+        const confirmation = await auth().signInWithPhoneNumber('+91' + phoneNumber);
         return confirmation;
 
     } catch (error) {
         console.error('error---', error);
+        return false;
     }
 }
 
