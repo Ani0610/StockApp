@@ -12,19 +12,23 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Alert 
+  Alert,
 } from "react-native";
 import { GlobalStyle } from "../../../globalStyle";
 import * as yup from "yup";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import Icon from "react-native-easy-icon";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setToast } from '../../redux/action/Ui/Uislice';
+import { setLoading, setToast } from "../../redux/action/Ui/Uislice";
 import { RootState } from "../../redux/store";
 import {
   addjobTeam,
-  deletejobTeam,
   editjobTeam,
+  editJobworkTeamPerson,
+  editTeamJobWork,
+  getJobWorkTeamPersons,
+  addJobworkTeamPerson,
+  deletejobTeam,
 } from "../../redux/action/ job work/JobTeamSlice";
 import SelectDropdown from "react-native-select-dropdown";
 import {
@@ -32,6 +36,15 @@ import {
   getJobWorkTeam,
   updateJobWorkTeam,
   deleteJobWorkTeamById,
+  addJobWorkTeam,
+  checkTeamExists,
+  addJobWorkTeamPerson,
+  editMyJobWorkTeam,
+  editJobWorkTeamPerson,
+  getMyJobWorkTeam,
+  getMyJobWorkTeamPersons,
+  addJobWorkTeamIfNotExists,
+  addJobWorkTeamPersonIfNotExists,
 } from "../../services/master/master.service";
 
 var heightY = Dimensions.get("window").height;
@@ -50,10 +63,14 @@ const JobWorkTeam = () => {
   const [update, setUpdate] = useState(false);
   const [data, setdata] = useState<any | null>(null); // Track the selected card's ID
   const [isVisible, setisVisible] = useState(false);
+  const [error, setError] = useState(null);
+  const [personName, setPersonName] = useState("");
+  // const error = useSelector((state) => state.jobTeamPerson.error);
   const { user }: any = useSelector((state: RootState) => state.user);
   const { teams }: any = useSelector((state: RootState) => state.teams);
   const { jobWorks } = useSelector((state: RootState) => state.jobWorks);
   const [team, setTeam] = useState<any[]>([]);
+  const [teamPersons, setTeamPersons] = useState<any[]>([]);
   const dispatch = useDispatch();
   const [initialFormValues, setInitialFormValues] = useState<InitialFormValues>(
     {
@@ -77,6 +94,7 @@ const JobWorkTeam = () => {
     ),
   });
 
+  //Old Intial code
   // const formik = useFormik<InitialFormValues>({
   //     initialValues: initialFormValues,
   //     validationSchema: teamSchema,
@@ -94,15 +112,26 @@ const JobWorkTeam = () => {
   //     }),
   // });
 
+
+
+  //New code
   const formik = useFormik<InitialFormValues>({
     initialValues: initialFormValues,
     validationSchema: teamSchema,
-    onSubmit: (values: any) => {
+    onSubmit: async (values: any) => {
       if (update) {
+        // Update operation
         updateJobWorkTeam(values)
           .then((res) => {
             if (res) {
               dispatch(editjobTeam({ ...values }));
+              dispatch(
+                setToast({
+                  message: "Team updated successfully",
+                  isVisible: true,
+                  type: "success",
+                })
+              );
             } else {
               dispatch(
                 setToast({
@@ -125,31 +154,79 @@ const JobWorkTeam = () => {
           });
       } else {
         addTeam(values)
-        .then((res) => {
+          .then(async (res) => {
             if (res) {
-                // Assuming addjobTeam is a Redux action to update the state with the new team data
-                dispatch(addjobTeam({ ...res }));
-                dispatch(setToast({
-                    message: "Team added successfully",
-                    isVisible: true,
-                    type: "success",
-                }));
-            } else {
-                dispatch(setToast({
-                    message: "Something went wrong",
+              dispatch(addjobTeam({ ...res }));
+              dispatch(
+                setToast({
+                  message: "Team added successfully",
+                  isVisible: true,
+                  type: "success",
+                })
+              );
+
+              try {
+                if (await checkTeamExists(values.itemName)) {
+                  setError(
+                    "Team name already exists. Please choose another name."
+                  );
+                  return;
+                }
+                // await addJobWorkTeamIfNotExists();
+                const teamData = {
+                  teamName: values.itemName,
+                  jobID: res.id,
+                  partyName: values.partyName,
+                  workType: values.workType,
+                };
+                const newTeam = await addJobWorkTeam(teamData);
+                dispatch(addjobTeam(newTeam));
+
+                //   await addJobWorkTeamPersonIfNotExists();
+                if (values.teamPersonName && values.teamPersonName.length > 0) {
+                  for (const member of values.teamPersonName) {
+                    const personData = {
+                      teamID: newTeam.id,
+                      jobID: res.id,
+                      personName: member.personName,
+                    };
+                    await addJobWorkTeamPerson(personData);
+                  }
+                } else {
+                  console.log("No team members found");
+                }
+              } catch (err) {
+                setError(err.message);
+                console.error("Error adding team:", err);
+                dispatch(
+                  setToast({
+                    message: "Error adding team: " + err.message,
                     isVisible: true,
                     type: "danger",
-                }));
+                  })
+                );
+              }
+            } else {
+              dispatch(
+                setToast({
+                  message: "Something went wrong",
+                  isVisible: true,
+                  type: "danger",
+                })
+              );
             }
-        })
-        .catch((error) => {
+          })
+          .catch((error) => {
             console.error("Error adding team:", error);
-            dispatch(setToast({
-                message: "Something went wrong",
+            setError(error.message);
+            dispatch(
+              setToast({
+                message: "Error adding team: " + error.message,
                 isVisible: true,
                 type: "danger",
-            }));
-        }); 
+              })
+            );
+          });
       }
       setShowModal(false);
       setUpdate(false);
@@ -202,11 +279,11 @@ const JobWorkTeam = () => {
       if (fetchedData) {
         setTeam(fetchedData);
       } else {
-        setTeam([]); // Set an empty array if no data is fetched
+        setTeam([]);
       }
     } catch (error) {
       console.error("Error fetching team data:", error);
-      setTeam([]); // Set an empty array in case of error
+      setTeam([]);
     }
   };
 
@@ -223,45 +300,95 @@ const JobWorkTeam = () => {
     setisVisible(false);
     setShowModal(true);
   };
-//   const deleteTeam = () => {
-//     dispatch(deletejobTeam(data));
-//     setisVisible(false);
-//   };
+  //   const deleteTeam = () => {
+  //     dispatch(deletejobTeam(data));
+  //     setisVisible(false);
+  //   };
 
-const deleteTeam = () => {
+  useEffect(() => {
+    fetchJobWorkTeamData();
+    fetchJobWorkTeamPersonsData();
+  }, []);
+
+  const fetchJobWorkTeamData = async () => {
+    try {
+      const fetchedJobWorkTeam = await getMyJobWorkTeam();
+      if (fetchedJobWorkTeam) {
+        // Update the form fields with the fetched jobWorkTeam data
+        const { teamName, partyName, workType } = fetchedJobWorkTeam;
+        setFieldValue("itemName", teamName);
+        setFieldValue("partyName", partyName);
+        setFieldValue("workType", workType);
+        setTeam(fetchedJobWorkTeam);
+      } else {
+        setTeam([]);
+      }
+    } catch (error) {
+      console.error("Error fetching team data:", error);
+      setTeam([]);
+    }
+  };
+
+  const fetchJobWorkTeamPersonsData = async () => {
+    try {
+      const fetchedJobWorkTeamPersons = await getMyJobWorkTeamPersons();
+      if (fetchedJobWorkTeamPersons) {
+        setTeamPersons(fetchedJobWorkTeamPersons);
+        console.log(
+          "Fetched Job Work Team Persons:",
+          fetchedJobWorkTeamPersons
+        );
+      } else {
+        setTeamPersons([]);
+      }
+    } catch (error) {
+      console.error("Error fetching team persons data:", error);
+      setTeamPersons([]);
+    }
+  };
+
+  const deleteTeam = () => {
     Alert.alert("Are you sure?", "You want to delete this?", [
       {
-        text: 'Cancel',
+        text: "Cancel",
         onPress: () => console.log("Cancel Pressed"),
-        style: 'cancel',
+        style: "cancel",
       },
       {
         text: "Yes",
         onPress: () => {
           dispatch(setLoading(true));
-          deleteJobWorkTeamById(data).then((res) => {
-            dispatch(setLoading(false));
-            if (res) {
-              dispatch(deletejobTeam(data));
-              setShowModal(false); // Update the visibility by closing the modal
-            } else {
-              dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }));
-            }
-          }).catch((error) => {
-            dispatch(setLoading(false));
-            dispatch(setToast({ message: "Something went wrong", isVisible: true, type: 'danger' }));
-            console.error("Error deleting job team: ", error);
-          });
-        }
-      }
+          deleteJobWorkTeamById(data)
+            .then((res) => {
+              dispatch(setLoading(false));
+              if (res) {
+                dispatch(deletejobTeam(data));
+                setShowModal(false); // Update the visibility by closing the modal
+              } else {
+                dispatch(
+                  setToast({
+                    message: "Something went wrong",
+                    isVisible: true,
+                    type: "danger",
+                  })
+                );
+              }
+            })
+            .catch((error) => {
+              dispatch(setLoading(false));
+              dispatch(
+                setToast({
+                  message: "Something went wrong",
+                  isVisible: true,
+                  type: "danger",
+                })
+              );
+              console.error("Error deleting job team: ", error);
+            });
+        },
+      },
     ]);
   };
-  
-  
-
-
-  
-
 
   return (
     <>
@@ -299,7 +426,7 @@ const deleteTeam = () => {
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.itemName}
+                      {item.teamName}
                     </Text>
                     <Text
                       style={GlobalStyle.textcolor}
@@ -320,9 +447,10 @@ const deleteTeam = () => {
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.teamPersonName && Array.isArray(item.teamPersonName)
-                        ? item.teamPersonName
-                            .map((team: any) => team.personName)
+                      {teamPersons && Array.isArray(teamPersons)
+                        ? teamPersons
+                            .filter((person: any) => person.teamID === item.id)
+                            .map((person: any) => person.personName)
                             .join(", ")
                         : "No persons"}
                     </Text>
