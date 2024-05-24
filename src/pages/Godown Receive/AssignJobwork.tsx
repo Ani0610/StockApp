@@ -11,6 +11,7 @@ import { addAssignJobs } from '../../redux/action/assignJob/assignJobSlice';
 import { RootState } from '../../redux/store';
 import { addAssignJobService } from '../../services/jobwork/jobwork.service';
 import { getStonesByID, updateStone } from '../../services/master/master.service';
+import { workType } from '../../components/UI/commonComponent';
 
 interface InitialFormValues {
     challanNo: number;
@@ -120,7 +121,6 @@ const AssignJobwork = ({ navigation, route }: any) => {
         }
     })
 
-    const worktype = ["stone", "paper", "other"];
     const {
         handleChange,
         handleBlur,
@@ -328,7 +328,7 @@ const AssignJobwork = ({ navigation, route }: any) => {
                     <View style={GlobalStyle.inputField}>
                         <Text style={[GlobalStyle.inputLabel, { width: '45%' }]}>Work Type</Text>
                         <SelectDropdown
-                            data={[...worktype]}
+                            data={[...workType]}
                             onSelect={(selectedItem) => {
                                 if (selectedItem === "stone") {
                                     const stonesData = JSON.parse(JSON.stringify(existingDesign.stoneDetails))
