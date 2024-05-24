@@ -34,9 +34,11 @@ import {
   checkTeamExists,
   createJobWorkTeam,
   deleteJobWorkTeamById,
+  deleteNewJobWorkTeamById,
   getJobWorkTeam,
   getMyJobWorkTeam,
-  getMyJobWorkTeamPersons
+  getMyJobWorkTeamPersons,
+  editMyJobWorkTeam
 } from "../../services/master/master.service";
 
 var heightY = Dimensions.get("window").height;
@@ -122,6 +124,57 @@ const JobWorkTeam = () => {
             type: "success",
           })
         );
+
+
+
+
+
+        // try {
+        //   const teamData = {
+        //     teamName: values.teamName,
+        //     jobId: values.jobId,
+        //     partyName: values.partyName,
+        //     workType: values.workType,
+        //     personName: values.teamPersonName.map((person: any) => person.personName).join(", "),
+        //   };
+    
+        //   console.log("Team Data:", teamData);
+        //   console.log("Team Members:", values.teamPersonName);
+    
+        //   let newTeam = null;
+        //   if (update) {
+        //     newTeam = await editMyJobWorkTeam(teamData);
+        //   } else {
+        //     const res = await checkTeamExists(values.teamName);
+        //     if (res) {
+        //       dispatch(setToast({
+        //         message: "Team name already exists. Please choose another name.",
+        //         isVisible: true,
+        //         type: "danger",
+        //       }));
+        //       return;
+        //     }
+        //     newTeam = await createJobWorkTeam(teamData);
+        //   }
+    
+        //   if (newTeam) {
+        //     if (update) {
+        //       dispatch(editTeamJobwork(newTeam));
+        //       dispatch(setToast({
+        //         message: "Team updated successfully",
+        //         isVisible: true,
+        //         type: "success",
+        //       }));
+
+
+
+
+
+
+
+
+
+
       } else {
         console.log(values, 'values')
         dispatch(setLoading(true));
@@ -256,9 +309,14 @@ const JobWorkTeam = () => {
   const editTeam = () => {
     setFieldValue("partyName", data.partyName);
     setFieldValue("workType", data.workType);
-    // setFieldValue("teamName", data.teamName);
-    setFieldValue("itemName", data.itemName);
-    setFieldValue("teamPersonName", data.teamPersonName);
+    setFieldValue("teamName", data.teamName);
+    // setFieldValue("itemName", data.itemName);
+    //setFieldValue("teamPersonName", data.personName);
+
+    const personNameArray = data.personName.split(", ").map((name: any) => ({ personName: name }));
+    setFieldValue("teamPersonName", personNameArray);
+
+
     setFieldValue("useruid", data.useruid);
     setFieldValue("price", data.price);
     setFieldValue("id", data.id);
@@ -323,7 +381,7 @@ const JobWorkTeam = () => {
         text: "Yes",
         onPress: () => {
           dispatch(setLoading(true));
-          deleteJobWorkTeamById(data)
+          deleteNewJobWorkTeamById(data)
             .then((res) => {
               dispatch(setLoading(false));
               if (res) {

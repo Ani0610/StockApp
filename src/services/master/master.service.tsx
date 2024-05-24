@@ -394,7 +394,7 @@ export const checkTeamExists = async (teamName: any) => {
 // Create a new job work team with id and createdAt fields
 export const createJobWorkTeam = async (data: any) => {
     try {
-        // Remove undefined fields from data
+     
         const sanitizedData: any = {};
         Object.keys(data).forEach((key) => {
             if (data[key] !== undefined) {
@@ -402,21 +402,17 @@ export const createJobWorkTeam = async (data: any) => {
             }
         });
 
-        // Add the document to the collection with createdAt timestamp
         const res = await collectionJobworkTeam.add({
             ...sanitizedData,
-            createdAt: firestore.FieldValue.serverTimestamp(), // Adding the created timestamp
+            createdAt: firestore.FieldValue.serverTimestamp(), 
         });
 
-        // Update the document with the generated ID
         await res.update({
             id: res.id,
         });
 
-        // Get the updated document snapshot
         const docSnapshot = await res.get();
 
-        // Get the data from the document snapshot
         const addedData = docSnapshot.data();
 
         return addedData;
@@ -461,9 +457,9 @@ export const editMyJobWorkTeam = async (teamData: any) => {
 };
 
 // Delete a job work team by ID
-export const deleteNewJobWorkTeamById = async (id: string) => {
+export const deleteNewJobWorkTeamById = async (values: any) => {
     try {
-        await collectionJobworkTeam.doc(id).delete();
+        await collectionJobworkTeam.doc(values.id).delete();
         return true;
     } catch (error) {
         console.error('error', error);
