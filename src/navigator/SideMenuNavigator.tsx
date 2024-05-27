@@ -19,6 +19,7 @@ import GodownReceive from "./GodownReceive";
 import JobworkReport from "../pages/Job work details/JobWorkReport";
 import currentJob from "../pages/job work module/currentJob";
 import CurrentJobWork from "../pages/job work module/currentJob";
+import TeamPersons from "../pages/job work module/teamPersons";
 const DrawerStack = createDrawerNavigator();
 const SideMenuNavigator = ({ navigation }: any) => {
   const { user }: any = useSelector((state: RootState) => state.user);
@@ -30,8 +31,8 @@ const SideMenuNavigator = ({ navigation }: any) => {
         headerStyle: {
           backgroundColor: "#24acf2", // Set the background color of the header for all screens
           elevation: 0,
-          shadowOpacity:0,
-         
+          shadowOpacity: 0,
+
         },
         headerTintColor: 'white',
       }}
@@ -106,6 +107,11 @@ const SideMenuNavigator = ({ navigation }: any) => {
                   component={DesignDetails}
                 />
                 <DrawerStack.Screen
+                  name="GodownReceive"
+                  component={GodownReceive}
+                  options={{ headerShown: false }}
+                />
+                <DrawerStack.Screen
                   name="JobWork Details"
                   component={JobWorkDetails}
                 />
@@ -132,7 +138,7 @@ const SideMenuNavigator = ({ navigation }: any) => {
                   component={CurrentJobWork}
                 />
                 <DrawerStack.Screen name="Work By Team" component={TeamWorkPerDay} />
-                <DrawerStack.Screen name="Team" component={JobWorkTeam} />
+                <DrawerStack.Screen name="Team" component={TeamPersons} />
               </>
             );
           case "carrier":

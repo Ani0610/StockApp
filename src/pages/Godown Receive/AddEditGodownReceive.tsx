@@ -57,7 +57,7 @@ const AddEditGodownReceive = ({ navigation, route }: any) => {
         if (route?.params && route?.params.rowData) {
             dispatch(setLoading(true));
             getChallanDetails().then((res: any) => {
-                const inChallan=res.filter((item:any)=>item.challanType==="In")
+                const inChallan = res ? res.filter((item: any) => item.challanType === "In") : []
                 setInChallan(inChallan)
                 if (res && res.findIndex((data: any) => data.challanType === "In") > -1) {
                     const selectedItem = route?.params?.rowData;
@@ -79,7 +79,7 @@ const AddEditGodownReceive = ({ navigation, route }: any) => {
         } else {
             dispatch(setLoading(true));
             getChallanDetails().then((res: any) => {
-                const inChallan=res.filter((item:any)=>item.challanType==="In")
+                const inChallan = res ? res.filter((item: any) => item.challanType === "In"):[]
                 setInChallan(inChallan)
                 if (res && res.findIndex((data: any) => data.challanType === "In") > -1) {
                     const commonChallanNos = res.map((entry: any) => entry.challanNo)
@@ -342,7 +342,7 @@ const AddEditGodownReceive = ({ navigation, route }: any) => {
                             }}
                             search={true}
                             searchPlaceHolder={"Search by Design Number"}
-                            searchInputStyle={{ width:250 }}
+                            searchInputStyle={{ width: 250 }}
                             buttonTextAfterSelection={(
                                 selectedItem: any,
                                 index: number

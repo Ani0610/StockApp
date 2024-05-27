@@ -33,12 +33,10 @@ import {
   addJobWorkTeamPerson,
   checkTeamExists,
   createJobWorkTeam,
-  deleteJobWorkTeamById,
   deleteNewJobWorkTeamById,
   getJobWorkTeam,
   getMyJobWorkTeam,
-  getMyJobWorkTeamPersons,
-  editMyJobWorkTeam
+  getMyJobWorkTeamPersons
 } from "../../services/master/master.service";
 
 var heightY = Dimensions.get("window").height;
@@ -48,7 +46,7 @@ interface InitialFormValues {
   workType: string;
   jobId: string;
   teamName: string;
-  teamPersonName: any;
+  teamPersonName: any[];
   useruid: "";
   price: "";
   id: undefined;
@@ -137,10 +135,10 @@ const JobWorkTeam = () => {
         //     workType: values.workType,
         //     personName: values.teamPersonName.map((person: any) => person.personName).join(", "),
         //   };
-    
+
         //   console.log("Team Data:", teamData);
         //   console.log("Team Members:", values.teamPersonName);
-    
+
         //   let newTeam = null;
         //   if (update) {
         //     newTeam = await editMyJobWorkTeam(teamData);
@@ -156,7 +154,7 @@ const JobWorkTeam = () => {
         //     }
         //     newTeam = await createJobWorkTeam(teamData);
         //   }
-    
+
         //   if (newTeam) {
         //     if (update) {
         //       dispatch(editTeamJobwork(newTeam));
@@ -265,9 +263,9 @@ const JobWorkTeam = () => {
     resetForm();
   };
   useEffect(() => {
-    if (user.userType === "job") {
+    if (user.userType === "jobwork") {
       const tm: any = jobworkTeams.filter(
-        (item: any) => item.useruid === user.useruid
+        (item: any) => item.useruid === user.uid
       );
       setTeam([...tm]);
     } else {
@@ -288,7 +286,7 @@ const JobWorkTeam = () => {
     fetchTeamData();
   }, []);
 
-  
+
   const fetchTeamData = async () => {
     try {
       await dispatch(setLoading(true));
@@ -471,7 +469,7 @@ const JobWorkTeam = () => {
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
-                       {item.personName}
+                        {item.personName}
                       </Text>
                     </View>
                     <View style={GlobalStyle.rightSide}>
@@ -654,7 +652,7 @@ const JobWorkTeam = () => {
                                 handleBlur("partyName");
                               }}
                               value={values.partyName}
-                              style={{ flex: 1, fontSize: 16, color: "#000" }}
+                              style={{ fontSize: 16, color: "#000", textAlign: "right" }}
                               placeholderTextColor="gray"
                               placeholder="Enter Party Name"
                               editable={false}
@@ -835,7 +833,7 @@ const JobWorkTeam = () => {
                             </View>
                             {values.teamPersonName?.length > 0 &&
                               values.teamPersonName.map(
-                                (person: any, i: any) => (
+                                (person: any, i: number) => (
                                   <View
                                     key={i}
                                     style={[
@@ -909,8 +907,7 @@ const JobWorkTeam = () => {
                                               ]}
                                             >
                                               {
-                                                errors.teamPersonName[i]
-                                                  .personName
+                                                errors.teamPersonName[i].personName
                                               }
                                             </Text>
                                           )}

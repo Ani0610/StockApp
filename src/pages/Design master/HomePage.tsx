@@ -29,7 +29,7 @@ import {
 import { updateDesignTotal } from "../../redux/action/DesignsMaster/designMasterSlice";
 const HomePage = ({ navigation }: any) => {
   const totalCount = useSelector((state: RootState) => state.designMaster.totalDesignCount) || 0
-  const sampleDetails = [{ label: "Sample Created", value: totalCount }];
+  const sampleDetails = [{ label: "Created", value: totalCount }];
   const deliveredDetails = [{ label: "Order", value: 0 }];
   const pendingDetails = [{ label: "Order", value: 0 }];
   const [pendingJobs, setPendingJobs] = useState([]);
